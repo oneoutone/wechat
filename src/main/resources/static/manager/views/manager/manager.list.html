@@ -1,0 +1,66 @@
+<div class="padding">
+    <div class="box-body white m-b">
+        <button type="button" ui-sref="app.manager.info" class="btn btn-sm {{app.setting.theme.primary}}">
+            <i class="material-icons">add</i> 新建
+        </button>
+        <form class="form-inline pull-right v-m" role="search">
+            <div class="form-group">
+                <div class="input-group input-group-sm">
+                    <input id="filter" type="text" class="form-control p-x b-a rounded" ng-model="filterString" placeholder="搜索">
+                    <span class="input-group-btn">
+              <button type="submit" class="btn white b-a rounded no-shadow"><i class="fa fa-search"></i></button>
+            </span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-4" ng-repeat="item in userList | filter:{username: filterString}">
+            <div class="box text-center">
+                <div class="box-tool">
+                    <ul class="nav">
+                        <li class="nav-item inline dropdown">
+                            <a class="nav-link text-muted" data-toggle="dropdown">
+                                <i class="material-icons md-18">&#xe164;</i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-scale pull-right dark">
+                                <a href class="dropdown-item" ui-sref="app.manager.info({id: item.id})">编辑</a>
+                                <a class="dropdown-item" href ng-if="!hasPermission(item,'admin')" data-toggle="modal" data-target="#delete" ng-click="removeUser(item.id)">删除</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="p-a-md">
+                    <p><img ng-src="{{item.avatar ? item.avatar : '../../assets/images/a0.jpg'}}?x-oss-process=image/resize,m_fixed,h_56,w_56" class="img-circle w-56"></p>
+                    <a href class="text-md block">{{item.username="" ? 'Admin':item.username}}<span class="label label-sm danger m-l-sm" ng-if="hasPermission(item,'admin')">Admin</span> </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- delete modal -->
+<div id="delete" class="modal fade animate black-overlay" data-backdrop="false">
+    <div class="row-col h-v">
+        <div class="row-cell v-m">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content flip-y">
+                    <div class="modal-body text-center">
+                        <p class="p-y">
+                            <i class="fa fa-warning text-warn fa-3x"></i><br><br>
+                            确定删除管理员?
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm white p-x-md" data-dismiss="modal">取消</button>
+                        <button type="button" ng-click="deleteManager()"  class="btn btn-sm {{app.setting.theme.primary}} p-x-md">删除</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div>
+        </div>
+    </div>
+</div>
+
+

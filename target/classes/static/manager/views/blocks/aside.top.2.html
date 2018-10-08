@@ -1,0 +1,11 @@
+<div class="nav-fold">
+	<a ui-sref="app.manager.info({id: app.setting.user.id})">
+	    <span class="pull-left">
+	      <img ng-src="{{app.user.avatar? app.user.avatar : '../../assets/images/a0.jpg'}}?x-oss-process=image/resize,m_fixed,h_40,w_40" alt="..." class="w-40 r">
+	    </span>
+	    <span class="clear hidden-folded p-x">
+	      <span class="block _500">{{app.user.name}}</span>
+	      <small class="block text-muted">系统管理员</small>
+	    </span>
+	</a>
+</div>

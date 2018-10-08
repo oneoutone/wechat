@@ -1,0 +1,106 @@
+<style type="text/css">
+  .weui-picker-modal {
+    background: white;
+  }
+  .weui-picker-modal .toolbar {
+    /*position: relative;*/
+    /*width: 100%;*/
+    /*font-size: 16px;*/
+    /*line-height: 1.5;*/
+    /*color: #3d4145;*/
+    /*background: #f7f7f8;*/
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    padding: 10px 15px;
+    background-color: #fbf9fe;
+    position: relative;
+    text-align: center;
+  }
+  .weui-picker-modal .toolbar-inner {
+    height: 1.5rem;
+  }
+
+  .weui-picker-modal .picker-button:last-child {
+    text-align: right;
+  }
+  .weui-picker-modal .picker-button {
+    /*position: absolute;*/
+    /*right: 0;*/
+    /*box-sizing: border-box;*/
+    /*height: 30px;*/
+    /*line-height: 30px;*/
+    /*color: #04be02;*/
+    /*z-index: 1;*/
+    /*padding: 0 .5rem;*/
+    display: block;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    color: #586c94;
+  }
+
+  .weui-flex .placeholder {
+    height: auto;
+    line-height: 1em;
+    text-align: left;
+  }
+  .placeholder {
+    height: auto;
+    line-height: 1em;
+    text-align: left;
+  }
+
+  .facebook-card .facebook-date {
+    margin-left: 0;
+    font-size: .65rem;
+  }
+  .facebook-card .facebook-name {
+    margin-left: 0;
+    font-size: .75rem;
+    font-weight: 800;
+    color: #5f646e;
+  }
+  .row {
+    margin-left: -4px;
+    margin-right: -4px;
+  }
+  .col-xs-6 {
+    float: left;
+    width: 50%;
+  }
+
+</style>
+<div class="content" style="position: relative; height: 100vh">
+  <div class="page__bd">
+    <div class="weui-navbar">
+      <div class="weui-navbar__item" id="city">
+        {{service.city}} <span class="material-icons">arrow_drop_down</span>
+      </div>
+      <!--<div class="weui-navbar__item" id="market">
+        {{service.market}} <span class="material-icons">arrow_drop_down</span>
+      </div>-->
+      <div class="weui-navbar__item">
+        <input class="weui_input text-center" type="text" value="{{service.market}}" id='market'/>
+      </div>
+    </div>
+    <div class=" page__bd_spacing" style="margin-top: 48px;">
+      <div class="row p-t-xs">
+        <div class="col-xs-6" ng-repeat="item in services" ui-sref="operator.service.detail({id: item.id})" on-finish-render-filters>
+          <div class="weui-flex__item">
+            <div class="placeholder">
+              <div class="card facebook-card m-a-0">
+                <div class="card-content"><img src="{{item.logo ? item.logo : '../../assets/images/c1.jpg'}}" style="width: 100%" ></div>
+                <div class="card-header no-border">
+                  <div class="facebook-date m-b-xs">{{item.created.created | date: "yyyy-MM-dd"}}</div>
+                  <div class="facebook-name">{{item.name}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

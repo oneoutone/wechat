@@ -1,0 +1,17 @@
+{
+  "name": "jinchuang_wechat",
+  "version": "0.5.0",
+  "scripts": {
+    "start": "node node_modules/http-server/bin/http-server -c-1 -o -p 8880"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "http-server": "^0.6.1"
+  },
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "license": "UNLICENSED",
+  "description": "jinchuang_wechat"
+}

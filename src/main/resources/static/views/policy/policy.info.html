@@ -1,0 +1,134 @@
+<style type="text/css">
+  ul{
+    padding: 0;
+    list-style: none;
+  }
+  .ellipsis{
+    width: 100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    display: block;
+  }
+  .link{
+    color: dodgerblue;
+    text-decoration: underline;
+  }
+  .text-indent{
+    text-indent: 2em;
+    word-break: break-all;
+    word-wrap: break-word;
+  }
+  .bar .button {
+    top: 0rem;
+    border-radius: 0;
+  }
+</style>
+
+
+<nav class="bar bar-tab">
+  <a href class="tab-item external button no-borders"><i class="material-icons text-lg">favorite_border</i></a>
+  <a href class="tab-item external button no-borders"><i class="material-icons text-lg">alarm</i></a>
+  <a href class="tab-item external button no-borders "><i class="material-icons text-lg">share</i></a>
+  <a href class="tab-item external button button-fill button-danger p-l-md p-r-md open-popup" ng-click="apply()">申请代办</a>
+</nav>
+<div class="content">
+  <div class="content-padded">
+    <h4 class="m-a-0 m-b-sm">{{policy.name}}</h4>
+    <!--<small class="m-r-sm">标签:</small> <small class="label-sm label-primary m-r-xs text-white">人社局</small> <small class="label-sm label-info m-r-xs text-white">小规模</small></br>--><div class="box-divider m-a-0 m-b-sm"></div>
+    <div class="m-a-0 text-xs">
+      <ul>
+        <li>
+          <div class="row no-gutter">
+            <small class="col-20">发布单位</small>
+            <small class="col-80">{{policy.releaseDepartment}}</small>
+          </div>
+        </li>
+        <li>
+          <div class="row no-gutter">
+            <small class="col-20">截止时间</small>
+            <small class="col-80">{{policy.onDate| date:'yyyy-MM-dd'}}</small>
+          </div>
+        </li>
+        <li>
+          <div class="row no-gutter">
+            <small class="col-20">相关链接</small>
+            <div class="col-80">
+              <a href="{{policy.url}}">
+                <small class="ellipsis link">{{policy.url}}</small>
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div  id="policyContent" class="text-xs">
+      <!--<p class="text-indent">-->
+      <!--前两天，代表大英帝国皇室形象的凯特王妃和威廉王子CP一起去印度乡下访问，王妃身上的那件机车牛仔裤，虽然颜色也像吃了土一样朴素，但还是瞬间秒掉了周围一堆老干部style高腰裤。-->
+      <!--</p>-->
+      <!--<p class="text-indent">-->
+      <!--其实这种裤子最早是完全上不了这种大场面的，因为初衷是设计给机车党穿的，最明显的特色是膝盖附近有褶皱处理，那是为了让骑车过程中一直弯曲的腿不至于绷着难受。-->
+      <!--</p>-->
+      <!--<p class="text-indent">-->
+      <!--“我最喜欢的牛仔裤职场穿搭不属于夸张的类型，相反只有注重几个小细节就好。通常情况下，我会选择有设计感的上衣，比如有皱褶领口的衬衫再或者是高领衫，手提包的颜色要足够大胆，然后再加上一两件精致的首饰点缀，就会使牛仔裤LOOK变得特别起来，同时还能兼具专业性。”-->
+      <!--</p>-->
+      <!--<p class="text-indent">-->
+      <!--后来，这种机车党穿的牛仔裤被Balmain这样走街头风的时装品牌推广到高级时装界，虽然被大牌加持了，但依然被大多数人拒绝，因为真的太难穿了，一般得配上整套街头机车服，腿还得够直才行。-->
+      <!--</p>-->
+    </div>
+
+
+
+    <script type="text/javascript">
+      /*var paragraphs=document.getElementsByTagName("p");
+      for(i=0; i< paragraphs.length; i++){
+        paragraphs[i].style.textAlign = "justify";
+        paragraphs[i].style.letterSpacing = '-.15em';
+        paragraphs[i].innerHTML = paragraphs[i].innerHTML.split("").join(" ");
+      }*/
+    </script>
+
+  </div>
+</div>
+
+<div class="js_dialog" id="iosDialog1" style="display: none;">
+  <div class="weui-mask"></div>
+  <div class="weui-dialog">
+    <div class="weui-dialog__hd"><strong class="weui-dialog__title">申请人信息</strong></div>
+
+    <div class="weui-cell">
+      <div class="weui-cell__hd"><label class="weui-label">申请人姓名</label></div>
+      <div class="weui-cell__bd">
+        <input class="weui-input" ng-model="name" type="text"/>
+      </div>
+    </div>
+
+    <div class="weui-cell">
+      <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
+      <div class="weui-cell__bd">
+        <input class="weui-input" id="phoneInput" ng-model="phone" ng-pattern="/^[0-9]{11}$/" type="text" required>
+      </div>
+    </div>
+
+    <div class="weui-cell">
+      <div class="weui-cell__hd"><label class="weui-label">邮箱</label></div>
+      <div class="weui-cell__bd">
+        <input class="weui-input" id="emailInput"  ng-model="email" type="text" ng-pattern="/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}/" required>
+      </div>
+    </div>
+
+    <div class="weui-dialog__ft">
+      <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_default" ng-click="hideModal()">取消</a>
+      <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="guestApply()">确认</a>
+    </div>
+  </div>
+</div>
+
+<div id="toast" style="display:none;">
+  <div class="weui-mask_transparent"></div>
+  <div class="weui-toast">
+    <i class="weui-icon_toast weui-icon-success-no-circle"></i>
+    <p class="weui-toast__content">申请成功</p>
+  </div>
+</div>

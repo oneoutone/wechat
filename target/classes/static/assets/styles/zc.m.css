@@ -1,0 +1,22 @@
+/*
+ 众创空间项目 mobile 端的css 文件
+*/
+
+
+.dark {
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #2e3e4e; }
+
+.bg-auto:before {
+  content: "";
+  position: absolute;
+  width: inherit;
+  top: 0;
+  bottom: 0;
+  background-color: inherit;
+  border: inherit; }
+
+.w-full {
+  width: 100%; }
+
+

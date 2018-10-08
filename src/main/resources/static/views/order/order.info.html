@@ -1,0 +1,171 @@
+
+<style type="text/css">
+    .weui-picker-modal {
+        background: white;
+    }
+    .weui-picker-modal .toolbar {
+        /*position: relative;*/
+        /*width: 100%;*/
+        /*font-size: 16px;*/
+        /*line-height: 1.5;*/
+        /*color: #3d4145;*/
+        /*background: #f7f7f8;*/
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        padding: 10px 15px;
+        background-color: #fbf9fe;
+        position: relative;
+        text-align: center;
+    }
+    .weui-picker-modal .toolbar-inner {
+        height: 1.5rem;
+    }
+
+    .weui-picker-modal .picker-button:last-child {
+        text-align: right;
+    }
+    .weui-picker-modal .picker-button {
+        /*position: absolute;*/
+        /*right: 0;*/
+        /*box-sizing: border-box;*/
+        /*height: 30px;*/
+        /*line-height: 30px;*/
+        /*color: #04be02;*/
+        /*z-index: 1;*/
+        /*padding: 0 .5rem;*/
+        display: block;
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        flex: 1;
+        color: #586c94;
+    }
+
+    .weui-flex .placeholder {
+        height: auto;
+        line-height: 1em;
+        text-align: left;
+    }
+    .placeholder {
+        height: auto;
+        line-height: 1em;
+        text-align: left;
+    }
+
+    .facebook-card {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .facebook-card .facebook-date {
+        margin-left: 0;
+        font-size: .75rem;
+    }
+    .facebook-card .facebook-name {
+        margin-left: 10px;
+        font-size: .8rem;
+        font-weight: 900;
+        color: #5f646e;
+    }
+    .row {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+    .col-xs-6 {
+        float: left;
+        width: 50%;
+    }
+    p {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .right-cell {
+        padding-right: 10px;
+
+    }
+
+    .left-cell {
+        padding-left: 10px;
+    }
+
+    .left-cell-text {
+        text-align:left;
+        padding-left: 10px;
+    }
+
+    .right-cell-text {
+        text-align:right;
+        padding-right: 10px;
+    }
+
+</style>
+<div class="content" style="position: relative; height: 90vh">
+    <div class="page__bd">
+        <div class=" page__bd_spacing" style="margin-top: 10px;">
+            <div class="row p-t-xs">
+                <div class="weui-flex__item">
+                    <div class="card facebook-card">
+                        <div class="facebook-name m-b-2 p-b-2">{{ticket.content}}</div>
+                        <div class="facebook-name m-t-2">
+                            <ul class="weui-uploader__files row right-cell" id="uploaderFiles">
+                                <div ng-repeat="image in ticket.attachments">
+                                    <a ng-click="preview(image)"><img src="{{image.url}}" class="weui-uploader__file"> </a>
+                                </div>
+                            </ul>
+                        </div>
+                        <div class="card-header no-border">
+                            <div class="facebook-date weui-flex__item pull-left">{{ticket.created}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-repeat="item in replies"  style="margin-right: 10px" on-finish-render-filters>
+                    <div>
+                        <div class="card facebook-card">
+                            <div>
+                                <div class="facebook-name reply-content {{item.author.user_type == 'customer' ? 'right-cell-text' : 'left-cell-text'}}" style="word-wrap:break-word; word-break:break-all; overflow: hidden;"></div>
+                            </div>
+                            <div class="facebook-name m-t-2 {{item.author.user_type == 'customer' ? 'right-cell' : 'left-cell'}}" >
+                                <ul class="weui-uploader__files row">
+                                    <div ng-repeat="image in item.attachments" class="{{item.author.user_type == 'customer' ? 'pull-right' : 'pull-left'}}">
+                                        <a ng-click="preview(image)"><img src="{{image.url}}" class="weui-uploader__file"> </a>
+                                    </div>
+                                </ul>
+                            </div>
+                            <div class="card-header no-border" style="margin-top: 5px; height: 1rem;">
+                                <div class="facebook-date {{item.author.user_type == 'customer' ? 'right-cell-text' : 'left-cell-text'}}" style="margin-top: 5px;">{{item.created}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="content weui-flex" style="position: relative; height: 10vh">
+    <div ng-show="ticket.status_en && ticket.status_en != 'resolved'" class="weui-flex__item"><div class="placeholder"> <a href="javascript:;" class="weui-btn weui-btn_primary {{ticket.status_en == 'resolved' ? 'weui-btn_disabled': ''}}" ui-sref="order.reply({id: ticket.id})">回复</a></div></div>
+    <div ng-show="ticket.status_en && ticket.status_en != 'resolved'" class="weui-flex__item"><div class="placeholder"> <a href="javascript:;" class="weui-btn weui-btn_primary {{ticket.status_en == 'resolved' ? 'weui-btn_disabled': ''}}" ng-click="showDialog()">解决</a></div></div>
+
+</div>
+
+
+<div class="js_dialog" id="dialog" style="display: none;">
+    <div class="weui-mask"></div>
+    <div class="weui-dialog">
+        <div class="weui-dialog__hd"><strong class="weui-dialog__title">工单提示</strong></div>
+        <div class="weui-dialog__bd">确认该工单已得到解决</div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default" ng-click="hideDialog()">取消</a>
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="resolve()">确认</a>
+        </div>
+    </div>
+</div>
+
+<div id="loadingToast1" style="display:none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-loading weui-icon_toast"></i>
+        <p class="weui-toast__content">处理中</p>
+    </div>
+</div>

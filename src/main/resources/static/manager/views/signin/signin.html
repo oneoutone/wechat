@@ -1,0 +1,33 @@
+<div class="center-block w-xxl w-auto-xs p-y-md">
+    <div class="navbar">
+        <div class="pull-center">
+            <a class="navbar-brand">
+                <img src="../../assets/images/logo_white.png" alt="." >
+                <span class="hidden-folded inline">{{app.name}}</span>
+            </a>
+        </div>
+    </div>
+    <div class="p-a-md box-color r box-shadow-z1 text-color m-a">
+        <form name="form">
+            <div class="md-form-group float-label">
+                <input ng-model="user.username" type="text" class="md-input" required>
+                <label>用户名/邮箱/手机号</label>
+            </div>
+            <div class="md-form-group float-label">
+                <input ng-model="user.pwd" type="password" class="md-input" required>
+                <label>密码</label>
+            </div>
+            <div class="m-b-md">
+                <label class="md-check">
+                    <input type="checkbox" ng-model="user.remember"><i class="primary"></i>保持登录
+                </label>
+            </div>
+            <button type="submit" ladda="loading" data-style="zoom-in"  ng-click="signin()" class="btn {{app.setting.theme.primary}} btn-block p-x-md">登录</button>
+        </form>
+    </div>
+
+    <div class="p-v-lg text-center">
+        <!--<div class="m-b"><a ui-sref="access.reset_password"  class="text-primary _600">忘记密码?</a></div>-->
+        <!--<div>没有账号? <a ui-sref="access.signup" href="signup.html" class="text-blue _600">注册</a></div>-->
+    </div>
+</div>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>锦创科技 - 积分兑换后台管理！</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- for ios 7 style, multi-resolution icon of 152x152 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
+    <link rel="apple-touch-icon" href="../assets/images/logo.png">
+    <meta name="apple-mobile-web-app-title" content="锦创科技">
+
+    <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" sizes="196x196" href="../assets/images/logo.png">
+
+    <!-- style -->
+    <base href="/manager/" />
+    <link rel="stylesheet" href="../assets/animate.css/animate.min.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/font-awesome/css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/material-design-icons/material-design-icons.css" type="text/css" />
+    <link rel="stylesheet" href="../assets/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
+    <!-- build:css ../assets/styles/app.min.css -->
+    <link rel="stylesheet" href="../assets/styles/style.css" type="text/css" />
+    <!-- endbuild -->
+
+    <!--for ladda button-->
+    <link rel="stylesheet" href="../assets/styles/ladda.min.css" type="text/css" />
+
+    <!--for altair invoice-->
+    <!-- uikit -->
+    <link rel="stylesheet" href="../assets/styles/uikit.almost-flat.min.css" media="all">
+    <!-- altair admin -->
+    <link rel="stylesheet" href="../assets/styles/main.min.css" media="all">
+    <link rel="stylesheet" href="../assets/styles/app.css" type="text/css" />
+
+
+</head>
+<body ng-app="app" ng-controller="AppCtrl" >
+<div class="app" ui-view></div>
+
+<!-- build:scripts scripts/app.angular.scripts -->
+<!-- jQuery -->
+<script src="../libs/jquery/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="../libs/jquery/tether/dist/js/tether.min.js"></script>
+<script src="../libs/jquery/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../libs/jquery/PACE/pace.min.js"></script>
+<script src="../libs/jquery/html-docx/html-docx.js"></script>
+
+<!-- Angular -->
+<script src="../libs/angular/angular/angular.min.js"></script>
+<script src="../libs/angular/angular-animate/angular-animate.min.js"></script>
+<script src="../libs/angular/angular-resource/angular-resource.min.js"></script>
+<script src="../libs/angular/angular-sanitize/angular-sanitize.min.js"></script>
+<script src="../libs/angular/angular-touch/angular-touch.min.js"></script>
+
+<!-- Angular ladda -->
+<link rel="stylesheet" href="../libs/angular/ladda/dist/ladda-themeless.min.css" type="text/css" />
+<script src="../libs/angular/ladda/dist/spin.min.js"></script>
+<script src="../libs/angular/ladda/dist/ladda.min.js"></script>
+<script src="../libs/angular/angular-ladda/dist/angular-ladda.min.js"></script>
+
+<!-- router -->
+<script src="../libs/angular/angular-ui-router/release/angular-ui-router.min.js"></script>
+<!-- storage -->
+<script src="../libs/angular/ngstorage/ngStorage.min.js"></script>
+
+<!-- utils -->
+<script src="../libs/angular/angular-ui-utils/ui-utils.min.js"></script>
+<!-- lazyload -->
+<script src="../libs/angular/oclazyload/dist/ocLazyLoad.min.js"></script>
+
+<!-- logger -->
+<script type="text/javascript" src="../libs/js/logger/loghub-tracking.js"></script>
+
+<!-- App -->
+<script src="scripts/app.js"></script>
+<script src="scripts/app.config.lazyload.js"></script>
+<script src="scripts/app.config.router.js"></script>
+<script src="scripts/app.ctrl.js"></script>
+
+<!--velocity-->
+<script src="../libs/js/velocity/velocity.min.js"></script>
+<script src="../libs/js/velocity/velocity.ui.min.js"></script>
+
+<!--ngInfiniteScroll.js-->
+<!--<script src="libs/js/ngInfiniteScroll-1.0.0/ng-infinite-scroll.js"></script>-->
+
+<script src="../scripts/directives/infiniteScroll.js"></script>
+<script src="../scripts/directives/cardFullscreenActivate.js"></script>
+<script src="../scripts/directives/cardFullscreenDeactivate.js"></script>
+<script src="../scripts/directives/ui-jp.js"></script>
+<script src="../scripts/directives/ui-nav.js"></script>
+<script src="../scripts/directives/ui-fullscreen.js"></script>
+<script src="../scripts/directives/ui-scroll-to.js"></script>
+<script src="../scripts/directives/ui-toggle-class.js"></script>
+<script src="../scripts/directives/ui-include.js"></script>
+<script src="../scripts/directives/onfinish.js"></script>
+<script src="../scripts/directives/print-page.js"></script>
+<script src="../scripts/directives/single-card.js"></script>
+<script src="../scripts/directives/list-outside.js"></script>
+<script src="../scripts/directives/custom-scrollbar.js"></script>
+
+
+<script src="../scripts/services/ngstore.js"></script>
+<script src="../scripts/services/ui-load.js"></script>
+<script src="../scripts/services/palette.js"></script>
+<!--<script src="scripts/services/bridge.js"></script>-->
+<script src="../scripts/services/util.js"></script>
+<script src="../scripts/services/ajax.js"></script>
+<script src="../scripts/services/lb-service.js"></script>
+<script src="../scripts/services/FileSaver.js"></script>
+<script src="../libs/jquery/jquery.bez/jquery.bez.min.js"></script>
+<!-- endbuild -->
+
+<!--ladda button-->
+<script src="../scripts/spin.min.js"></script>
+<script src="../scripts/ladda.min.js"></script>
+<script src="../libs/jquery/date-time/locales/bootstrap-datepicker.zh-CN.js"></script>
+<script src="../libs/angular/angular-summernote/dist/summernote.min.js"></script>
+
+<!--UIKit-->
+<script src="../libs/js/altair_v2.9.1/uikit.min.js"></script>
+<script src="../libs/js/altair_v2.9.1/uikit_beforeready.min.js"></script>
+
+
+<!-- MTA 统计分析 -->
+<script>
+    var _mtac = {"senseHash":0,"autoReport":0};
+    (function() {
+        var mta = document.createElement("script");
+        mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "500182051");
+
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+    })();
+</script>
+
+
+</body>
+</html>

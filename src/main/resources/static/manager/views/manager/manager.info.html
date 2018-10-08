@@ -1,0 +1,162 @@
+<style type="text/css">
+    #userLogo:hover{
+        box-shadow: 0 0 5px 5px rgba(0, 0, 0, .2);
+        cursor: pointer;
+    }
+</style>
+<div class="padding">
+    <div class="box m-b-0 p-a-md {{app.setting.theme.primary}}">
+        <div class="box-tool">
+            <a class="pull-right">
+                <i class="fa fa-close"  ng-click="goBack()"></i>
+            </a>
+        </div>
+        <div class="row">
+            <div class="m-t">
+                <a href class="pull-left m-r-md m-l-2">
+          <span >
+            <!--<p><i class="fa fa-spinner fa-pulse fa-5x fa-fw fa-inverse"></i></p>-->
+            <p ><img id="userLogo" src="../../assets/images/a0.jpg" class="avatar w-96 h-96 white"></p>
+          </span>
+                </a>
+                <div class="clear m-b">
+                    <h3 class="m-a-0 m-b-xs">{{user.username}}</h3>
+                    <p class="text-muted"></p>
+                    <!--<div class="block clearfix m-b">-->
+                        <!--<a href="" class="btn btn-icon rounded btn-sm">-->
+                            <!--<i class="material-icons">&#xe1bd;</i>-->
+                        <!--</a>-->
+                        <!--<a ng-if="currentRole.director || currentRole.admin" href="" class="btn btn-icon rounded btn-sm">-->
+                            <!--<i class="material-icons">&#xe8f7;</i>-->
+                        <!--</a>-->
+                        <!--<a ng-if="currentRole.clerk || currentRole.admin" href="" class="btn btn-icon rounded  btn-sm">-->
+                            <!--<i class="material-icons">&#xe2c8;</i>-->
+                        <!--</a>-->
+                        <!--<a ng-if="currentRole.executive || currentRole.admin" href="" class="btn btn-icon rounded  btn-sm">-->
+                            <!--<i class="material-icons">&#xe873;</i>-->
+                        <!--</a>-->
+                        <!--<a ng-if="currentRole.finance || currentRole.admin"href="" class="btn btn-icon rounded  btn-sm">-->
+                            <!--<i class="material-icons">&#xe53e;</i>-->
+                        <!--</a>-->
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="padding white">
+
+        <div class="b-b nav-active-bg">
+            <ul class="nav nav-tabs">
+                <li class="nav-item active">
+                    <a class="nav-link" href data-toggle="tab" data-target="#tab_1">基本信息</a>
+                </li>
+                <li class="nav-item" ng-if="user.id">
+                    <a class="nav-link" href data-toggle="tab" data-target="#tab_2">权限设置</a>
+                </li>
+                <li class="nav-item" ng-if="user.id">
+                    <a class="nav-link" href data-toggle="tab" data-target="#tab_3">重置密码</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="padding white">
+        <div class="tab-content">
+            <div class="tab-pane p-v-sm active" id="tab_1">
+                <form name="userForm" class="form-validation" ng-submit="upsertUser()" noValidate>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group ">
+                                <label>用户名</label>
+                                <input id="nameInput" type="text"  class="form-control" ng-model="user.username" required>
+                            </div>
+                            <div class="form-group ">
+                                <label>邮箱</label>
+                                <input id="emailInput" type="email"  ng-pattern="/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}/" class="form-control" ng-model="user.email" required>
+                            </div>
+                            <div class="form-group ">
+                                <label>手机号</label>
+                                <input id="phoneInput" type="tel" ng-pattern="/^[0-9]{11}$/" placeholder="11位手机号码"  class="form-control" ng-model="user.phone" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div  ng-if="!user.id" class="form-group ">
+                                <label>密码</label>
+                                <input id="passwordInput" type="password"  class="form-control" ng-model="pwd" required>
+                            </div>
+                            <div ng-if="!user.id" class="form-group ">
+                                <label>确认密码</label>
+                                <input id="confirmInput" type="password"  class="form-control" ng-model="confirmPwd" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" ladda="profileLoading" data-style="expand-left" class="btn m-t {{app.setting.theme.primary}}">保存</button>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane p-v-sm" id="tab_2">
+                <form name="teamForm" ng-submit="upsertPermission()">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label class="ui-check">
+                                        <input type="checkbox" ng-disabled="user.roles.admin || (!app.setting.user.roles.admin && !app.setting.user.roles.manage)" ng-model="user.roles.productEdit">
+                                        <i class="dark-white"></i>
+                                        商品管理
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label class="ui-check">
+                                        <input type="checkbox" ng-disabled="user.roles.admin || (!app.setting.user.roles.admin && !app.setting.user.roles.manage)" ng-model="user.roles.productConfirm" >
+                                        <i class="dark-white"></i>
+                                        商品审核
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label class="ui-check">
+                                        <input type="checkbox" ng-disabled="user.roles.admin || (!app.setting.user.roles.admin && !app.setting.user.roles.manage)" ng-model="user.roles.manage">
+                                        <i class="dark-white"></i>
+                                        人员管理
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" ladda="permissionLoading" data-style="expand-left" ng-hide="user.roles.admin  || (!app.setting.user.roles.admin && !app.setting.user.roles.manage)" class="btn m-t {{app.setting.theme.primary}}">保存</button>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane p-v-sm" id="tab_3"  ng-if="user.id">
+                <form name="userForm" class="form-validation" ng-submit="updatePassword()" noValidate>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group ">
+                                <label>密码</label>
+                                <input id="newPasswordInput" type="password"  class="form-control" ng-model="newPwd" required>
+                            </div>
+                            <div class="form-group ">
+                                <label>确认密码</label>
+                                <input id="newConfirmInput" type="password"  class="form-control" ng-model="newConfirmPwd" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" ladda="passwordLoading" data-style="expand-left" class="btn m-t {{app.setting.theme.primary}}">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

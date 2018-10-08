@@ -1,0 +1,189 @@
+<style type="text/css">
+  a{
+    color: #373a3c;
+  }
+  .weui-uploader__file{
+    width: 77px;
+    height: 77px;
+  }
+  .weui-cells:after, .weui-cells:before {
+    content: " ";
+    height: 0px;
+    border: none;
+    color: #d9d9d9;
+  }
+  textarea{
+    /*去除input默认样式*/
+    -webkit-appearance:none;
+    border-radius: 0;
+  }
+
+  .arrow.left:before{
+    /*border-right-color: rgba(120, 130, 140, 0.13);
+    border-left-width: 0;*/
+    border-right-color: transparent;
+  }
+  .arrow.right:before {
+    /*border-left-color: rgba(120, 130, 140, 0.13);
+    border-right-width: 0;*/
+    border-left-color: transparent;
+  }
+  .label{
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 80%;
+    line-height: 1.5;
+  }
+</style>
+
+<div class="content text-xs">
+  <!--反馈详情-->
+  <div class="dker b-b" ng-show="id">
+    <div class="p-a-sm text-ellipsis" style="line-height: 32px">
+      <img ng-src="{{feedback.user.avatar ? feedback.user.avatar : '../assets/images/logo.png'}}" class="img-circle w-32 m-r-sm">
+      来自 <a href>{{feedback.user.name}}( {{feedback.user.team.name}} )</a> <span class="text-xs">于 {{feedback.created | date: "yyyy-MM-dd HH:mm"}}</span>
+    </div>
+    <div class=" p-y-sm">
+      <div class="content-padded" style="margin-top: 0; margin-bottom: 0;">
+        <p class="m-a-0">{{feedback.description}}</p>
+        <div class="p-t-sm">
+          <div ng-repeat="attach in feedback.images" class="b-a inline m-r-sm m-b-sm bg-light">
+            <div class="p-a-xs w-sm lt">
+              <a><img ng-src="{{attach}}" class="w-full"></a>
+            </div>
+          </div>
+        </div>
+        <div class="m-b" ng-repeat="record in feedback.comments">
+          <span class="p-y-xs {{record.userId == user.id ? 'pull-right':'pull-left'}}">
+            <img ng-src="{{record.userId == user.id ? (user.avatar ? user.avatar : '../assets/images/logo.png') : (record.user.avatar ? record.user.avatar : '../assets/images/logo.png')}}" alt="..." class="w-32 img-circle">
+          </span>
+          <span class="clear hidden-folded p-x-sm {{record.userId == user.id ? 'text-right':''}}">
+            <small class="block text-muted">{{record.created | date: (record.isToday ? "HH:mm" : "yyyy-MM-dd HH:mm")}}</small>
+            <span class="label label-lg white text-dark pos-rlt text-sm m-r-xs text-left" style="font-weight: normal;"><b class="arrow {{record.userId == user.id ? 'right':'left'}} b-white pull-in"></b>{{record.description}}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--意见反馈-->
+  <div class="b-b" ng-show="!id">
+    <img src="http://maker-space-files.oss-cn-shanghai.aliyuncs.com/feedback_background.png?x-oss-process=image/resize,m_mfit,h_100,w_100" style="width: 100%;">
+    <article class="weui-article" style="padding-bottom: 0; padding-top: 0;">
+      <h1 id="ooo">用户反馈</h1>
+      <section>
+        <h3>请留下您的宝贵意见，我们的运营人员将尽快联系您</h3>
+      </section>
+    </article>
+  </div>
+
+
+  <!--输入框-->
+  <div>
+    <!--<div class="box">
+      <div class="box-header ng-show" ng-hide="reply">
+        <div class="m-b-lg">
+          点击这里 <a href class="text-u-l" ng-click="reply=!reply">回复</a>
+        </div>
+      </div>
+      <div class="ng-hide" ng-show="reply">
+        <div class="box-header b-b">
+          {{item.from}}
+        </div>
+        <div class="box-body" contenteditable="true" style="min-height:100px"></div>
+        <div class="box-footer">
+          <button class="btn white pull-right" ng-click="reply=!reply"><i class="fa fa-trash-o"></i></button>
+          <button class="btn info w-xs">发送</button>
+        </div>
+      </div>
+    </div>-->
+    <div class="weui-cells weui-cells_form m-a-0">
+      <div class="weui-cell">
+        <div class="weui-cell__bd">
+          <div class="weui-uploader__hd">
+            <div class="weui-uploader__title text-sm"  ng-show="id">意见反馈</div>
+          </div>
+          <textarea class="weui-textarea b-a p-a-xs text-sm" rows="3" ng-modal="description" id="descriptionId"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--上传图片-->
+  <div ng-show="!id">
+    <div class="weui-gallery" id="gallery">
+      <span class="weui-gallery__img" id="galleryImg"></span>
+      <div class="weui-gallery__opr">
+        <a href="javascript:" class="weui-gallery__del">
+          <i class="weui-icon-delete weui-icon_gallery-delete"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="weui-cells weui-cells_form m-a-0">
+      <div class="weui-cell">
+        <div class="weui-cell__bd">
+          <div class="weui-uploader">
+            <div class="weui-uploader__hd">
+              <div class="weui-uploader__title text-sm">图片上传</div>
+            </div>
+            <div class="weui-uploader__bd ">
+              <ul class="weui-uploader__files m-a-0" id="uploaderFiles">
+                <div class="m-r" ng-repeat="image in feedback.images">
+                  <a><img src='{{image}}' class="weui-uploader__file"></a>
+                </div>
+                <!--<div class="p-a-xs w-xms lt b-a inline m-r-sm m-b-sm bg-light">-->
+                  <!--<a><img ng-src='../assets/images/logo.png' class="w-full"></a>-->
+                <!--</div>-->
+                <div class="weui-uploader__input-box" ng-click="uploadImage()" ng-hide="feedback.images.length >= 3">
+                </div>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--提交-->
+  <div class="weui-btn-area m-b">
+    <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips" ng-click="doFeedback()">提交反馈</a>
+  </div>
+</div>
+
+
+
+<div class="js_dialog" style=" display: none;" id="m-success">
+  <div class="weui-mask"></div>
+  <div class="weui-dialog ">
+    <div class="weui-dialog__bd">
+      提交成功
+    </div>
+    <div class="weui-dialog__ft">
+      <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="quit()">确定</a>
+    </div>
+  </div>
+</div>
+
+<div class="js_dialog" style=" display: none;" id="m-fail">
+  <div class="weui-mask"></div>
+  <div class="weui-dialog ">
+    <div class="weui-dialog__bd">
+      提交失败
+    </div>
+    <div class="weui-dialog__ft">
+      <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="close()">确定</a>
+    </div>
+  </div>
+</div>
+
+
+<div id="loadingToast" style="display:none;">
+  <div class="weui-mask_transparent"></div>
+  <div class="weui-toast">
+    <i class="weui-loading weui-icon_toast"></i>
+    <p class="weui-toast__content">上传中</p>
+  </div>
+</div>

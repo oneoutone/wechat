@@ -1,0 +1,266 @@
+<style>
+    .datepicker{z-index:1151 !important;}
+    .clsDatePicker {
+        z-index: 100000;
+    }
+</style>
+
+<div class="padding">
+
+    <div class="nav-active-{{app.setting.theme.primary}} p-b">
+        <ul class="nav nav-pills" ui-nav>
+            <li class="nav-item {{state == 'all' ? 'active' : ''}}">
+                <a class="nav-link" ng-click="setState('all')" href>全部</a>
+            </li>
+            <li class="nav-item {{state == 'current' ? 'active' : ''}}" >
+                <a class="nav-link" ng-click="setState('current')" href>当前入驻 <b class="label success">{{nowParkNum}}</b></a>
+            </li>
+            <li class="nav-item {{state == 'tempBanned' ? 'active' : ''}}" >
+                <a class="nav-link" ng-click="setState('tempBanned')" href>暂时禁用 <b class="label warn">{{tempBannedNum}}</b></a>
+            </li>
+            <li class="nav-item {{state == 'past' ? 'active' : ''}}" >
+                <a class="nav-link" ng-click="setState('past')" href>历史入驻 <b class="label danger">{{pastParkNum}}</b></a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="box">
+
+        <div class="box-body b-t">
+            <button type="button" data-toggle="modal" ng-click="setUser()" data-target="#m-edit" class="btn btn-sm {{app.setting.theme.primary}}">
+                <i class="material-icons">add</i> 新建
+            </button>
+            <input id="uploadFile" type="file" ngf-select="onFileSelect($file)" accept=".xls,.xlsx" class="hide" />
+            <button ladda="importLoading" data-style="zoom-in" type="button"  ui-sref="app.park.team.import" class="btn btn-sm {{app.setting.theme.primary}}">
+                导入
+            </button>
+            <button type="button"  ng-click="clickExport()" class="btn btn-sm {{app.setting.theme.primary}}">
+                导出
+            </button>
+            <form class="form-inline pull-right v-m" role="search">
+                <div class="form-group">
+                    <div class="input-group input-group-sm">
+                        <input id="filter" type="text" class="form-control p-x b-a rounded" ng-model="filterString" placeholder="搜索" ng-change="doFilter()">
+                        <span class="input-group-btn">
+              <button type="submit" class="btn white b-a rounded no-shadow"><i class="fa fa-search"></i></button>
+            </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <table id="teamTable" class="table table-striped" data-empty="没有记录">
+            <thead>
+            <tr>
+                <th>
+                    <a ng-click="sortBy('name')">团队名称</a><span ng-show="order == 'name'" class="fooicon {{direct == 'ASC' ? 'fooicon-sort-asc' : 'fooicon-sort-desc'}} m-l-1"></span>
+                </th>
+                <th>公司名称</th>
+                <th data-breakpoints="xs sm md" data-sortable="false">人数</th>
+                <th>
+                    <a ng-click="sortBy('enterDate')">入驻时间</a><span ng-show="order == 'enterDate'" class="fooicon {{direct == 'ASC' ? 'fooicon-sort-asc' : 'fooicon-sort-desc'}} m-l-1"></span>
+                </th>
+                <th data-breakpoints="xs sm md">
+                    <a ng-click="sortBy('leaveDate')">离开时间</a><span ng-show="order == 'leaveDate'" class="fooicon {{direct == 'ASC' ? 'fooicon-sort-asc' : 'fooicon-sort-desc'}} m-l-1"></span>
+                </th>
+                <th data-type="html" data-sortable="false">操作</th>
+            </tr>
+            </thead>
+            <tr ng-repeat="row in teams">
+                <td class="v-m">{{row.name}}</td>
+                <td class="v-m">{{row.company.name}}</td>
+                <td class="v-m">{{row.employees == undefined ? 0 : row.employees.length}}</td>
+                <td class="v-m">{{row.enterDate | date:'yyyy-MM-dd'}}</td>
+                <td class="v-m">{{row.leaveDate | date:'yyyy-MM-dd'}}</td>
+                <td class="v-m" data-type="html">
+                    <button class="btn btn-xs btn-outline b-dark text-dark" ui-sref="app.park.team.info({id: row.id})" >编辑</button>
+                    <!-- Single button -->
+                    <div class="btn-group" uib-dropdown>
+                        <button type="button" class="btn btn-xs btn-outline b-dark text-dark b-a" uib-dropdown-toggle ng-disabled="disabled">
+                            更多 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                            <li role="menuitem"><a href ui-sref="app.park.team.users({id: row.id})">人员管理</a></li>
+                            <li role="menuitem"><a href ng-click="changeLeft(row)">{{(row.left == true || row.status == 'tempBanned' )? '移入当前入驻' : '移入历史入驻'}}</a></li>
+                            <li role="menuitem"><a href ng-click="showDeleteModal(row)" data-toggle="modal" data-target="#delete">删除</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr class="white b-white" ng-show="bigTotalItems > 10">
+                <td colspan="6" class="white b-white text-center">
+                    <ul class="pagination" uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" total-items="true" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" next-text="下一页" previous-text="上一页" rotate="false" ng-change="pageChanged()"></ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- small modal -->
+<div id="m-remove" class="modal fade animate black-overlay" data-backdrop="false">
+    <div class="row-col h-v">
+        <div class="row-cell v-m">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content flip-y">
+                    <div class="modal-body text-center">
+                        <p class="p-y m-t"><i class="fa fa-check text-success fa-3x"></i></p>
+                        <p>该团队已被移入历史入驻！</p>
+                    </div>
+                    <div class="modal-footer text-center">
+                        <!--<button type="button" class="btn white p-x-md" data-dismiss="modal">取消</button>-->
+                        <button type="button" class="btn {{app.setting.theme.primary}} p-x-md" data-dismiss="modal">知道了</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="m-return" class="modal fade animate black-overlay" data-backdrop="false">
+    <div class="row-col h-v">
+        <div class="row-cell v-m">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content flip-y">
+                    <div class="modal-body text-center">
+                        <p class="p-y m-t"><i class="fa fa-check text-success fa-3x"></i></p>
+                        <p>该团队已被移入当前入驻！</p>
+                    </div>
+                    <div class="modal-footer text-center">
+                        <!--<button type="button" class="btn white p-x-md" data-dismiss="modal">取消</button>-->
+                        <button type="button" class="btn {{app.setting.theme.primary}} p-x-md" data-dismiss="modal">知道了</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / .modal -->
+
+<!-- / .modal -->
+<div id="delete" class="modal fade animate black-overlay" data-backdrop="false">
+    <div class="row-col h-v">
+        <div class="row-cell v-m">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content flip-y">
+                    <div class="modal-body text-center">
+                        <p class="p-y">
+                            <i class="fa fa-warning text-warn fa-3x"></i><br><br>
+                            确定删除团队?
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm white p-x-md" data-dismiss="modal">取消</button>
+                        <button type="button" ng-click="deleteTeam()"  class="btn btn-sm {{app.setting.theme.primary}} p-x-md" data-dismiss="modal">删除</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- .modal -->
+<div id="m-edit" class="modal white-overlay" data-backdrop="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content box-shadow-z3">
+            <div class="modal-header">
+                <h5 class="modal-title">新建团队</h5>
+            </div>
+            <div class="modal-body p-a-0">
+                <form name="dbForm" role="form" id="teamForm" class="form-validation" ng-submit="createTeam()" novalidate>
+                    <div class="p-a-md">
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label for="nameInput">团队名称<span class="text-danger"> *</span></label>
+                                <input id="nameInput" type="text"  class="form-control checkPost"  ng-model="team.name" required >
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="ceoInput">联系人<span class="text-danger"> *</span></label>
+                                <input id="ceoInput" type="text"  class="form-control" ng-model="team.contactPeople.name" >
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="phoneInput">联系人手机号<span class="text-danger"> *</span></label>
+                                <input id="phoneInput" type="tel" ng-pattern="/^[0-9]{11}$/" placeholder="11位手机号码"  class="form-control" ng-model="team.contactPeople.phone">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="emailInput">联系邮箱<span class="text-danger"> *</span></label>
+                                <input id="emailInput" type="tel" ng-pattern="/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}/" placeholder="邮箱"  class="form-control" ng-model="team.contactPeople.email">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="projectName">项目名称<span class="text-danger"> *</span></label>
+                                <input id="projectName" type="text" ng-model="project.name" class="form-control">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="industry">所属行业</label>
+                                <input id="industry" type="text" ng-model="project.industry" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="projectInfo">项目简介</label>
+                            <textarea id="projectInfo" class="form-control" ng_model="project.description" rows="4"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="company">公司名称</label>
+                                <input id="company" type="text" ng-model="company.name" class="form-control">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="reg_no">统一社会信用代码</label>
+                                <input id="reg_no" type="text" ng-model="company.reg_no" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button class="btn btn-sm white" data-dismiss="modal">取消</button>
+                        <button type="submit" ladda="loading" data-style="expand-left" class="btn btn-sm {{app.setting.theme.primary}}" >完成</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- .modal -->
+<div id="m-days" class="modal white-overlay" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content box-shadow-z3">
+            <div class="modal-header">
+                <h5 class="modal-title">自动禁用时间设置</h5>
+            </div>
+            <div class="modal-body p-a-0">
+                <form name="accessCardForm" role="form">
+                    <div class=" p-a-3">
+                        <div class="">
+                            <label>该团队将在设置的日期自动禁用</label>
+                            <div class=" ">
+                                <div class="">
+                                    <input type="text"  class="form-control form-control-sm"
+                                           ng-model="revertDate"
+                                           data-date-format="yyyy-MM-dd"
+                                           data-icon-left="fa fa-chevron-left"
+                                           data-icon-right="fa fa-chevron-right"
+                                           data-autoclose="true"
+                                           data-min-date="{{minDate}}"
+                                           bs-datepicker
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn white p-x-md"  data-dismiss="modal">取消</button>
+                        <button  class="btn {{app.setting.theme.primary}}"  ng-click="saveRevert()" >完成</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / .modal -->
+
