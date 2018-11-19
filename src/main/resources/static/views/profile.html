@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <title>个人中心</title>
+</head>
+
+<body>
+<div class="my-head layout-center">
+  <div class="imgbd"><img class="img" src="{{app.setting.user.headerUrl}}" /></div>
+  <div class="user-info flex-item1">
+    <div class="name">{{app.setting.user.nickName}}</div>
+    <div class="text">工号：{{app.setting.user.emplyeeId}}</div>
+    <div class="text">部门：{{app.setting.user.organ}}</div>
+    <div class="text">总积分：<span class="c-sub">{{app.setting.user.score ? app.setting.user.score : 0}}</span></div>
+  </div>
+</div>
+
+<ul class="my-list">
+  <li class="r-arrow">
+    <a class="layout-center" ui-sref="order.list">
+      <i class="iconfont icon-gongdan"></i>
+      <span class="text">我的工单</span>
+    </a>
+  </li>
+  <li class="r-arrow">
+    <a class="layout-center" ui-sref="redeemList">
+      <i class="iconfont icon-duihuandingdan"></i>
+      <span class="text">兑换订单</span>
+    </a>
+  </li>
+  <li class="r-arrow">
+    <a class="layout-center" ui-sref="scoreList">
+      <i class="iconfont icon-jifen"></i>
+      <span class="text">积分明细</span>
+    </a>
+  </li>
+  <li class="r-arrow">
+    <a class="layout-center" ui-sref="score">
+      <i class="iconfont icon-prompt"></i>
+      <span class="text">如何赚取积分</span>
+    </a>
+  </li>
+</ul>
+</body>
+
+</html>

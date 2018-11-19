@@ -1,0 +1,168 @@
+<div class="padding">
+
+
+    <div class="row">
+        <div class="box">
+            <div class="box-header"><h2>礼品信息</h2></div>
+            <div class="box-divider"></div>
+            <div class="box-body">
+
+
+
+
+                <div class="row  m-t-2">
+                    <p class="form-control-static dker p-x col-sm-12 m-a-sm" style="min-height: 1.5rem;" >基本信息</p>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline ">
+                                <label style="width:12%"><span class="text-danger"> *</span>简称:</label>
+                                <input  type="text"  class="form-control"  ng-model="product.abbreviation" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline ">
+                                <label style="width:12%"><span class="text-danger"> *</span>全称:</label>
+                                <input  type="text"  class="form-control checkPost "  ng-model="product.name" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline">
+                                <label style="width:12%"><span class="text-danger "> *</span>封面图:</label>
+                                <input id="simpleImageInput" type="file" ng-show="!product.simpleImageUrl" class="form-control-sm" ng-model="simpleImage" onchange="angular.element(this).scope().uploadSimpleFile(this)">
+                                <div id="adImages" ng-show="product.simpleImageUrl" class="row text-white p-l-lllg" ng-click="changeSimpleImage()">
+                                    <div class="col-sm-5 " >
+                                        <div  class="item" >
+                                            <img  style="width:100%; height: 100%;" ng-src="{{product.simpleImageUrl}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline ">
+                                <label style="width:12%"><span class="text-danger"> *</span>详情图:</label>
+                                <input  type="file"  class="form-control-sm " ng-show="detailImages.length < 2" onchange="angular.element(this).scope().uploadDetailFile(this)">
+                                <div class="row text-white p-l-lllg" ng-show="detailImages.length > 0">
+                                    <div class="col-sm-3" ng-show="detailImages.length > 0">
+                                        <div class="item" >
+                                            <img  style="width:100%; height: 100%;" src="{{detailImages[0]}}">
+                                            <div class="item-overlay black-overlay w-full" style="background-color: rgba(0, 0, 0, 0.65);" ></div>
+                                            <div class="bottom item-overlay text-center p-x-xs">
+                                                <a href ui-toggle-class class="text-md p-a-sm inline" ng-click="removeImage(0)">
+                                                    <i class="material-icons  text-lg">delete</i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3" ng-show="detailImages.length > 1">
+                                        <div  class="item" >
+                                            <img  style="width:100%; height: 100%;" src="{{detailImages[1]}}">
+                                            <div class="item-overlay black-overlay w-full" style="background-color: rgba(0, 0, 0, 0.65);" ></div>
+                                            <div class="bottom item-overlay text-center p-x-xs">
+                                                <a href ui-toggle-class class="text-md p-a-sm inline" ng-click="removeImage(1)">
+                                                    <i class="material-icons  text-lg">delete</i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="form-control-static dker p-x col-sm-12 m-a-sm" style="min-height: 1.5rem;" >兑换信息</p>
+
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline">
+                                <label style="width:20%"><span class="text-danger"> *</span>兑换开始时间:</label>
+                                <input type="text" size="18" class="form-control w-auto inline" ng-disabled="product.id"
+                                       ng-model="product.start"
+                                       data-date-format="yyyy-MM-dd"
+                                       data-max-date="{{untilDate}}"
+                                       data-icon-left="fa fa-chevron-left"
+                                       data-icon-right="fa fa-chevron-right"
+                                       placeholder="开始时间"
+                                       autoclose="true"
+                                       bs-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline">
+                                <label style="width:20%"><span class="text-danger"> *</span>兑换结束时间:</label>
+                                <input type="text" size="18" class="form-control w-auto inline" ng-disabled="product.id"
+                                       ng-model="product.end"
+                                       data-date-format="yyyy-MM-dd"
+                                       data-max-date="{{untilDate}}"
+                                       data-icon-left="fa fa-chevron-left"
+                                       data-icon-right="fa fa-chevron-right"
+                                       placeholder="结束时间"
+                                       autoclose="true"
+                                       bs-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline">
+                                <label style="width:20%"><span class="text-danger"> *</span>兑换所需积分:</label>
+                                <input  type="text"  class="form-control checkPost"  ng-model="product.score" required>积分
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline">
+                                <label style="width:20%"><span class="text-danger"> *</span>库存:</label>
+                                <input  type="text"  class="form-control checkPost"  ng-model="product.store" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline">
+                                <label style="width:20%"><span class="text-danger"> *</span>市场价:</label>
+                                <input  type="text"  class="form-control checkPost"  ng-model="product.price" required>元
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline">
+                                <label style="width:20%">备注:</label>
+                                <textarea   type="text" roww="4" class="form-control checkPost"  ng-model="product.remark" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" ng-show="product.id">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline">
+                                <label style="width:20%">新建时间:</label>
+                            <span>{{product.created | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+                <div class="box-footer p-t p-b ">
+                    <div class="form-group p-t">
+                        <button type="button" class="btn white btn-sm " onClick="javascript: history.go(-1);">返回</button>
+                        <button ladda="loading" data-style="expand-left" ng-click="saveProduct()" class="btn btn-sm {{app.setting.theme.primary}} -right">保存</button>
+                    </div>
+                </div>
+        </div>
+        <div>
+        </div>
+    </div>
+</div>

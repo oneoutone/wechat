@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>工单详情</title>
+</head>
+
+<body>
+<div class="wo-detail">
+    <div class="cont">
+        <h3 class="tit">{{ticket.subject}}&nbsp;&nbsp;<span class="state {{ticket.status_en == 'resolved' ? 'state2' : (ticket.status_en == 'closed' ? 'state3' : 'state1')}}">{{ticket.status_en == 'resolved' ? '已解决' : (ticket.status_en == 'closed' ? '已关闭' : '进行中')}}</span></h3>
+        <div class="time">{{ticket.created}}</div>
+        <p class="text">{{ticket.content}}</p>
+        <div class="imgbox clearfix"><img ng-click="preview(image)"  ng-repeat="image in ticket.attachments" class="img" src="{{image.url}}" /></div>
+    </div>
+    <div class="foot layout-box">
+        <div class="foot-item flex-item1" ng-show="ticket.status_en && ticket.status_en != 'resolved' && ticket.status_en != 'closed'" ui-sref="order.reply({id: ticket.id})"><i class="iconfont icon-huifu"></i><span class="fn-text">回复</span></div>
+        <div class="foot-item flex-item1" ng-show="ticket.status_en && ticket.status_en != 'resolved' && ticket.status_en != 'closed'" ng-click="showDialog()"><i class="iconfont icon-jiejue"></i><span class="fn-text">解决</span></div>
+        <!--<div class="foot-item flex-item1 active"><i class="iconfont icon-jiejue2"></i><span class="fn-text">已解决</span></div>-->
+    </div>
+</div>
+
+<ul class="reply-list">
+    <li class="reply-item"  ng-repeat="item in replies"  on-finish-render-filters>
+        <div class="layout-box">
+            <div class="name flex-item1">{{item.author.nick_name}}</div>
+            <span class="time">{{item.created}}</span>
+        </div>
+        <p class="text reply-content"></p>
+        <div class="imgbox clearfix"><img ng-repeat="image in item.attachments"  ng-click="preview(image)" class="img" src="{{image.url}}" /></div>
+    </li>
+</ul>
+
+</body>
+
+</html>
+
+
+
+
+
+<div class="js_dialog" id="dialog" style="display: none;">
+    <div class="weui-mask"></div>
+    <div class="weui-dialog">
+        <div class="weui-dialog__hd"><strong class="weui-dialog__title">工单提示</strong></div>
+        <div class="weui-dialog__bd">确认该工单已得到解决</div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default" ng-click="hideDialog()">取消</a>
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="resolve()">确认</a>
+        </div>
+    </div>
+</div>
+
+<div id="loadingToast1" style="display:none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-loading weui-icon_toast"></i>
+        <p class="weui-toast__content">处理中</p>
+    </div>
+</div>

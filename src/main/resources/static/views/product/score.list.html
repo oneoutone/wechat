@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>积分明细</title>
+</head>
+
+<body>
+<div class="points-sum">
+    <div class="tit">当前总积分：</div>
+    <div class="sum">{{app.setting.user.score}}</div>
+</div>
+
+<ul class="points-list">
+    <li class="points-item" ng-repeat="item in scoreList">
+        <a class="layout-center">
+            <div class="flex-item1">
+                <div class="tit">{{item.remark}}</div>
+                <div class="time">2018-09-07{{item.created | date: 'yyyy-MM-dd'}}</div>
+            </div>
+            <span class="value {{item.type == 'add' ? 'plus' : 'minus'}}">{{item.type == 'add' ? '+' : '-'}}{{item.score}}</span>
+        </a>
+    </li>
+</ul>
+</body>
+
+</html>

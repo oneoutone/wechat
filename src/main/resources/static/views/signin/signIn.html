@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <title>绑定注册</title>
+</head>
+
+<body class="bg-white">
+<form class="reg bg-white">
+
+  <img class="logo" src="assets/images/img-logo.png" />
+
+  <ul class="input-group">
+    <li class="input-row layout-box">
+      <label class="iconfont icon-username"></label>
+      <div class="input-box flex-item1">
+        <input id="employeeId" class="input" type="text" ng-model="employeeId" placeholder="请输入员工号" />
+      </div>
+    </li>
+    <li class="input-row layout-box">
+      <label class="iconfont icon-shouji"></label>
+      <div class="input-box flex-item1">
+        <input id="phone" class="input" type="tel" ng-model="phone" placeholder="请输入手机号" />
+      </div>
+    </li>
+    <li class="input-row layout-box">
+      <label class="iconfont icon-yanzhengma"></label>
+      <div class="input-box flex-item1">
+        <input id="code" class="input" type="text" ng-model="code" placeholder="请输入手机校验码" />
+      </div>
+      <span class="get-code {{waiting ? 'waiting' : ''}}" ng-click="getCode()">{{codeString}}</span>
+    </li>
+  </ul>
+
+  <!--<div class="protocol-box clearfix">-->
+    <!--<input class="iconbox" type="checkbox" ng-model="agree" /><span class="text">我已阅读和同意</span><span class="protocol">隐私和服务条款</span>-->
+  <!--</div>-->
+
+  <button type="submit" class="btn-main" ng-click="bind()">绑定注册</button>
+</form>
+</body>
+
+</html>
+
+<div id="loadingToast" style="display:none;">
+  <div class="weui-mask_transparent"></div>
+  <div class="weui-toast">
+    <i class="weui-loading weui-icon_toast"></i>
+    <p class="weui-toast__content">请稍等</p>
+  </div>
+</div>
+
+<div id="errToastr" style="display: none;">
+  <div class="weui-mask_transparent"></div>
+  <div class="weui-toast">
+    <p class="weui-toast__content">{{msg}}</p>
+  </div>
+</div>

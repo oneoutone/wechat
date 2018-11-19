@@ -1,0 +1,106 @@
+<style>
+    .datepicker{z-index:1151 !important;}
+    .clsDatePicker {
+        z-index: 100000;
+    }
+    .head_form {
+        height: 20vh;
+    }
+</style>
+
+<div class="padding">
+
+    <div class="box">
+        <div class="box-body head_form">
+            <form>
+                <div>
+                    <div class="form-inline col-sm-5">
+                        <label>公司</label>
+                        <select ng-model="filter.org"  class="form-control c-select form-control-sm p-a-0 p-l p-r-lg" style="border-radius: .2rem; width: 10rem;">
+                            <option ng-selected="item == filter.org" ng-repeat="item in orgList"  value="{{item}}">{{item}}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-inline col-sm-4">
+                        <label>工号</label>
+                        <input type="text" class="form-control-sm p-x b-a" ng-model="filter.employeeId" placeholder="名称">
+                    </div>
+
+                    <div class="form-inline col-sm-3">
+                        <button  type="button"  ng-click="doFilter()" class=" btn btn-sm btn-outline b-{{app.setting.theme.primary}} text-{{app.setting.theme.primary}}">
+                            查询
+                        </button>
+                        <button  type="button" ng-click="download()" class=" btn btn-sm btn-outline b-{{app.setting.theme.primary}} text-{{app.setting.theme.primary}} m-l-3">
+                            下载
+                        </button>
+                    </div>
+
+                </div>
+
+                <div style="padding-top: 4rem">
+                    <div class="form-inline col-sm-5">
+                        <label>兑礼名称</label>
+                        <input type="text" class="form-control-sm p-x b-a" ng-model="filter.productName" placeholder="兑礼名称">
+
+                    </div>
+                    <div class="form-inline col-sm-7">
+                        <div class="input-group-sm form-inline">
+                            <label>兑换时间</label>
+                            <input type="text" size="18" ng-change="selectRoomCb()" class="form-control w-auto inline"
+                                   ng-model="filter.start"
+                                   data-date-format="yyyy-MM-dd"
+                                   data-max-date="{{untilDate}}"
+                                   data-icon-left="fa fa-chevron-left"
+                                   data-icon-right="fa fa-chevron-right"
+                                   placeholder="开始日期"
+                                   autoclose="true"
+                                   bs-datepicker><span class="m-l-2 m-r-2">至</span>
+                            <input type="text" size="18" ng-change="selectRoomCb()" class="form-control w-auto inline"
+                                   ng-model="filter.end"
+                                   data-date-format="yyyy-MM-dd"
+                                   data-min-date="{{fromDate}}"
+                                   data-icon-left="fa fa-chevron-left"
+                                   data-icon-right="fa fa-chevron-right"
+                                   placeholder="截止日期"
+                                   autoclose="true"
+                                   bs-datepicker>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+
+        <table id="teamTable" class="table table-striped" data-empty="没有记录">
+            <thead>
+            <tr>
+                <th data-breakpoints="xs sm md" data-sortable="false">订单编号</th>
+                <th data-breakpoints="xs sm md" data-sortable="false">兑礼名称</th>
+                <th data-breakpoints="xs sm md" data-sortable="false">兑换人姓名</th>
+                <th data-breakpoints="xs sm md" data-sortable="false">工号</th>
+                <th data-breakpoints="xs sm md" data-sortable="false">状态</th>
+                <th data-breakpoints="xs sm md" data-sortable="false">兑换时间</th>
+                <th data-breakpoints="xs sm md" data-sortable="false">操作</th>
+            </tr>
+            </thead>
+            <tr ng-repeat="row in redeemList">
+                <td class="v-m">{{row.no}}</td>
+                <td class="v-m">{{row.productName}}</td>
+                <td class="v-m">{{row.userName}}</td>
+                <td class="v-m">{{row.employeeId}}</td>
+                <td class="v-m">{{row.status == 'accepted' ? '已兑换' : '已完成'}}</td>
+                <td class="v-m">{{row.created | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                <td class="v-m">
+                    <button class="btn btn-xs {{app.setting.theme.primary}}"  ui-sref="app.redeem.info({id: row.id})" >详情</button>
+                </td>
+            </tr>
+            <tr class="white b-white" ng-show="bigTotalItems > 10">
+                <td colspan="6" class="white b-white text-center">
+                    <ul class="pagination" uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" total-items="true" max-size="10" class="pagination-sm" boundary-link-numbers="true" next-text="下一页" previous-text="上一页" rotate="false" ng-change="pageChanged()"></ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+

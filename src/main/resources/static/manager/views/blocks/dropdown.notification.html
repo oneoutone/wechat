@@ -1,0 +1,65 @@
+
+<style type="text/css">
+  .notificationModal{
+    width: 450px;
+    background: white;
+    position: absolute;
+    padding: 0px 10px;
+    right: 0px;
+    top: 56px;
+  }
+
+  .w-30 {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .notification .list-left {
+    float: left;
+    padding-right: 10px;
+  }
+
+  .notification .list-item {
+    display: block;
+    position: relative;
+    padding: 10px 0;
+  }
+
+  .notification .list-left + .list-body {
+    margin-left: 40px;
+  }
+
+  .notification .inset .list-body:after {
+    left: 40px;
+  }
+</style>
+
+<div class="notificationModal box b-a" ng-show="notification">
+  <a class="pull-right text-muted text-lg m-r-sm" ng-click="showNotification()">&times;</a>
+  <div class="b-b p-a-sm text-center">
+    <span class="">通知</span>
+  </div>
+  <div id="testx" class="scrollable notification"  style="overflow-y: auto;">
+    <ul class="list inset m-a-0">
+      <li class="list-item" ng-repeat="item in app.notificationList">
+        <a herf="" class="list-left">
+          <span ng-show="!item.creator.avatar" class="w-30 r-2x _600 text-md accent">{{item.creator.name ? item.creator.name[0] : "管"}}</span>
+          <span ng-show="item.creator.avatar"><img ng-src="{{item.creator.avatar}}?x-oss-process=image/resize,m_fixed,h_30,w_30" class="w-30 r-2x white"></span>
+        </a>
+        <div class="list-body block"  >
+          <span ng-bind-html="item.content"></span>
+          <small class="text-muted" style="display: inline-flex;">{{item.created | date: "M月d日 HH:mm"}}</small>
+        </div>
+      </li>
+    </ul>
+
+    <a href class="list-item _600" ui-sref="app.notification" ng-click="showNotification()">显示所有通知</a>
+
+
+  </div>
+</div>
+
+<!-- / dropdown -->

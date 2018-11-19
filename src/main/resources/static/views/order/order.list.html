@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>我的工单</title>
+</head>
+
+<body>
+<div class="head-menu">
+    <ul class="layout-box">
+        <li class="menu-item flex-item1 {{status == 'all' ? 'active' : ''}}" ng-click="setStatus('all')"><span>全部</span></li>
+        <li class="menu-item flex-item1 {{status == 'processing' ? 'active' : ''}}" ng-click="setStatus('processing')"><span>进行中</span></li>
+        <li class="menu-item flex-item1 {{status == 'resolved' ? 'active' : ''}}" ng-click="setStatus('resolved')"><span>已解决</span></li>
+        <li class="menu-item flex-item1 {{status == 'closed' ? 'active' : ''}}" ng-click="setStatus('closed')"><span>已关闭</span></li>
+    </ul>
+</div>
+
+<div class="content">
+    <ul class="wo-list">
+        <li class="wo-item" ng-repeat="item in list" ui-sref="order.info({id: item.id})" on-finish-render-filters>
+            <div class="layout-center">
+                <h3 class="tit ellipsis flex-item1">{{item.subject}}</h3>
+                <span class="state {{item.status == 'resolved' ? 'state2' : (item.status == 'closed' ? 'state3' : 'state1')}}">{{item.status == 'resolved' ? '已解决' : (item.status == 'closed' ? '已关闭' : '进行中')}}</span>
+            </div>
+            <div class="cont layout-box">
+                <div class="text flex-item1">{{item.assignee}}</div>
+                <div class="time">{{item.created}}</div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="foot-btn">
+    <button type="button" class="btn" ui-sref="order.add">新建工单</button>
+</div>
+
+</body>
+
+</html>

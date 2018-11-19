@@ -1,0 +1,98 @@
+<style>
+    .datepicker{z-index:1151 !important;}
+    .clsDatePicker {
+        z-index: 100000;
+    }
+    .head_form {
+        height: 20vh;
+    }
+</style>
+
+<div class="padding">
+
+    <div class="box">
+        <div class="box-body head_form">
+            <form>
+                <div>
+                    <div class="form-inline col-sm-3">
+                        <label>编号</label>
+                        <input type="text" class="form-control-sm p-x b-a" ng-model="filter.id" placeholder="编号">
+                    </div>
+                    <div class="form-inline col-sm-3">
+                        <label>名称</label>
+                        <input type="text" class="form-control-sm p-x b-a" ng-model="filter.name" placeholder="名称">
+                    </div>
+
+                    <div class="form-inline col-sm-3">
+                        <label>状态</label>
+                        <select ng-model="filter.status"  class="form-control c-select form-control-sm p-a-0 p-l p-r-lg" style="border-radius: .2rem; width: 10rem;">
+                            <option ng-selected="item.value == filter.status" ng-repeat="item in statusList"  value="{{item.value}}">{{item.name}}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-inline col-sm-2">
+                        <button  type="button"  ng-click="doFilter()" class=" btn btn-sm btn-outline b-{{app.setting.theme.primary}} text-{{app.setting.theme.primary}}">
+                            查询
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+        <table id="teamTable" class="table table-striped" data-empty="没有记录">
+            <thead>
+            <tr>
+                <th data-breakpoints="xs sm md" data-sortable="false">编号</th>
+                <th data-breakpoints="xs sm md" data-sortable="false">礼品名称</th>
+                <th data-breakpoints="xs sm md" data-sortable="false">状态</th>
+                <th data-breakpoints="xs sm md" data-sortable="false">兑换开始时间</th>
+                <th data-breakpoints="xs sm md" data-sortable="false">兑换结束时间</th>
+                <th data-breakpoints="xs sm md" data-sortable="false">操作</th>
+            </tr>
+            </thead>
+            <tr ng-repeat="row in productList">
+                <td class="v-m">{{row.id}}</td>
+                <td class="v-m">{{row.name}}</td>
+                <td ng-if="!row.status || row.status == 'draft'" class="v-m">草稿</td>
+                <td ng-if="row.status == 'confirm_waiting'" class="v-m">待审核</td>
+                <td ng-if="row.status == 'confirmed'" class="v-m">已审核</td>
+                <td ng-if="row.status == 'confirm_refused'" class="v-m">审核驳回</td>
+                <td class="v-m">{{row.start | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                <td class="v-m">{{row.end | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                <td class="v-m">
+                    <button class="btn btn-xs {{app.setting.theme.primary}}" ng-show="row.status == 'confirm_waiting'" ui-sref="app.confirm.info({id: row.id})" >审核</button>
+                </td>
+            </tr>
+            <tr class="white b-white" ng-show="bigTotalItems > 10">
+                <td colspan="6" class="white b-white text-center">
+                    <ul class="pagination" uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" total-items="true" max-size="10" class="pagination-sm" boundary-link-numbers="true" next-text="下一页" previous-text="上一页" rotate="false" ng-change="pageChanged()"></ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<!-- / .modal -->
+<div id="delete" class="modal fade animate black-overlay" data-backdrop="false">
+    <div class="row-col h-v">
+        <div class="row-cell v-m">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content flip-y">
+                    <div class="modal-body text-center">
+                        <p class="p-y">
+                            <i class="fa fa-warning text-warn fa-3x"></i><br><br>
+                            确定删除商品?
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm white p-x-md" data-dismiss="modal">取消</button>
+                        <button type="button" ng-click="delete()"  class="btn btn-sm {{app.setting.theme.primary}} p-x-md" data-dismiss="modal">删除</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div>
+        </div>
+    </div>
+</div>
+

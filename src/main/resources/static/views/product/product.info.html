@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>商品详情</title>
+</head>
+
+<body class="bg-white">
+<div class="goods-content">
+    <!--<div class="swiper-container">-->
+        <!--<div class="swiper-wrapper">-->
+            <!--<div class="swiper-slide"><img src="assets/images/img2.png" /></div>-->
+            <!--<div class="swiper-slide"><img src="assets/images/bg-my.png" /></div>-->
+            <!--<div class="swiper-slide"><img src="assets/images/bg-1.png" /></div>-->
+            <!--<div class="swiper-slide"><img src="assets/images/bg-2.png" /></div>-->
+        <!--</div>-->
+        <!--<div class="swiper-pagination"></div>-->
+    <!--</div>-->
+    <swipers data="images" ></swipers>
+
+    <div class="goods-box">
+        <div class="tit">{{product.name}}</div>
+        <div class="goods-info layout-box">
+            <div class="col flex-item"><span class="label">积分价: </span><span class="num">{{product.score}}</span><span class="text"> 分</span></div>
+            <div class="col flex-item tc"><span class="label">市场价: </span><span class="text">￥{{product.price}}</span></div>
+            <div class="col flex-item tr"><span class="label">库存: </span><span class="text">{{product.store}}</span></div>
+        </div>
+    </div>
+
+    <div class="blank-line"></div>
+
+    <div class="goods-box">
+        <div class="title">相关说明 </div>
+        <div class="text">
+            <p>{{product.remark}}</p>
+            <p>南京总部：南京总部员工兑换礼品后请至企划部领取： 各分公司&软件谷：各分公司员工兑换后，于次月初由南京总部发往各分公司，各分公司员工可与前台客服联系进行领取：
+            </p>
+            <p>积分一旦兑换成功，不可退换，兑换成功将按照兑换填写地址发货：</p>
+        </div>
+    </div>
+</div>
+
+<div class="foot-btn2">
+    <button id="redeemBtn" type="button" class="btn {{disable ? 'disabled' : ''}}"  ng-disabled="disable" ng-click="showModal()">{{title}}</button>
+</div>
+
+<div id="loadingToast" style="display:none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-loading weui-icon_toast"></i>
+        <p class="weui-toast__content">兑换中</p>
+    </div>
+</div>
+
+<!--弹框-->
+<div id="redeemPop" class="pop-mask">
+    <div class="pop-box">
+        <div class="pop-cont">
+            <div class="text">请填写/核实联系人信息，如有问题，我们将按 填写信息联系你</div>
+            <ul class="input-group">
+                <li class="input-row layout-box">
+                    <label><span class="c-red">* </span>联系人：</label>
+                    <div class="input-box flex-item1">
+                        <input class="input" type="text" id="name" placeholder="请输入联系人" />
+                    </div>
+                </li>
+                <li class="input-row layout-box">
+                    <label><span class="c-red">* </span>联系电话：</label>
+                    <div class="input-box flex-item1">
+                        <input class="input" type="tel" id="phone" placeholder="请输入联系电话" />
+                    </div>
+                </li>
+            </ul>
+            <div class="text">备注：实物礼品我们将于下月初统一发至{{app.setting.user.organ}}，届时请联系行政人员领取</div>
+            <button type="button" class="btn" ng-click="redeem()">提交</button>
+        </div>
+        <span id="redeemClose" class="pop-close" ng-click="hide()"><i class=" iconfont icon-close"></i></span>
+    </div>
+</div>
+</body>
+<script>
+    // var swiper = new Swiper('.swiper-container', {
+    //     pagination: {
+    //         el: '.swiper-pagination',
+    //     },
+    // });
+
+    // document.getElementById("redeemBtn").onclick = function() {
+    //     document.getElementById("redeemPop").style.display = "block";
+    // };
+    //
+    // document.getElementById("redeemClose").onclick = function() {
+    //     document.getElementById("redeemPop").style.display = "none";
+    // };
+</script>
+
+</html>
+
+

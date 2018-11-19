@@ -1,0 +1,107 @@
+<div class="padding">
+
+
+    <div class="row">
+        <div class="box">
+            <div class="box-header"><h2>兑换订单详情</h2></div>
+            <div class="box-divider"></div>
+            <div class="box-body">
+                <div class="row  m-t-2">
+                    <p class="form-control-static dker p-x col-sm-12 m-a-sm" style="min-height: 1.5rem;" >基本信息</p>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline ">
+                                <label style="width:12%">订单编号:</label>
+                                {{redeem.no}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline ">
+                                <label style="width:12%">工号:</label>
+                                {{redeem.employeeId}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline ">
+                                <label style="width:12%">联系人:</label>
+                                {{redeem.userName}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline ">
+                                <label style="width:12%">电话:</label>
+                                {{redeem.userPhone}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline ">
+                                <label style="width:12%">所属公司:</label>
+                                {{redeem.org}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline ">
+                                <label style="width:12%">订单状态:</label>
+                                {{redeem.status == 'accepted' ? '已兑换' : '已完成'}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline ">
+                                <label style="width:12%">订单总积分:</label>
+                                {{redeem.price}}积分
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <div class="form-group form-inline ">
+                                <label style="width:12%">兑换时间:</label>
+                                {{redeem.created | date: 'yyyy-MM-dd HH:mm:ss'}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="form-control-static dker p-x col-sm-12 m-a-sm" style="min-height: 1.5rem;" >兑礼信息</p>
+
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-md-push-1">
+                            <table id="teamTable" class="table table-striped col-md-push-1" data-empty="没有记录">
+                                <thead>
+                                <tr>
+                                    <th data-breakpoints="xs sm md" data-sortable="false">编号</th>
+                                    <th data-breakpoints="xs sm md" data-sortable="false">名称</th>
+                                    <th data-breakpoints="xs sm md" data-sortable="false">数量</th>
+                                    <th data-breakpoints="xs sm md" data-sortable="false">所需积分</th>
+                                </tr>
+                                </thead>
+                                <tr>
+                                    <td class="v-m">{{product.id}}</td>
+                                    <td class="v-m">{{product.name}}</td>
+                                    <td class="v-m">1</td>
+                                    <td class="v-m">{{product.score}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+            <div class="box-footer p-t p-b ">
+                <div class="form-group p-t">
+                    <button type="button" class="btn white btn-sm " onClick="javascript: history.go(-1);">返回</button>
+                </div>
+            </div>
+        </div>
+        <div>
+        </div>
+    </div>
+</div>
