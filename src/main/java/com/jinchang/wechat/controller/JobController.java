@@ -21,13 +21,11 @@ import com.jinchang.wechat.util.HttpUtil;
 import org.springframework.core.env.Environment;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-
 import java.io.*;
 import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
 import org.apache.http.client.ClientProtocolException;
 import org.apache.commons.codec.digest.DigestUtils;
 import weixin.popular.api.MessageAPI;
@@ -38,7 +36,6 @@ import weixin.popular.bean.message.templatemessage.TemplateMessageItem;
 import weixin.popular.bean.message.templatemessage.TemplateMessageResult;
 import weixin.popular.bean.token.Token;
 import weixin.popular.api.MediaAPI;
-
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLEncoder;
 
@@ -128,7 +125,6 @@ public class JobController {
         String r = HttpUtil.sendPost(url, JSON.toJSONString(ticket));
         return new ResponseEntity<String>(r ,HttpStatus.OK);
     }
-
 
     @GetMapping("/{id}")
     public String getJobDetail(@PathVariable String id, HttpServletRequest r1) throws IOException{
@@ -251,7 +247,6 @@ public class JobController {
                 }
             }
         }
-
         return "ok";
     }
 
