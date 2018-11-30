@@ -1,0 +1,59 @@
+<div class="content" style="position: relative; height: 100vh">
+  <div class="page__bd" style="height: 100vh;">
+    <div class="weui-msg">
+      <h2 class="weui-msg_title" style="font-weight: normal">
+        <img style="width: 30px; vertical-align: middle; line-height: 1.5; display: inline-block;" src="../assets/images/logo.png">
+        <span>{{app.name}}</span>
+      </h2>
+    </div>
+    <div class="weui-cells weui-cells_form">
+      <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label" style="font-weight: normal">用户名</label></div>
+        <div class="weui-cell__bd">
+          <input ng-focus="hideFooter=true" ng-blur="hideFooter=false" class="weui-input" ng-model="username" type="text" placeholder="请输入手机号/邮箱"/>
+        </div>
+      </div>
+      <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label" style="font-weight: normal">密码</label></div>
+        <div class="weui-cell__bd">
+          <input ng-focus="hideFooter=true" ng-blur="hideFooter=false" class="weui-input" ng-model="password" type="password"  placeholder="默认为手机号后6位"/>
+        </div>
+        <!--<div class="weui-cell__ft" href="javascript:" ng-click="showMe()">
+          <i class="weui-icon-info-circle"></i>
+        </div>-->
+      </div>
+    </div>
+    <p class="weui-btn-area">
+      <a href="javascript:" ng-click="login(username, password)"  class="weui-btn weui-btn_primary">登录</a>
+    </p>
+  </div>
+
+  <div ng-hide="hideFooter" class="page__ft j_bottom" style="padding-top: 0;">
+    <p class="weui-footer__text j_bottom">Built with <i class="material-icons md-4">&#xe87d;</i> by <a style="color: black" href="http://www.ccoffice.cc" target="_blank">ccoffice.cc</a> </p>
+  </div>
+
+</div>
+
+
+<div id="loadingToast" style="display:none;">
+  <div class="weui-mask_transparent"></div>
+  <div class="weui-toast">
+    <i class="weui-loading weui-icon_toast"></i>
+    <p class="weui-toast__content">登录中</p>
+  </div>
+</div>
+
+
+<!--BEGIN dialog2-->
+<div class="js_dialog" id="LoginTips" style=" display: none;">
+  <div class="weui-mask"></div>
+  <div class="weui-dialog">
+    <div class="weui-dialog__bd">
+      <img class="img-responsive " style="width: 100%" src="../assets/images/passwordTips.png"/>
+    </div>
+    <div class="weui-dialog__ft">
+      <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="hideMe()">知道了</a>
+    </div>
+  </div>
+</div>
+<!--END dialog2-->

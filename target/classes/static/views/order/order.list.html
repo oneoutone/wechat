@@ -1,0 +1,112 @@
+<style type="text/css">
+    .weui-picker-modal {
+        background: white;
+    }
+    .weui-picker-modal .toolbar {
+        /*position: relative;*/
+        /*width: 100%;*/
+        /*font-size: 16px;*/
+        /*line-height: 1.5;*/
+        /*color: #3d4145;*/
+        /*background: #f7f7f8;*/
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        padding: 10px 15px;
+        background-color: #fbf9fe;
+        position: relative;
+        text-align: center;
+    }
+    .weui-picker-modal .toolbar-inner {
+        height: 1.5rem;
+    }
+
+    .weui-picker-modal .picker-button:last-child {
+        text-align: right;
+    }
+    .weui-picker-modal .picker-button {
+        /*position: absolute;*/
+        /*right: 0;*/
+        /*box-sizing: border-box;*/
+        /*height: 30px;*/
+        /*line-height: 30px;*/
+        /*color: #04be02;*/
+        /*z-index: 1;*/
+        /*padding: 0 .5rem;*/
+        display: block;
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        flex: 1;
+        color: #586c94;
+    }
+
+    .weui-flex .placeholder {
+        height: auto;
+        line-height: 1em;
+        text-align: left;
+    }
+    .placeholder {
+        height: auto;
+        line-height: 1em;
+        text-align: left;
+    }
+
+    .facebook-card {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .facebook-card .facebook-date {
+        margin-left: 0;
+        font-size: .75rem;
+    }
+    .facebook-card .facebook-name {
+        margin-left: 10px;
+        font-size: .8rem;
+        font-weight: 900;
+        color: #5f646e;
+    }
+    .row {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+    .col-xs-6 {
+        float: left;
+        width: 50%;
+    }
+
+</style>
+<div class="content" style="position: relative; height: 100vh">
+    <div class="page__bd">
+        <div class="weui-navbar">
+            <div class="weui-navbar__item {{status == 'processing' ? 'text-success' : ''}}" ng-click="setStatus('processing')">进行中</div>
+            <div class="weui-navbar__item {{status == 'all' ? 'text-success' : ''}}" ng-click="setStatus('all')">全部工单</div>
+            <div class="weui-navbar__item {{status == 'finished' ? 'text-success' : ''}}" ng-click="setStatus('finished')">已解决</div>
+            <!--<div class="weui-navbar__item" id="market">
+              {{service.market}} <span class="material-icons">arrow_drop_down</span>
+            </div>-->
+
+        </div>
+        <div class=" page__bd_spacing" style="margin-top: 48px;">
+            <div class="row p-t-xs">
+                <div ng-repeat="item in list" ui-sref="order.info({id: item.id})" on-finish-render-filters>
+                    <div class="weui-flex__item">
+                            <div class="card facebook-card">
+                                <div class="facebook-name">{{item.subject}}</div>
+                                <div class="card-header no-border">
+                                    <div class="facebook-date weui-flex__item pull-left">{{item.created}}</div>
+                                    <div class="facebook-name pull-right {{item.status == 'resolved' ? 'text-success' : 'text-warning'}}" >{{item.status == 'resolved' ? '已解决' : '进行中'}}</div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-fab-wrapper" style="bottom: 75px;">
+        <a class="md-fab md-fab-primary md-fab-wave-light" ui-sref="order.add">
+            <i class="material-icons">&#xE145;</i>
+        </a>
+    </div>
+
+</div>

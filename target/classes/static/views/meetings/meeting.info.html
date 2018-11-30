@@ -1,0 +1,165 @@
+<div class="content" xmlns="http://www.w3.org/1999/html">
+  <div class="page__bd">
+    <div id="booking-form-container" class="weui-cells weui-cells_form" style="margin-top: 0;">
+
+      <div class="weui-cell weui-cell_select weui-cell_select-after">
+        <div class="weui-cell__hd">
+          <label class="weui-label">会议室</label>
+        </div>
+        <div class="weui-cell__bd">
+          <select class="weui-select" ng-disabled="confirmManager" ng-model="bookingFormData.meetingRoom" ng-change="setConfirm()">
+            <option ng-repeat="room in meetingRooms" value="{{room.id}}">{{room.name ? room.name : room.externalId}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">开始时间</label></div>
+        <div class="weui-cell__bd">
+          <input class="weui-input" ng-disabled="confirmManager"  id="startInput" type="text"/>
+        </div>
+      </div>
+
+      <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">结束时间</label></div>
+        <div class="weui-cell__bd">
+          <input class="weui-input" ng-disabled="confirmManager" id="endInput" type="text"/>
+        </div>
+      </div>
+
+      <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">主题</label></div>
+        <div class="weui-cell__bd">
+          <input class="weui-input" ng-disabled="confirmManager"  ng-model="bookingFormData.subject" type="text" placeholder="选填"/>
+        </div>
+      </div>
+
+      <div class="weui-cell">
+        <div class="weui-cell__bd">
+          <textarea class="weui-textarea" ng-disabled="confirmManager"  ng-model="bookingFormData.description" placeholder="描述(选填)" rows="3"></textarea>
+          <div class="weui-textarea-counter"><span>0</span>/200</div>
+        </div>
+      </div>
+
+    </div>
+    <p style="color: #f44355; margin:0; padding: 0.25rem 15px 0 15px;" ng-show="needConfirm"><small><i class="material-icons md-5">&#xe88f;</i>{{info}}</small></p>
+    <p style="color: #f44355; margin:0; padding: 0.25rem 15px 0 15px;" ng-show="!meetingId && currentCoins >= 0 && nextFlag == false" ><small>本月剩余{{currentCoins}}个</small></p>
+    <p style="color: #f44355; margin:0; padding: 0.25rem 15px 0 15px;" ng-show="!meetingId && currentCoins < 0 && nextFlag == false" ><small>本月已超支{{0-currentCoins}}个</small></p>
+    <p style="color: #f44355; margin:0; padding: 0.25rem 15px 0 15px;" ng-show="!meetingId && nextFlag == true" ><small>下月币尚未分配</small></p>
+    <p style="color: #f44355; margin:0; padding: 0.25rem 15px 0 15px;" ng-show="!meetingId" ><small>预计本次消耗{{coins}}个</small></p>
+    <div class="weui-btn-area">
+      <a ng-show="!meetingId || (meeting.organizerId == user.id && showDetele)" class="weui-btn {{meetingId ? 'weui-btn_warn' : 'weui-btn_primary'}}" href="javascript:" ng-click="bookingConfirmOrCancelClicked()" id="bookingBtn">{{meetingId ? '取消预约' : '预约'}}</a>
+      <a ng-show="confirmManager" class="weui-btn weui-btn_primary" href="javascript:" ng-click="confirm()">审核</a>
+      <a ng-show="meetingId && meeting.organizerId == user.id && showTerminate" class="weui-btn weui-btn_default" ng-click="terminate()">结束使用</a>
+    </div>
+  </div>
+</div>
+
+<!--BEGIN dialog1-->
+<div id="dialogs">
+  <div class="js_dialog" id="DeleteMeeting" style="display: none;">
+    <div class="weui-mask"></div>
+    <div class="weui-dialog">
+      <div class="weui-dialog__hd"><strong class="weui-dialog__title">确认删除</strong></div>
+      <div class="weui-dialog__bd">确定要删除此预约信息吗?</div>
+      <div class="weui-dialog__ft">
+        <a href="javascript:" ng-click="onDelete(false)" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+        <a href="javascript:" ng-click="onDelete(true)"  class="weui-dialog__btn weui-dialog__btn_primary">确定</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="dialog1">
+  <div class="js_dialog" id="TermianteMeeting" style="display: none;">
+    <div class="weui-mask"></div>
+    <div class="weui-dialog">
+      <div class="weui-dialog__hd"><strong class="weui-dialog__title">提前结束</strong></div>
+      <div class="weui-dialog__bd">您的会议预约将于{{terminateTime}}提前结束</div>
+      <div class="weui-dialog__ft">
+        <a href="javascript:" ng-click="onTerminate(false)" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+        <a href="javascript:" ng-click="onTerminate(true)"  class="weui-dialog__btn weui-dialog__btn_primary">确定</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="dialog2">
+  <div class="js_dialog" id="NoTermianteMeeting" style="display: none;">
+    <div class="weui-mask"></div>
+    <div class="weui-dialog">
+      <div class="weui-dialog__hd"><strong class="weui-dialog__title">提前结束</strong></div>
+      <div class="weui-dialog__bd">您的会议预已结束，无法提前结束</div>
+      <div class="weui-dialog__ft">
+        <a href="javascript:" ng-click="closeNoTerminate()" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--END dialog1-->
+
+<!--BEGIN dialog2-->
+<div class="js_dialog" id="noMeetingTips" style="display: none;">
+  <div class="weui-mask"></div>
+  <div class="weui-dialog">
+    <div class="weui-dialog__bd">
+      没有这个会议记录
+    </div>
+    <div class="weui-dialog__ft">
+      <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="hideMe()">知道了</a>
+    </div>
+  </div>
+</div>
+<!--END dialog2-->
+
+<div id="loadingToast" style="display:none;">
+  <div class="weui-mask_transparent"></div>
+  <div class="weui-toast">
+    <i class="weui-loading weui-icon_toast"></i>
+    <p class="weui-toast__content">处理中</p>
+  </div>
+</div>
+
+<div class="js_dialog" id="iosDialog1" style="display: none;">
+  <div class="weui-mask"></div>
+  <div class="weui-dialog">
+    <div class="weui-dialog__hd"><strong class="weui-dialog__title">支付信息</strong></div>
+
+    <div class="weui-cell">
+      <div class="weui-cell__hd"><label class="weui-label">会议室单价</label></div>
+      <div class="weui-cell__bd">
+        <!--
+        <input class="weui-input" ng-disabled="true" ng-model="pay.unitPrice" type="text"/>
+        -->
+        <label class="weui-label">{{pay.unitPrice}}元</label>
+      </div>
+    </div>
+
+    <div class="weui-cell">
+      <div class="weui-cell__hd"><label class="weui-label">团队额度</label></div>
+      <div class="weui-cell__bd">
+        <label class="weui-label">{{pay.meetingTime}}小时</label>
+      </div>
+    </div>
+
+    <div class="weui-cell">
+      <div class="weui-cell__hd"><label class="weui-label">已经使用</label></div>
+      <div class="weui-cell__bd">
+        <label class="weui-label">{{pay.usedTime}}小时</label>
+      </div>
+    </div>
+    <div class="weui-cell">
+      <div class="weui-cell__hd"><label class="weui-label">需要支付</label></div>
+      <div class="weui-cell__bd">
+        <label class="weui-label">{{pay.fee}}元</label>
+      </div>
+    </div>
+
+    <div class="weui-dialog__ft">
+      <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_default" ng-click="hideModal()">取消</a>
+      <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="meetingPay()">确认</a>
+    </div>
+  </div>
+</div>
+
+

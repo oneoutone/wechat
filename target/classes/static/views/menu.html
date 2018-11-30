@@ -1,0 +1,189 @@
+<style type="text/css">
+  .self-adaption{
+    width: 100%;
+    height: auto;
+  }
+  .row .button {
+    border-radius: 0;
+    border: none;
+  }
+  .list-block .item-text{
+    height:auto;
+  }
+  .list-block.media-list .item-media{
+    padding-top:0;
+    padding-bottom: 0;
+  }
+  .item-after{
+    text-align: right;
+    line-height: 1.2rem
+  }
+  .m-a-0{
+    margin:0;
+  }
+
+  .swiper-container {
+    width: 100%;
+    height: auto;
+    padding-bottom: 0px;
+  }
+  .swiper-container-horizontal>.swiper-pagination {
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+  }
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+    background: #fff;
+  }
+  .swiper-slide img {
+    width: 100%;
+    display: inline;
+    border:1px solid #e7e7e7;
+  }
+  #topSlider .swiper-container{
+    /*height: 210px;*/
+  }
+  #topSlider .swiper-slide img {
+    width: 100%;
+    border: none;
+  }
+
+  .item-content{
+    color: #000;
+  }
+  .item-content:active, .item-content:hover, .item-content:focus{
+    color:black;
+  }
+
+</style>
+
+
+<div class="content">
+
+  <!-- Swiper -->
+  <div class="swiper-container" id="topSlider">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <a href="http://www.huodongxing.com/event/9355378088800?utm_source=Mobile%E4%B8%BB%E5%8A%9E%E6%96%B9%E9%A1%B5&utm_medium=&utm_campaign=orgpage">
+          <img src="../assets/images/activity_04.png" alt="...">
+        </a>
+      </div>
+      <div class="swiper-slide">
+        <a href="http://www.huodongxing.com/event/5357477736700?utm_source=%E5%8F%91%E7%8E%B0%E6%B4%BB%E5%8A%A8%E5%88%97%E8%A1%A8%E9%A1%B5&utm_medium=&utm_campaign=eventspage">
+          <img src="http://wimg.huodongxing.com/logo/201610/5357477736700/372482485881153_v2.jpg" alt="...">
+        </a>
+      </div>
+      <div class="swiper-slide">
+        <a href="http://www.huodongxing.com/event/9362658581400?utm_source=%E4%B8%BB%E9%A1%B5&utm_medium=%E7%83%AD%E9%97%A8%E7%82%B9%E5%87%BB%E5%88%97%E8%A1%A8&utm_campaign=homepage">
+          <img src="http://wimg.huodongxing.com/logo/201611/9362658581400/872518462958560_v2.jpg" alt="...">
+        </a>
+      </div>
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+  </div>
+
+  <div class="row no-gutter p-t-sm p-b-xs">
+    <div class="col-33 text-center" ui-sref="meeting.grid">
+      <p class="material-icons text-lg m-a-0">event_seat</p>
+      <p class="m-a-0 text-xs text-muted">会议预约</p>
+    </div>
+    <div class="col-33 text-center" ui-sref="profile">
+      <p class="material-icons text-lg m-a-0">face</p>
+      <p class="m-a-0 text-xs text-muted">个人中心</p>
+    </div>
+    <div class="col-33 text-center" ui-sref="password">
+      <p class="material-icons text-lg m-a-0">lock_open</p>
+      <p class="m-a-0 text-xs text-muted">密码修改</p>
+    </div>
+  </div>
+
+  <!--<div class="row no-gutter p-t-sm p-b-xs">-->
+    <!--<div class="col-33 text-center" ui-sref="financing.info">-->
+      <!--<p class="material-icons text-lg m-a-0">event_seat</p>-->
+      <!--<p class="m-a-0 text-xs text-muted">融资信息</p>-->
+    <!--</div>-->
+    <!--<div class="col-33 text-center" ui-sref="service.list">-->
+      <!--<p class="material-icons text-lg m-a-0">face</p>-->
+      <!--<p class="m-a-0 text-xs text-muted">创业服务</p>-->
+    <!--</div>-->
+    <!--<div class="col-33 text-center" ui-sref="password">-->
+      <!--<p class="material-icons text-lg m-a-0">lock_open</p>-->
+      <!--<p class="m-a-0 text-xs text-muted">密码修改</p>-->
+    <!--</div>-->
+  <!--</div>-->
+
+  <div class="list-block media-list" style="margin: 0;">
+    <ul>
+      <li>
+        <a href="#" class="item-content">
+          <div class="item-inner"  style="background: none; padding-right: .75rem;">
+            <div class="item-title-row">
+              <div class="item-title">创业服务</div>
+              <div class="item-after" ui-sref="service.market"><small>更多>></small></div>
+            </div>
+            <div class="item-media m-t-sm">
+              <!-- Swiper -->
+              <div class="swiper-container">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide" ng-repeat="service in serviceList" ui-sref="{{service.url}}">
+                    <img src="{{service.logo ? service.logo : '../assets/images/policy_01.png'}}" alt="...">
+                    <div class="item-subtitle">{{service.name}}</div>
+                    <div class="item-text text-muted"><small>发表于 {{service.created| date:'yyyy-MM-dd'}}</small></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a href="#" class="item-content">
+          <div class="item-inner"  style="background: none; padding-right: .75rem;">
+            <div class="item-title-row">
+              <div class="item-title">创业政策</div>
+              <div class="item-after" ui-sref="policy.list"><small>更多>></small></div>
+            </div>
+            <div class="item-media m-t-sm">
+              <!-- Swiper -->
+              <div class="swiper-container">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide" ng-repeat="policy in policyList" ui-sref="policy.info({id: policy.id})">
+                    <img src="{{policy.logo ? policy.logo : '../assets/images/policy_01.png'}}" alt="...">
+                    <div class="item-subtitle">{{policy.name}}</div>
+                    <div class="item-text text-muted"><small>发表于 {{policy.created| date:'yyyy-MM-dd'}}</small></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a href="#" class="item-content">
+          <div class="item-inner"  style="background: none; padding-right: .75rem;">
+            <div class="item-title-row">
+              <div class="item-title" >创业活动</div>
+              <div class="item-after" ui-sref="activity.list" style="text-align: right"><small>更多>></small></div>
+            </div>
+            <div class="item-media m-t-sm">
+              <!-- Swiper -->
+              <div class="swiper-container">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide" ng-repeat="activity in activityList" ui-sref="activity.info({id: activity.id})" on-finish-render-filters>
+                    <img ng-src="{{activity.logo ? activity.logo : '../assets/images/policy_02.png'}}" alt="...">
+                    <div class="item-subtitle">{{activity.name}}</div>
+                    <div class="item-text text-muted"><small>发表于 {{activity.created| date:'yyyy-MM-dd'}}</small></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

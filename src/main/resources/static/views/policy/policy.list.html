@@ -1,0 +1,130 @@
+<style type="text/css">
+  .ellipsis{
+    width: 100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .s_center{
+    border:none;
+    background: none;
+    width: 100%;
+    padding-left: 15px;
+    margin: 0;
+    line-height: 2rem;
+    height: 2rem;
+  }
+  .btn-group button{
+    background: white;
+    border:none;
+    height: 2.2rem;
+  }
+  .btn-group.open .dropdown-toggle {
+     -webkit-box-shadow: none;
+     box-shadow: none;
+  }
+  .list-block .item-text {
+     height: auto;
+  }
+  .btn.active, .btn.focus, .btn:active, .btn:focus, .btn:hover, .open>.dropdown-toggle.btn {
+    background-color: #fff;
+  }
+  a, a:focus, a:hover, a:active {
+    background: white;
+    text-decoration: none;
+  }
+  .form-control, .c-select, select{
+    min-height: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    /*很关键：将默认的select选择框样式清除*/
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+  }
+
+  /*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+  select::-ms-expand { display: none; }
+
+  .select-drop-down{
+    line-height: 44px;
+    /*position: absolute;*/
+    border-right: 1px solid #ccc;
+    height: 44px;
+    min-height: 44px;
+  }
+</style>
+
+
+<header class="bar bar-nav" style="padding: 0;">
+  <div class="buttons-tab">
+    <select required="" class="form-control c-select p-l-sm" ng-model="address.province" ng-options="key as key for (key,value) in division"
+            ng-change="changeAddress('province')">
+    </select>
+    <span class="material-icons select-drop-down p-r"> arrow_drop_down</span>
+    <select class="form-control c-select p-l-sm" ng-model="address.city" ng-options="key as key for (key,value) in division[address.province]"
+           ng-change="changeAddress('city')">
+    </select>
+    <span class="material-icons select-drop-down p-r"> arrow_drop_down</span>
+    <select required="" class="form-control c-select p-l-sm" ng-model="address.district" ng-options="key for key in division[address.province][address.city]" ng-change="changeAddress('district')">
+    </select>
+    <span class="material-icons select-drop-down p-r"> arrow_drop_down</span>
+  </div>
+  <!--<div class="btn-group btn-group-justified" role="group" aria-label="..." style=" background: white;">-->
+    <!--<div class="btn-group">-->
+      <!--<button id="dropdownMenu1" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">-->
+        <!--适用对象 <span class="caret"></span>-->
+      <!--</button>-->
+      <!--<ul aria-labelledby="dropdownMenu1" class="dropdown-menu" role="menu">-->
+        <!--<li><a href="#">适用对象</a></li>-->
+        <!--<li><a href="#">适用对象</a></li>-->
+        <!--<li><a href="#">适用对象</a></li>-->
+      <!--</ul>-->
+    <!--</div>-->
+    <!--<div class="btn-group">-->
+      <!--<button id="dropdownMenu2" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">-->
+        <!--发布单位 <span class="caret"></span>-->
+      <!--</button>-->
+      <!--<ul aria-labelledby="dropdownMenu2" class="dropdown-menu" role="menu">-->
+        <!--<li><a href="#">适用对象</a></li>-->
+        <!--<li><a href="#">适用对象</a></li>-->
+        <!--<li><a href="#">适用对象</a></li>-->
+      <!--</ul>-->
+    <!--</div>-->
+    <!--<div class="btn-group">-->
+      <!--<button id="dropdownMenu3" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">-->
+        <!--发布时间 <span class="caret"></span>-->
+      <!--</button>-->
+      <!--<ul aria-labelledby="dropdownMenu3" class="dropdown-menu" role="menu">-->
+        <!--<li><a href="#">1月</a></li>-->
+        <!--<li><a href="#">2月</a></li>-->
+        <!--<li><a href="#">3月</a></li>-->
+      <!--</ul>-->
+    <!--</div>-->
+  <!--</div>-->
+</header>
+<div class="content" style="background: white">
+  <div class="list-block media-list" style="margin: 0;">
+    <ul>
+      <li ng-repeat="policy in policyList">
+        <a href class="item-link item-content" ui-sref="policy.info({id: policy.id})">
+          <div class="item-media"><img ng-src="{{policy.logo ? policy.logo : '../assets/images/policyCover.jpg' }}?x-oss-process=image/resize,m_mfit,h_100,w_100" style='width: 4rem; height: 4rem;'></div>
+          <div class="item-inner" style="background: none;">
+            <div class="item-title-row">
+              <div class="item-title">{{policy.name}}</div>
+              <!--<div class="item-after">$15</div>-->
+            </div>
+            <div class="item-subtitle ellipsis">
+              <div class="tag-group tag-sm">
+                <!--<label class='tag'>小范围</label>-->
+                <label class="tag active">{{policy.releaseDepartment}}</label>
+              </div>
+            </div>
+            <div class="item-text ellipsis text-mutted"><small>{{policy.created| date:'yyyy-MM-dd'}}</small></div>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

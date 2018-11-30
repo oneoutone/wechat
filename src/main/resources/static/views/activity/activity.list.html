@@ -1,0 +1,96 @@
+<style type="text/css">
+  .ellipsis{
+    width: 100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .s_center{
+    border:none;
+    background: none;
+    width: 100%;
+    padding-left: 15px;
+    margin: 0;
+    line-height: 2rem;
+    height: 2rem;
+  }
+  .btn-group button{
+    background: white;
+    border:none;
+    height: 2.2rem;
+  }
+  .btn-group.open .dropdown-toggle {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+  .list-block .item-text {
+    height: auto;
+  }
+  .btn.active, .btn.focus, .btn:active, .btn:focus, .btn:hover, .open>.dropdown-toggle.btn {
+    background-color: #fff;
+  }
+  a, a:focus, a:hover, a:active {
+    background: white;
+    text-decoration: none;
+  }
+</style>
+
+
+<header class="bar bar-nav" style="padding: 0;">
+  <div class="btn-group btn-group-justified" role="group" aria-label="..." style=" background: white;">
+    <div class="btn-group">
+      <button id="dropdownMenu1" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        适用对象 <span class="caret"></span>
+      </button>
+      <ul aria-labelledby="dropdownMenu1" class="dropdown-menu" role="menu">
+        <li><a href="#">适用对象</a></li>
+        <li><a href="#">适用对象</a></li>
+        <li><a href="#">适用对象</a></li>
+      </ul>
+    </div>
+    <div class="btn-group">
+      <button id="dropdownMenu2" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        发布单位 <span class="caret"></span>
+      </button>
+      <ul aria-labelledby="dropdownMenu2" class="dropdown-menu" role="menu">
+        <li><a href="#">适用对象</a></li>
+        <li><a href="#">适用对象</a></li>
+        <li><a href="#">适用对象</a></li>
+      </ul>
+    </div>
+    <div class="btn-group">
+      <button id="dropdownMenu3" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        发布时间 <span class="caret"></span>
+      </button>
+      <ul aria-labelledby="dropdownMenu3" class="dropdown-menu" role="menu">
+        <li><a href="#">1月</a></li>
+        <li><a href="#">2月</a></li>
+        <li><a href="#">3月</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+<div class="content" style="background: white">
+  <div class="list-block media-list" style="margin: 0;">
+    <ul>
+      <li ng-repeat="activity in activityList">
+        <a href class="item-link item-content" ui-sref="operator.activity.info({id: activity.id})">
+          <div class="item-media"><img ng-src="{{activity.logo}}?x-oss-process=image/resize,m_fill,h_100,w_100" style='width: 4rem; height: 4rem;'></div>
+          <div class="item-inner" style="background: none;">
+            <div class="item-title-row">
+              <div class="item-title">{{activity.name}}</div>
+              <!--<div class="item-after">$15</div>-->
+            </div>
+            <div class="item-subtitle ellipsis">
+              <div class="tag-group tag-sm">
+                <!--<label class='tag'>小范围</label>-->
+                <label class="tag active">{{activity.address}}</label>
+              </div>
+            </div>
+            <div class="item-text ellipsis text-mutted"><small>{{activity.created| date:'yyyy-MM-dd'}}</small></div>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

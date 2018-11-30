@@ -1,0 +1,68 @@
+<div class="content">
+  <div class="page__bd">
+    <div id="booking-form-container" class="weui-cells weui-cells_form" style="margin-top: 0;">
+      <div class="weui-cell weui-cell_select weui-cell_select-after">
+        <div class="weui-cell__hd">
+          <label class="weui-label">会议室</label>
+        </div>
+        <div class="weui-cell__bd">
+          <select class="weui-select" ng-model="bookingFormData.meetingRoom" ng-change="meetingRoomChanged()">
+            <option ng-repeat="room in meetingRooms" value="{{room}}">{{room}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">时间</label></div>
+        <div class="weui-cell__bd">
+          <input class="weui-input" type="datetime-local" ng-model="bookingFormData.meetingDateTime" value="" placeholder=""/>
+        </div>
+      </div>
+
+      <div class="weui-cell weui-cell_select weui-cell_select-after">
+        <div class="weui-cell__hd">
+          <label class="weui-label">持续时间</label>
+        </div>
+        <div class="weui-cell__bd">
+          <select class="weui-select" ng-model="bookingFormData.duration">
+            <option ng-repeat="duration in meetingDurations" value="{{duration}}">{{duration}} 小时</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">主题</label></div>
+        <div class="weui-cell__bd">
+          <input class="weui-input" ng-model="bookingFormData.subject" type="text" placeholder="选填"/>
+        </div>
+      </div>
+
+      <div class="weui-cell">
+        <div class="weui-cell__bd">
+          <textarea class="weui-textarea" ng-model="bookingFormData.description" placeholder="描述(选填)" rows="3"></textarea>
+          <div class="weui-textarea-counter"><span>0</span>/200</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="weui-btn-area">
+    <a class="weui-btn weui-btn_primary" href="javascript:" ng-click="confirmBookingClicked()" id="showTooltips">开门</a>
+    <a class="weui-btn weui-btn_warn" href="javascript:" ng-click="$DeleteMeeting.fadeIn(200);">取消预约</a>
+    <a class="weui-btn weui-btn_default" href="javascript:" ng-click="cancelClicked()">修改</a>
+  </div>
+</div>
+
+
+<!--BEGIN dialog1-->
+<div class="js_dialog" id="DeleteMeeting">
+  <div class="weui-mask"></div>
+  <div class="weui-dialog">
+    <div class="weui-dialog__hd"><strong class="weui-dialog__title">确认删除</strong></div>
+    <div class="weui-dialog__bd">确定要删除此预约信息吗?</div>
+    <div class="weui-dialog__ft">
+      <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_default">反悔</a>
+      <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary">确定</a>
+    </div>
+  </div>
+</div>
+<!--END dialog1-->

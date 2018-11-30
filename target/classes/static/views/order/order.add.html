@@ -1,0 +1,141 @@
+<style type="text/css">
+    a{
+        color: #373a3c;
+    }
+    .weui-uploader__file{
+        width: 77px;
+        height: 77px;
+    }
+    .weui-cells:after, .weui-cells:before {
+        content: " ";
+        height: 0px;
+        border: none;
+        color: #d9d9d9;
+    }
+    textarea{
+        /*去除input默认样式*/
+        -webkit-appearance:none;
+        border-radius: 0;
+    }
+
+    .arrow.left:before{
+        border-right-color: transparent;
+    }
+    .arrow.right:before {
+        border-left-color: transparent;
+    }
+    .label{
+        white-space: normal;
+        word-wrap: break-word;
+        max-width: 80%;
+        line-height: 1.5;
+    }
+</style>
+
+<div class="content text-xs">
+
+
+    <!--意见反馈-->
+    <div class="b-b" ng-show="!id">
+        <img src="http://maker-space-files.oss-cn-shanghai.aliyuncs.com/feedback_background.png?x-oss-process=image/resize,m_mfit,h_100,w_100" style="width: 100%;">
+        <article class="weui-article" style="padding-bottom: 0; padding-top: 0;">
+            <h1 id="ooo">新建工单</h1>
+        </article>
+    </div>
+
+
+    <!--输入框-->
+    <div>
+        <div class="weui-cells weui-cells_form m-a-0">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea id="subject" class="weui-textarea b-a p-a-xs text-sm" style="margin-bottom: 20px; margin-top: 20px" rows="1"  ng-modal="subject" placeholder="工单主题"></textarea>
+                    <textarea id="content" class="weui-textarea b-a p-a-xs text-sm p-t-2 m-t-2"  placeholder="问题描述" rows="3" ng-modal="content" id="descriptionId"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--上传图片-->
+    <div ng-show="!id">
+        <div class="weui-gallery" id="gallery">
+            <span class="weui-gallery__img" id="galleryImg"></span>
+            <div class="weui-gallery__opr">
+                <a href="javascript:" class="weui-gallery__del">
+                    <i class="weui-icon-delete weui-icon_gallery-delete"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="weui-cells weui-cells_form m-a-0">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__hd">
+                            <div class="weui-uploader__title text-sm">图片上传</div>
+                        </div>
+                        <div class="weui-uploader__bd ">
+                            <ul class="weui-uploader__files m-a-0" id="uploaderFiles">
+                                <div class="m-r" ng-repeat="image in images">
+                                    <a><img src="{{image.data}}" class="weui-uploader__file"> </a>
+                                </div>
+                                <div class="weui-uploader__input-box" ng-click="uploadImage()" ng-hide="images.length >= 3">
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--提交-->
+    <div class="weui-btn-area m-b">
+        <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips" ng-click="createOrder()">提交工单</a>
+    </div>
+</div>
+
+
+
+<div class="js_dialog" style=" display: none;" id="m-success">
+    <div class="weui-mask"></div>
+    <div class="weui-dialog ">
+        <div class="weui-dialog__bd">
+            提交成功
+        </div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="quit()">确定</a>
+        </div>
+    </div>
+</div>
+
+<div class="js_dialog" style=" display: none;" id="m-fail">
+    <div class="weui-mask"></div>
+    <div class="weui-dialog ">
+        <div class="weui-dialog__bd">
+            提交失败
+        </div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="close()">确定</a>
+        </div>
+    </div>
+</div>
+
+
+<div id="loadingToast" style="display:none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-loading weui-icon_toast"></i>
+        <p class="weui-toast__content">上传中</p>
+    </div>
+</div>
+
+<div id="loadingToast1" style="display:none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-loading weui-icon_toast"></i>
+        <p class="weui-toast__content">处理中</p>
+    </div>
+</div>
