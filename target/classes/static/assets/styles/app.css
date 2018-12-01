@@ -80,6 +80,9 @@ sup {
   position: absolute;
   left: 50%; }
 
+.pull-l {
+  right: 60%; }
+
 .close {
   font-size: 1.3rem; }
 

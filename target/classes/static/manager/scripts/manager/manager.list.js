@@ -21,7 +21,7 @@
             httpService.getManagers(function(data){
                 $scope.userList = data;
             }, function(err){
-               consoel.log(err)
+               console.log(err)
             })
         }
 

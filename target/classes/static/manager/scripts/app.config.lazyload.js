@@ -136,7 +136,7 @@
                 files: [
                     '../scripts/services/ajax.js'
                 ]
-            },
+            }
         ])
         .config(['$ocLazyLoadProvider', 'MODULE_CONFIG', function($ocLazyLoadProvider, MODULE_CONFIG) {
             $ocLazyLoadProvider.config({

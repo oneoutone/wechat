@@ -33,6 +33,7 @@
             var content = $('#content').val()
             if(!content){
                 toastr.error('请输入内容')
+                return
             }
             $('#loadingToast1').fadeIn(100);
             if(vm.app.setting.accessToken){
@@ -52,6 +53,11 @@
             }
         }
 
+        vm.remove = function(index){
+            vm.images.splice(index,1);
+        }
+
+
         vm.uploadImage = function(){
             wx.chooseImage({
                 count: 1, // 默认9
@@ -70,11 +76,9 @@
                                 headers:{'Content-Type': 'application/json', 'Authorization': vm.app.setting.accessToken},
                                 data: {mediaId: serverId}
                             }).success(function(data, header, config, status){
-                                alert(data.message.url)
                                 wx.getLocalImgData({
                                     localId: res1.localId, // 图片的localID
                                     success: function (res2) {
-                                        alert(res2.localData)
                                         $scope.$apply(function () {
                                             vm.images.push({localId: res1.localId, data: res2.localData, serverId: serverId, dataId: data.message.attachment_id})
                                         })

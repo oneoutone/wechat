@@ -85,13 +85,59 @@
             .state('app.product',{
                 url: '/product',
                 template: '<div ui-view></div>',
-                data: {title: '产品管理'}
+                data: {title: '礼品管理'}
             })
             .state('app.product.list', {
-                url: '/list',
+                url: '/list?name&status&saleStatus&start&end&page',
                 templateUrl: 'views/product/product.list.html',
                 controller: "ProductListCtrl",
-                resolve: load(['toastr', 'scripts/product/product.list.js'])
+                resolve: load(['toastr', 'moment', 'mgcrea.ngStrap', 'scripts/product/product.list.js'])
+            })
+            .state('app.product.detail', {
+                url: '/detail?id',
+                templateUrl: 'views/product/product.detail.html',
+                controller: "ProductDetailCtrl",
+                resolve: load(['toastr', 'moment', 'ngFileUpload', 'mgcrea.ngStrap', 'scripts/product/product.detail.js'])
+            })
+            .state('app.product.info', {
+                url: '/:id',
+                templateUrl: 'views/product/product.info.html',
+                controller: "ProductInfoCtrl",
+                resolve: load(['toastr', 'moment', 'ngFileUpload', 'mgcrea.ngStrap', 'scripts/product/product.info.js'])
+            })
+            .state('app.confirm',{
+                url: '/confirm',
+                template: '<div ui-view></div>',
+                data: {title: '礼品审核'}
+            })
+            .state('app.confirm.list', {
+                url: '/list?id&name&status&page',
+                templateUrl: 'views/product/confirm/confirm.list.html',
+                controller: "ConfirmListCtrl",
+                resolve: load(['toastr', 'moment', 'mgcrea.ngStrap', 'scripts/product/confirm/confirm.list.js'])
+            })
+            .state('app.confirm.info', {
+                url: '/info?id',
+                templateUrl: 'views/product/confirm/confirm.info.html',
+                controller: "ConfirmInfoCtrl",
+                resolve: load(['toastr', 'moment', 'mgcrea.ngStrap', 'scripts/product/confirm/confirm.info.js'])
+            })
+            .state('app.redeem',{
+                url: '/redeem',
+                template: '<div ui-view></div>',
+                data: {title: '兑换订单'}
+            })
+            .state('app.redeem.list', {
+                url: '/list?org&productName&employeeId&start&end&page',
+                templateUrl: 'views/product/redeem.list.html',
+                controller: "RedeemListCtrl",
+                resolve: load(['toastr', 'moment', 'XLSX', 'mgcrea.ngStrap', 'scripts/product/redeem.list.js'])
+            })
+            .state('app.redeem.info', {
+                url: '/info?id',
+                templateUrl: 'views/product/redeem.info.html',
+                controller: "RedeemInfoCtrl",
+                resolve: load(['toastr', 'moment', 'mgcrea.ngStrap', 'scripts/product/redeem.info.js'])
             })
 
         function load(srcs, callback) {

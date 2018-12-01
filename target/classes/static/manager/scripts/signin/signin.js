@@ -14,10 +14,28 @@
     function SignInCtrl ($scope, $state, toastr, httpService) {
         var vm =  $scope
         vm.user = {}
-        if (vm.app.isAuthenticated()){
-            console.info("isAuthenticated")
-            $state.go('app.manager.list');
-        }
+        vm.app.ready(function(){
+            if (vm.app.isAuthenticated()){
+                if(vm.app.setting.user.roles.productEdit){
+                    $state.go('app.product.list')
+                    return
+                }
+                if(vm.app.setting.user.roles.productConfirm){
+                    $state.go('app.confirm.list')
+                    return
+                }
+                if(vm.app.setting.user.roles.manage){
+                    $state.go('app.manager.list')
+                    return
+                }
+                if(vm.app.setting.user.roles.admin){
+                    $state.go('app.manager.list')
+                    return
+                }
+            }
+
+        })
+
 
 
         vm.signin = function() {
@@ -37,10 +55,31 @@
             httpService.signin(vm.user, function(result) {
                 $scope.loading = false
                 vm.app.setUser(result)
-                vm.app.init()
-                $state.go('app.manager.list')
+                vm.app.init(function(){
+                    if (vm.app.isAuthenticated()) {
+                        if (vm.app.setting.user.roles.productEdit) {
+                            $state.go('app.product.list')
+                            return
+                        }
+                        if (vm.app.setting.user.roles.productConfirm) {
+                            $state.go('app.confirm.list')
+                            return
+                        }
+                        if (vm.app.setting.user.roles.manage) {
+                            $state.go('app.manager.list')
+                            return
+                        }
+                        if (vm.app.setting.user.roles.admin) {
+                            $state.go('app.manager.list')
+                            return
+                        }
+                    }
+                })
+
             }, function(result){
                 console.log(result)
+                $scope.loading = true
+                toastr.error(result.message)
             })
 
             // User.login({

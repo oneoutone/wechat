@@ -35,6 +35,7 @@
         module: true,
         files: [
           '../libs/angular/angular-toastr/dist/angular-toastr.tpls.min.js',
+          '../libs/angular/angular-toastr/dist/angular-toastr.min.css'
         ]
       },
       {
@@ -66,7 +67,14 @@
         files: [
           '../libs/js/decimal/decimal.js'
         ]
-      }
+      },
+        {
+            name: 'httpServer',
+            module: true,
+            files: [
+                '../scripts/services/ajax.js'
+            ]
+        }
     ])
     .config(['$ocLazyLoadProvider', 'MODULE_CONFIG', function($ocLazyLoadProvider, MODULE_CONFIG) {
       $ocLazyLoadProvider.config({

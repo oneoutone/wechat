@@ -1,59 +1,62 @@
-<div class="content" style="position: relative; height: 100vh">
-  <div class="page__bd" style="height: 100vh;">
-    <div class="weui-msg">
-      <h2 class="weui-msg_title" style="font-weight: normal">
-        <img style="width: 30px; vertical-align: middle; line-height: 1.5; display: inline-block;" src="../assets/images/logo.png">
-        <span>{{app.name}}</span>
-      </h2>
-    </div>
-    <div class="weui-cells weui-cells_form">
-      <div class="weui-cell">
-        <div class="weui-cell__hd"><label class="weui-label" style="font-weight: normal">用户名</label></div>
-        <div class="weui-cell__bd">
-          <input ng-focus="hideFooter=true" ng-blur="hideFooter=false" class="weui-input" ng-model="username" type="text" placeholder="请输入手机号/邮箱"/>
-        </div>
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <title>绑定注册</title>
+</head>
+
+<body class="bg-white">
+<form class="reg bg-white">
+
+  <img class="logo" src="assets/images/img-logo.png" />
+
+  <ul class="input-group">
+    <li class="input-row layout-box">
+      <label class="iconfont icon-username"></label>
+      <div class="input-box flex-item1">
+        <input id="employeeId" class="input" type="text" ng-model="employeeId" placeholder="请输入员工号" />
       </div>
-      <div class="weui-cell">
-        <div class="weui-cell__hd"><label class="weui-label" style="font-weight: normal">密码</label></div>
-        <div class="weui-cell__bd">
-          <input ng-focus="hideFooter=true" ng-blur="hideFooter=false" class="weui-input" ng-model="password" type="password"  placeholder="默认为手机号后6位"/>
-        </div>
-        <!--<div class="weui-cell__ft" href="javascript:" ng-click="showMe()">
-          <i class="weui-icon-info-circle"></i>
-        </div>-->
+    </li>
+    <li class="input-row layout-box">
+      <label class="iconfont icon-shouji"></label>
+      <div class="input-box flex-item1">
+        <input id="phone" class="input" type="tel" ng-model="phone" placeholder="请输入手机号" />
       </div>
-    </div>
-    <p class="weui-btn-area">
-      <a href="javascript:" ng-click="login(username, password)"  class="weui-btn weui-btn_primary">登录</a>
-    </p>
-  </div>
+    </li>
+    <li class="input-row layout-box">
+      <label class="iconfont icon-yanzhengma"></label>
+      <div class="input-box flex-item1">
+        <input id="code" class="input" type="text" ng-model="code" placeholder="请输入手机校验码" />
+      </div>
+      <span class="get-code {{waiting ? 'waiting' : ''}}" ng-click="getCode()">{{codeString}}</span>
+    </li>
+  </ul>
 
-  <div ng-hide="hideFooter" class="page__ft j_bottom" style="padding-top: 0;">
-    <p class="weui-footer__text j_bottom">Built with <i class="material-icons md-4">&#xe87d;</i> by <a style="color: black" href="http://www.ccoffice.cc" target="_blank">ccoffice.cc</a> </p>
-  </div>
+  <!--<div class="protocol-box clearfix">-->
+    <!--<input class="iconbox" type="checkbox" ng-model="agree" /><span class="text">我已阅读和同意</span><span class="protocol">隐私和服务条款</span>-->
+  <!--</div>-->
 
-</div>
+  <button type="submit" class="btn-main" ng-click="bind()">绑定注册</button>
+</form>
+</body>
 
+</html>
 
 <div id="loadingToast" style="display:none;">
   <div class="weui-mask_transparent"></div>
   <div class="weui-toast">
     <i class="weui-loading weui-icon_toast"></i>
-    <p class="weui-toast__content">登录中</p>
+    <p class="weui-toast__content">请稍等</p>
   </div>
 </div>
 
-
-<!--BEGIN dialog2-->
-<div class="js_dialog" id="LoginTips" style=" display: none;">
-  <div class="weui-mask"></div>
-  <div class="weui-dialog">
-    <div class="weui-dialog__bd">
-      <img class="img-responsive " style="width: 100%" src="../assets/images/passwordTips.png"/>
-    </div>
-    <div class="weui-dialog__ft">
-      <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="hideMe()">知道了</a>
-    </div>
+<div id="errToastr" style="display: none;">
+  <div class="weui-mask_transparent"></div>
+  <div class="weui-toast">
+    <p class="weui-toast__content">{{msg}}</p>
   </div>
 </div>
-<!--END dialog2-->

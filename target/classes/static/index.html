@@ -5,6 +5,9 @@
   <title>锦创科技</title>
   <meta name="description" content="锦创科技">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <!-- for ios 7 style, multi-resolution icon of 152x152 -->
@@ -21,34 +24,22 @@
   <!-- pages -->
 
   <!-- style -->
-  <link rel="stylesheet" href="assets/animate.css/animate.min.css" type="text/css" />
   <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css" type="text/css" />
-  <link rel="stylesheet" href="assets/material-design-icons/material-design-icons.css" type="text/css" />
-  <!--<link rel="stylesheet" href="../../assets/bootstrap/dist/css/bootstrap.min.css" type="text/css" />-->
+
   <!--<link rel="stylesheet" href="../assets/weui/dist/style/weui.min.css" type="text/css" />-->
   <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.0/weui.min.css" type="text/css" />
 
-  <!-- weui+ -->
-  <!--<link rel="stylesheet" href="../assets/weui+/weuix.min.css" />-->
-
-  <!--swiper css-->
-  <link rel="stylesheet" href="assets/swiper/css/swiper-3.4.0.min.css" type="text/css" />
-
-  <!--SUI style-->
-  <link rel="stylesheet" href="//g.alicdn.com/sui/sui3/0.0.18/css/sui.min.css">
-  <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
-  <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
-  <link rel="stylesheet" href="libs/angular/angular-toastr/dist/angular-toastr.min.css" type="text/css" />
-  <link rel="stylesheet" href="assets/styles/app.m.css" type="text/css" />
-  <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css" type="text/css" />
-  <link rel="stylesheet" href="assets/material-design-icons/material-design-icons.css" type="text/css" />
-  <link rel="stylesheet" href="assets/styles/main.min.css" media="all">
+  <link rel="stylesheet" href="assets/styles/style.css" />
+  <link rel="stylesheet" href="assets/styles/iconfont.css" />
+  <link rel="stylesheet" href="assets/styles/swiper.css" />
 
 </head>
 <body ng-app="app" ng-controller="AppCtrl" >
 <div class="app ui-view-container" ui-view></div>
 
 <!-- build:scripts scripts/app.angular.scripts -->
+<script src="libs/js/moment/min/moment-with-locales.min.js"></script>
+<script src="libs/js/swiper.min.js"></script>
 <!-- jQuery -->
 <script src="libs/jquery/jquery/dist/jquery.min.js"></script>
 
@@ -86,10 +77,10 @@
 <script src="scripts/directives/ui-include.js"></script>
 <script src="scripts/directives/onfinish.js"></script>
 <script src="scripts/directives/inertiaScroll.js"></script>
+<script src="scripts/directives/swiperDirective.js"></script>
 <script src="scripts/services/ngstore.js"></script>
 <script src="scripts/services/ui-load.js"></script>
 <script src="scripts/services/palette.js"></script>
-<script src="scripts/services/lb-service.js"></script>
 <script src="scripts/services/ajax.js"></script>
 <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js "></script>
 <!-- endbuild -->

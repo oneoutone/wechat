@@ -26,33 +26,28 @@
 
   function config($stateProvider, $urlRouterProvider, MODULE_CONFIG, $httpProvider) {
 
-    $httpProvider.interceptors.push(function($q, $location, LoopBackAuth) {
+    $httpProvider.interceptors.push(function($q, $location, $localStorage) {
       return {
         responseError: function(rejection) {
           if (rejection.status == 401) {
-            // console.info("401 occ");
-            // //Now clearing the loopback values from client browser for safe logout...
-            // LoopBackAuth.clearUser();
-            // LoopBackAuth.clearStorage();
-            // var url = $location.path();
-            // var from = encodeURIComponent(url);
-            // console.log(url);
-            // var operator = url.split("/")[2];
-            // // 如果已经在登陆界面，接收到401跳转到登陆界面了。
-            // if (url.indexOf('signIn') == -1) {
-            //   $location.path('o/'+operator+'/signIn').search('state=' + from);
-            // }
+              var url = $location.path();
+              var from = encodeURIComponent(url);
+              // 如果已经在登陆界面，接收到401跳转到登陆界面了。
+              $localStorage["local-setting"].accessToken = undefined
+              $localStorage["local-setting"].user = undefined
+              //event.preventDefault();
+              $location.path('/signin').search('state=' + from);
           }
           return $q.reject(rejection);
         }
       };
     });
 
-    $urlRouterProvider.otherwise('/orders');
+    $urlRouterProvider.otherwise('/orders/list');
 
     $stateProvider
-      .state('signIn', {
-        url: '/signIn?state',
+      .state('signin', {
+        url: '/signin',
         templateUrl: 'views/signin/signIn.html',
         controller: 'SignInCtrl',
         resolve: load(['moment', 'toastr', 'se.util', 'scripts/controllers/signIn.js'])
@@ -79,9 +74,9 @@
 
         .state('order.add', {
             url: '/add',
-            templateUrl: 'views/order/order.add.html',
+            templateUrl: 'views/order/order.add1.html',
             controller: 'OrderAddCtrl',
-            resolve: load(['toastr', 'scripts/controllers/order/order.add.js'])
+            resolve: load(['toastr', 'scripts/controllers/order/order.add1.js'])
         })
 
         .state('order.reply', {
@@ -97,70 +92,38 @@
             controller: 'ProfileCtrl',
             resolve: load(['toastr', 'se.util', 'moment', 'scripts/controllers/profile.js'])
          })
-
-
-
-        // 运营团队权限配置
-        .state('app.manager',{
-            url: '/managers',
-            template: '<div ui-view></div>',
-            data: {title: '管理团队'}
+        .state('score', {
+            url: '/score',
+            templateUrl: 'views/product/score.info.html'
         })
-        .state('app.manager.list', {
+        .state('product', {
+            url: '/product',
+            template: '<div ui-view></div>'
+        })
+        .state('product.list', {
             url: '/list',
-            templateUrl: 'views/manager/manager.list.html',
-            controller: "ManagerListCtrl",
-            resolve: load(['toastr', 'ngFileUpload', 'L_XLSX', 'XLSX', 'ui.bootstrap','footable', 'scripts/manager/manager.list.js'])
+            templateUrl: 'views/product/product.list.html',
+            controller: 'ProductListCtrl',
+            resolve: load(['moment', 'se.util', 'scripts/controllers/product/product.list.js'])
         })
-        .state('app.manager.info', {
-            url: '/list',
-            templateUrl: 'views/manager/manager.info.html',
-            controller: "ManagerInfoCtrl",
-            resolve: load(['toastr', 'ngFileUpload', 'scripts/manager/manager.info.js'])
+        .state('redeemList', {
+            url: '/redeemList',
+            templateUrl: 'views/product/redeem.list.html',
+            controller: 'RedeemListCtrl',
+            resolve: load(['moment', 'se.util', 'scripts/controllers/product/redeem.list.js'])
         })
-
-      // 会议预约
-      .state('operator.meeting', {
-        url: '/meetings',
-        template: '<div ui-view></div>',
-        data: { title: '会议室管理' }
-      })
-      .state('operator.meeting.grid', {
-        url: '/grid?date',
-        params: {"param": null, "time": null, "offsetx": null, "offsety": null},
-        templateUrl: '../m.views/meetings/meeting.grid.html',
-        controller: "MeetingGirdCtrl",
-        resolve: load(['moment', 'mobiscroll', '../scripts/m.controllers/meeting/meeting.grid.js'])
-      })
-      .state('operator.meeting.info', {
-        url: '/:id',
-        params: {"param": null, "offsetx": null, "offsety": null},
-        templateUrl: '../m.views/meetings/meeting.info.html',
-        //templateUrl: '../m.views/meetings/meetings.detail.m.html',
-        controller: 'BookingFormCtrl',
-        resolve: load(['moment', 'toastr', 'mobiscroll', 'Decimal', '../scripts/m.controllers/meeting/meeting.info.js'])
-      })
-
-
-      .state('menu', {
-        url: '/menu',
-        templateUrl: '../m.views/menu.html',
-        controller: 'MenuCtrl',
-        resolve: load(['ui.bootstrap', 'swiper', '../scripts/m.controllers/menu.js'])
-      })
-      .state('operator.feedback', {
-        url: '/feedback/:id',
-        templateUrl: '../m.views/feedback.html',
-        controller: 'FeedbackCtrl',
-        resolve: load(['moment', 'toastr', '../scripts/m.controllers/feedback.js'])
-      })
-      .state('operator.password', {
-        url: '/password',
-        templateUrl: '../m.views/settings/password.html',
-        controller: "PasswordCtrl",
-        resolve: load(['toastr', '../scripts/m.controllers/password.js'])
-      })
-
+        .state('scoreList', {
+            url: '/scoreList',
+            templateUrl: 'views/product/score.list.html',
+            controller: 'ScoreListCtrl',
+            resolve: load(['moment', 'se.util', 'scripts/controllers/product/score.list.js'])
+        })
+        .state('product.info', {
+            url: '/:id',
+            templateUrl: 'views/product/product.info.html',
+            controller: 'ProductInfoCtrl',
+            resolve: load(['moment', 'se.util', 'toastr', 'scripts/controllers/product/product.info.js'])
+        })
 
     function load(srcs, callback) {
       return {

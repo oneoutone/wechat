@@ -12,15 +12,16 @@
     .module('app')
     .controller('AppCtrl', AppCtrl);
 
-  AppCtrl.$inject  = ['$scope', 'User', '$localStorage'];
+  AppCtrl.$inject  = ['$scope', '$rootScope', '$localStorage', 'httpService', '$state', '$location'];
 
-  function AppCtrl($scope, User, $localStorage) {
+  function AppCtrl($scope, $rootScope, $localStorage, httpService, $state, $location) {
     var vm = $scope;
 
     vm.app = {
       name: '锦创科技微服务',
       version: '0.6.0',
-        host: 'http://alextest.nat300.top',
+        //host: 'http://localhost:8080/api',
+        host: 'http://jcservice.nat300.top/api',
       color: {
         'primary':      '#0cc2aa',
         'accent':       '#a88add',
@@ -47,7 +48,32 @@
         bg: '',
         date: new Date()
       }
-    };
+    }
+
+
+
+    vm.app.isAuthenticated = function(){
+      var now = new Date()
+      if(vm.app.setting && vm.app.setting.accessToken && vm.app.setting.expire && now < moment(vm.app.setting.expire).toDate()){
+        console.log(vm.app.setting.accessToken )
+        return true
+      }
+      return false
+    }
+
+      $rootScope.$on('$stateChangeStart', function (event, toState) {
+          //console.info( LoopBackAuth.currentUserData)
+          if (!vm.app.isAuthenticated() && toState.name.indexOf('signin') == -1) {
+              var url = $location.path();
+              var from = encodeURIComponent(url);
+              // 如果已经在登陆界面，接收到401跳转到登陆界面了。
+              //event.preventDefault();
+              //alert('$stateChangeStart1')
+              console.log($location.path())
+              console.log($location.host())
+              $location.path('/signin').search('state=' + from);
+          }
+      });
 
     vm.app.isReady = false;    // 程序是否初始化成功
     var todos = [];
@@ -61,8 +87,15 @@
       }
     };
 
+    vm.app.setAccessToken = function(data){
+        vm.app.setting.accessToken = data.accessToken
+        vm.app.setting.userId = data.userId
+        vm.app.setting.udeskId = data.udeskId
+        vm.app.setting.expire = data.expire
+    }
 
-    var setting = vm.app.name + '-m-Setting';
+    var setting = 'local-setting';
+    console.log(setting)
     // save settings to local storage
     if (angular.isDefined($localStorage[setting])) {
       vm.app.setting = $localStorage[setting];
@@ -77,43 +110,38 @@
 
 
     /**
-     * get user roles and convert to {admin: true, executive: true} format
-     *
-     * @param callback
-     */
-    // function getRoles(callback) {
-    //   User.prototype$__get__roles({id: 'me'}, function (roles) {
-    //     var _roles = {};
-    //     for (var index = 0; index < roles.length; index ++) {
-    //       var _roleName = roles[index].name;
-    //       _roles[_roleName] = true;
-    //     }
-    //     return callback(null, _roles);
-    //   }, function (err) {
-    //     return callback(err)
-    //   });
-    // }
-
-
-    /**
      * initialization
      *
      */
-    // vm.app.init = function(){
-    //   if (!User.getCurrentId()) {return}
-    //   User.getCurrent(function (user){
-    //     vm.app.user = user;
-    //     vm.app.setting.spaceId = user.spaceId;
-    //     getRoles(function (err, roles) {
-    //       vm.app.roles = roles;
-    //       vm.app.isReady = true;
-    //       vm.app.runTodos();
-    //     })
-    //   }, function (err) {
-    //     console.error(err)
-    //   });
-    // };
-    //
-    // vm.app.init();
+    vm.app.init = function(callback){
+        httpService.getMyProfile(function(data){
+            if(!data.id){
+                var url = $location.path();
+                var from = encodeURIComponent(url);
+                $location.path('/signin').search('state=' + from);
+            }
+            vm.app.setting.user = data
+            if(vm.app.setting.user.orgTree){
+                var tree = vm.app.setting.user.orgTree.split(',');
+                if(tree.length > 2){
+                    vm.app.setting.user.organ = tree[1]+'-'+tree[2]
+                }else{
+                    vm.app.setting.user.organ = tree[1]
+                }
+            }
+            vm.app.isReady = true
+            vm.app.runTodos()
+            if(callback){
+                callback()
+            }
+        }, function(err){
+            console.log(err)
+        })
+    };
+
+
+    if(vm.app.isAuthenticated()){
+        vm.app.init();
+    }
   }
 })();

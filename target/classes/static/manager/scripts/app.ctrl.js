@@ -25,7 +25,7 @@
         $rootScope.miniSidebarActive = true;
 
         vm.app = {
-            name: '锦创科技',
+            name: '锦创科技微服务后台',
             version: '0.6.0',
             // for chart colors
             color: {
@@ -99,13 +99,6 @@
                 $state.go('access.signin');
                 return
             }
-            // if (User.isAuthenticated() && vm.app.setting.loginType == "teamManager" && toState.name.indexOf('dashboard') != -1) {
-            //     event.preventDefault();
-            //     $state.go('app.teamManager.users');
-            // }else if(User.isAuthenticated() && (!vm.app.setting || !vm.app.setting.loginType) && toState.name.indexOf('dashboard') != -1){
-            //     event.preventDefault();
-            //     vm.app.logout()
-            // }
         });
 
 
@@ -114,7 +107,7 @@
          *
          * @param next
          */
-        vm.app.init = function () {
+        vm.app.init = function (callback) {
             httpService.getMyProfile(function(data){
                 vm.app.setting.user = data
                 vm.app.setting.user.roles = {}
@@ -126,6 +119,9 @@
                 }
                 vm.app.isReady = true
                 vm.app.runTodos()
+                if(callback){
+                    callback()
+                }
             }, function(err){
                 console.log(err)
             })
@@ -209,7 +205,7 @@
             $location.path('/access/signin');
         };
 
-        var setting = vm.app.name + '-Setting';
+        var setting = 'local-setting';
         console.log(setting)
         // save settings to local storage
         if (angular.isDefined($localStorage[setting])) {
