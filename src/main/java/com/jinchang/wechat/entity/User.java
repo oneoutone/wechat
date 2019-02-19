@@ -30,6 +30,8 @@ public class User {
     private String org;
     private String orgTree;
     private String orgCode;
+    private long companyId;
+    private String position;
 
     public long getId() {
         return id;
@@ -134,4 +136,12 @@ public class User {
     public String getOrgCode() { return orgCode; }
 
     public void setOrgCode(String orgCode) { this.orgCode = orgCode; }
+
+    public long getCompanyId() { return companyId; }
+
+    public void setCompanyId(long companyId) { this.companyId = companyId; }
+
+    public String getPosition() { return position; }
+
+    public void setPosition(String position) { this.position = position; }
 }

@@ -10,7 +10,6 @@
                 console.log('print')
             }
             self.ao = 1
-
             self.wechatAuth = function(data, success, fail){
                 $http({
                     method: 'post',
@@ -375,7 +374,324 @@
                 })
             }
 
+            self.register = function(success, fail){
+                $http({
+                    method: 'post',
+                    url: host + '/users/register',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getRegister = function(success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/users/register',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getRegisterHistory = function(data, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/users/registerHistory',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params:data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getCompanyCount = function(data, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/companies/count',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params:data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getCompanyList = function(data, success, fail) {
+                $http({
+                    method: 'get',
+                    url: host + '/companies',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params:data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getAllCompany = function(success, fail) {
+                $http({
+                    method: 'get',
+                    url: host + '/companies/all',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.createCompany = function(data, success, fail) {
+                $http({
+                    method: 'post',
+                    url: host + '/companies',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    data: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.updateCompany = function(data, success, fail) {
+                $http({
+                    method: 'post',
+                    url: host + '/companies/update',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    data: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.deleteCompany = function(id, success, fail){
+                $http({
+                    method: 'delete',
+                    url: host + '/companies/'+id,
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
+                }).success(function (r, header, config, status) {
+                    console.log(r)
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log(r)
+                    fail(r)
+                })
+            }
+
+            self.deleteCompanyUser = function(id, success, fail){
+                $http({
+                    method: 'delete',
+                    url: host + '/users/employee/'+id,
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
+                }).success(function (r, header, config, status) {
+                    console.log(r)
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log(r)
+                    fail(r)
+                })
+            }
+
+            self.getCompanyUser = function(companyId, data, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/users/company/' + companyId,
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params:data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getCompanyUserCount = function(companyId, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/users/company/' + companyId + '/count',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getCompanyById = function(id, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/companies/' + id ,
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.upsertEmployee = function(data, success, fail){
+                $http({
+                    method: 'post',
+                    url: host + '/users/upsertEmployee',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    data: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+
+            /*
+            meetingRoom CURE
+             */
+            //get all meeting room list
+            self.getMeetingRoomList = function(success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/meetingRooms',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            //meetingRoom create and update method
+            self.upsertMeetingRoom = function(data, success, fail){
+                $http({
+                    method: 'post',
+                    url: host + '/meetingRooms',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    data: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            //meetingRoom delete method
+            self.deleteMeetingRoom = function(id, success, fail){
+                $http({
+                    method: 'delete',
+                    url: host + '/meetingRooms/'+id,
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
+                }).success(function (r, header, config, status) {
+                    console.log(r)
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log(r)
+                    fail(r)
+                })
+            }
+
+            /**
+             * meeting CURE
+             */
+            //meetingRoom create and update method
+            self.upsertMeeting = function(data, success, fail){
+                $http({
+                    method: 'post',
+                    url: host + '/meetings',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    data: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getMeeting = function(param, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/meetings',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params: param
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.checkToken = function(token, success, fail){
+                $http({
+                    method: 'post',
+                    url: host + '/users/checkToken',
+                    headers: {'Content-Type': 'application/json'},
+                    data: {accessToken: token}
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.deleteMeeting = function(id, success, fail){
+                $http({
+                    method: 'delete',
+                    url: host + '/meetings/'+id,
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
+                }).success(function (r, header, config, status) {
+                    console.log(r)
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log(r)
+                    fail(r)
+                })
+            }
+
             function getAccessToken() {
+                console.log('getAccessToken')
                 if (!self.accessToken) {
                     self.accessToken = $localStorage["local-setting"].accessToken
                 }

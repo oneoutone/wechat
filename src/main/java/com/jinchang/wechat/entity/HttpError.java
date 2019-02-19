@@ -26,3 +26,4 @@ public class HttpError {
         this.message = message;
     }
 }
+

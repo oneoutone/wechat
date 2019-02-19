@@ -1,0 +1,127 @@
+<div class="head">
+    <div class="wrap clearfix">
+        <div class="logo">
+            <img src="../assets/images/img-logo1.png" />
+        </div>
+        <div class="head-right">
+            <span class="icon icon-user">您好：张山山 (软件研发部)</span>
+            <a href="javascript:void(0);" class="icon icon-quit">[退出]</a>
+        </div>
+    </div>
+</div>
+<div class="wrap">
+    <div class="wo-detail">
+        <div class="cont">
+            <h3 class="wo-tit">OA系统审批流程无法审<span class="state state1">进行中</span><!--<span class="state state2">已解决</span><span class="state state3">已关闭</span>--></h3>
+            <div class="time">2018-09-28</div>
+            <p class="text">这个审批人并不是每次都要修改流程，平时不修改的时候还是按照原流程流转;如果修改的话也并不一定是在当前节点之前、之后、或是并行的加个审批人，有时还需要添加审批的节点，设置流程走向并且针对这个节点设置读写属性</p>
+            <div class="imgbox clearfix"><img class="img" src="../assets/images/img-head.png" /><img class="img" src="../img/img-head.png" /><img class="img" src="../img/img-head.png" /><img class="img" src="../img/img-head.png" /><img class="img" src="../img/img-head.png" /><img class="img" src="../img/img-head.png" /><img class="img" src="../img/img-head.png" /><img class="img" src="../img/img-head.png" /><img class="img" src="../img/img-head.png" /></div>
+        </div>
+        <div class="btns">
+            <a href="javascript:void(0);" class="btn-item icon-replay" id="replyBtn">回复</a>
+            <a href="javascript:void(0);" class="btn-item icon-solve">解决</a>
+        </div>
+    </div>
+
+    <ul class="reply-list">
+        <li class="reply-item">
+            <div class="clearfix">
+                <div class="name fl">管理员</div>
+                <span class="time fr">2018-09-30</span>
+            </div>
+            <p class="text">这个审批人并不是每次都要修改流程，平时不修改的时候还是按照原流程流转</p>
+            <div class="imgbox clearfix"><img class="img" src="../assets/images/img-head.png" /><img class="img" src="../img/img-head.png" /></div>
+        </li>
+        <li class="reply-item">
+            <div class="clearfix">
+                <div class="name fl">我</div>
+                <span class="time fr">2018-09-30</span>
+            </div>
+            <p class="text">这个审批人并不是每次都要修改流程.....</p>
+        </li>
+    </ul>
+</div>
+
+<!--回复工单-->
+<div class="mask-box"></div>
+<div id="alertResult" class="alert-box">
+    <div class="title"><span class="tit">回复</span><span class="close-pop"></span></div>
+    <div class="alert-cont">
+        <form class="form-box">
+            <ul class="form-list">
+                <li class="textarea-box clearfix">
+                    <label class="tit"><span class="must c-red">*</span>回复内容</label>
+                    <div class="cont">
+                        <textarea class="textarea" name="" rows="5" placeholder="请填写回复内容"></textarea>
+                    </div>
+                </li>
+                <li class="imgs-box clearfix">
+                    <label class="tit">图片上传</label>
+                    <div class="cont">
+                        <div class="upload-img-list clearfix">
+                            <div class="img-item">
+                                <img class="img" src="../assets/images/img-head.png">
+                                <span class="del"></span>
+                            </div>
+                            <div class="img-item">
+                                <img class="img" src="../assets/images/img-head.png">
+                                <span class="del"></span>
+                            </div>
+                            <div class="img-item">
+                                <img class="img" src="../assets/images/img-head.png">
+                                <span class="del"></span>
+                            </div>
+                            <div class="img-item">
+                                <img class="img" src="../assets/images/img-head.png">
+                                <span class="del"></span>
+                            </div>
+                            <div class="img-item">
+                                <img class="img" src="../assets/images/img-head.png">
+                                <span class="del"></span>
+                            </div>
+                            <div class="add-img img-item">
+                                <img class="add" src="../assets/images/icon-add.png">
+                                <p class="text2">点击添加图片</p>
+                                <input type="file" accept="image/*" id="image-2">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </form>
+    </div>
+    <div class="btn-box">
+        <button id="closeAlert" type="button" class="btn-outlined">取消</button>
+        <button id="submitBtn" type="button" class="btn">提交</button>
+    </div>
+</div>
+
+<script src="../js/public.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $("#replyBtn").click(function() {
+        openPop()
+    });
+
+    $(".close-pop").click(function() {
+        closePop();
+    });
+
+    $("#closeAlert").click(function() {
+        closePop();
+    });
+
+    $("#submitBtn").click(function() {
+        closePop();
+    });
+
+    function openPop() {
+        $("#alertResult").show();
+        $(".mask-box").show();
+    }
+
+    function closePop() {
+        $("#alertResult").hide();
+        $(".mask-box").hide();
+    }
+</script>
+

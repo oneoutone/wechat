@@ -1,0 +1,75 @@
+<div class="head">
+    <div class="wrap clearfix">
+        <div class="logo">
+            <img src="../../assets/images/img-logo1.png" />
+        </div>
+        <div class="head-right">
+            <span class="icon icon-user">您好：{{app.setting.user.nickName}} ({{app.setting.user.org}})</span>
+        </div>
+    </div>
+</div>
+<div class="wrap">
+    <div class="wo-detail">
+        <div class="cont">
+            <h3 class="wo-tit">{{ticket.subject}}<span class="state {{ticket.status_en == 'resolved' ? 'state2' : (ticket.status_en == 'closed' ? 'state3' : (ticket.status_en == 'solving' ? 'state4' : 'state1'))}}">{{ticket.status_en == 'resolved' ? '已解决' : (ticket.status_en == 'closed' ? '已关闭' : (ticket.status_en == 'solving' ? '解决中' : '已提交'))}}</span><!--<span class="state state2">已解决</span><span class="state state3">已关闭</span>--></h3>
+            <div class="time">{{ticket.created}}</div>
+            <p class="text">{{ticket.content}}</p>
+            <div class="imgbox clearfix"><img class="img ig1" ng-repeat="image in ticket.attachments" src="{{image.url}}" ng-click="showBig($index)"/></div>
+        </div>
+        <div class="btns">
+            <a ng-show="ticket.status_en == 'open' || ticket.status_en == 'solving'" ng-click="showAdd()" class="btn-item icon-replay" id="replyBtn">回复</a>
+            <a ng-show="ticket.status_en == 'open' || ticket.status_en == 'solving'" ng-click="resolve()" class="btn-item icon-solve">解决</a>
+        </div>
+    </div>
+
+    <ul class="reply-list">
+        <li class="reply-item" ng-repeat="item in replies"  on-finish-render-filters>
+            <div class="clearfix">
+                <div class="name fl">{{item.author.nick_name}}</div>
+                <span class="time fr">{{item.created}}</span>
+            </div>
+            <p class="text reply-content"></p>
+            <div class="imgbox clearfix"><img class="img ig2" ng-repeat="image in item.attachments" src="{{image.url}}" ng-click="showBig1($index)" /></div>
+        </li>
+    </ul>
+</div>
+
+<!--回复工单-->
+<div class="mask-box"></div>
+<div id="alertResult" class="alert-box">
+    <div class="title"><span class="tit">回复</span><span class="close-pop" ng-click="hide()"></span></div>
+    <div class="alert-cont">
+        <form class="form-box">
+            <ul class="form-list">
+                <li class="textarea-box clearfix">
+                    <label class="tit"><span class="must c-red">*</span>回复内容</label>
+                    <div class="cont">
+                        <textarea class="textarea" name="" rows="5" ng-model="content" placeholder="请填写回复内容"></textarea>
+                    </div>
+                </li>
+                <li class="imgs-box clearfix">
+                    <label class="tit">图片上传</label>
+                    <div class="cont">
+                        <div class="upload-img-list clearfix">
+                            <div class="img-item" ng-repeat="image in images">
+                                <img class="img" src="{{image.data}}">
+                                <span class="del" ng-click="remove($index)"></span>
+                            </div>
+                            <div class="add-img img-item">
+                                <img class="add " src="../../assets/images/icon-add.png" >
+                                <p class="text2">点击添加图片</p>
+                                <input type="file" accept="image/*" id="image-2"  onchange="angular.element(this).scope().fileChanged(this.files)">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </form>
+    </div>
+    <div class="btn-box">
+        <button id="closeAlert" ng-click="hide()" type="button" class="btn-outlined">取消</button>
+        <button id="submitBtn" ng-click="reply()" type="button" class="btn">提交</button>
+    </div>
+</div>
+
+

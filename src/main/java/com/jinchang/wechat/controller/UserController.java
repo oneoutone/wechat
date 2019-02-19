@@ -6,7 +6,22 @@ import com.jinchang.wechat.exception.TokenException;
 import com.jinchang.wechat.repository.*;
 import com.jinchang.wechat.util.HttpUtil;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +41,9 @@ import weixin.popular.bean.message.templatemessage.TemplateMessageResult;
 import weixin.popular.bean.sns.SnsToken;
 import com.jinchang.wechat.repository.AccessTokenRepository;
 import com.jinchang.wechat.entity.AccessToken;
-import java.io.IOException;
+
+import java.io.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -36,7 +53,7 @@ import com.jinchang.wechat.entity.HttpError;
 
 
 @RestController
-@RequestMapping("/api//users")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
@@ -65,6 +82,12 @@ public class UserController {
 
     @Autowired
     protected EmployeeRepository employeeRepository;
+
+    @Autowired
+    protected RegisterRepository registerRepository;
+
+    @Autowired
+    protected RegisterHistoryRepository registerHistoryRepository;
 
     @Autowired
     private Environment env;
@@ -100,6 +123,44 @@ public class UserController {
         }else{
             return token.getAccessToken();
         }
+    }
+
+    @RequestMapping("/hello1")
+    public String hello1(HttpServletRequest request) throws FileNotFoundException, IOException, BiffException {
+        // 创建输入流，读取Excel
+        File file = new File("/Users/liyuan/Documents/newProject/file.xlsx");
+        BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+        //POIFSFileSystem fs = new POIFSFileSystem(in);
+        // jxl提供的Workbook
+        XSSFWorkbook wb = new XSSFWorkbook(in);
+        XSSFSheet st = wb.getSheetAt(0);
+        String result = "[";
+        for (int rowIndex = 2; rowIndex <= 633; rowIndex++) {
+            String r = "{";
+            XSSFRow row = st.getRow(rowIndex);
+            if (row == null) {
+                continue;
+            }
+            for (short columnIndex = 1; columnIndex <= 2; columnIndex++) {
+                XSSFCell cell = row.getCell(columnIndex);
+                if (columnIndex ==1 && cell != null) {
+                    String name = cell.getStringCellValue();
+                    r += "name: '" + cell.getStringCellValue() + "'";
+                    System.out.println(name);
+                    List<LDAPUser> u = lDAPUserRepository.findByName(name);
+                    if(u != null && u.size() == 1){
+                        r+=", employeeId: '"+u.get(0).getCn()+ "'";
+                    }
+                }
+                if (columnIndex ==2 && cell != null) {
+                    r += ", org: '"+cell.getStringCellValue()+"'";
+                }
+            }
+            r += "},\n";
+            result += r;
+        }
+        System.out.println(result);
+    return "ok";
     }
 
     @RequestMapping("/hello")
@@ -234,8 +295,12 @@ public class UserController {
         json.put("clientRoles", user.getClientRoles());
         json.put("emplyeeId", user.getEmployeeId());
         json.put("managerRoles", user.getManagerRoles());
-        json.put("org", user.getOrg());
-        json.put("orgTree", user.getOrgTree());
+        Employee employee = employeeRepository.findAllByEmployeeId(user.getEmployeeId());
+        if(employee != null){
+            json.put("org", employee.getOrgName());
+            json.put("orgTree", employee.getOrgTree());
+        }
+
         if(user != null && user.getEmployeeId() != null){
             LDAPUser ldapUser = lDAPUserRepository.findByCn(user.getEmployeeId());
             if(ldapUser == null || ldapUser.getJcemployeeleavedate() != null){
@@ -316,6 +381,27 @@ public class UserController {
         return new ResponseEntity<User>(u ,HttpStatus.OK);
     }
 
+    @GetMapping("/company/{id}")
+    public ResponseEntity<?> employeeList(@PathVariable String id, @RequestParam(required=false, defaultValue = "") int page) {
+        if(page > 0){
+            page -= 1;
+        }
+        System.out.println("calc value");
+        System.out.println(id);
+        Page<User> r = userRepository.findAllByCompanyId(Long.parseLong(id), PageRequest.of(page, 10, Sort.Direction.DESC, "created"));
+        JSONObject result = new JSONObject();
+        result.put("userList", r.getContent());
+        return new ResponseEntity<JSONObject>(result ,HttpStatus.OK);
+    }
+
+    @GetMapping("/company/{id}/count")
+    public ResponseEntity<?> employeeCount(@PathVariable String id) {
+        int r = userRepository.countCompanyUser(Long.parseLong(id));
+        JSONObject result = new JSONObject();
+        result.put("count", r);
+        return new ResponseEntity<JSONObject>(result ,HttpStatus.OK);
+    }
+
     @GetMapping("/managers/list")
     public ResponseEntity<?> ManagerList() {
         List<User> us = userRepository.findAllByManagerRolesIsNotNull();
@@ -392,6 +478,142 @@ public class UserController {
          return user;
     }
 
+    @PostMapping("/upsertEmployee")
+    public ResponseEntity<?> upsertEmployee(@RequestBody User user) {
+        User u = new User();
+        if(user.getId() > 0){
+            u = userRepository.findById(user.getId());
+        }else{
+            if(user.getPhone() == null) {
+                return new ResponseEntity<HttpError>(new HttpError(400, "请输入手机号"),HttpStatus.BAD_REQUEST);
+            }
+            if(user.getCompanyId() == 0) {
+                return new ResponseEntity<HttpError>(new HttpError(400, "没有员工公司信息"),HttpStatus.BAD_REQUEST);
+            }
+            u.setUsername(user.getPhone().toString());
+            u.setPassword(bCryptPasswordEncoder.encode("12345"));
+            u.setCompanyId(user.getCompanyId());
+        }
+        if(user.getNickName() != null){
+            u.setNickName(user.getNickName());
+        }
+        if(user.getPhone() != null){
+            u.setPhone(user.getPhone());
+        }
+        if(user.getEmail() != null){
+            u.setEmail(user.getEmail());
+        }
+        if(user.getPosition() != null){
+            u.setPosition(user.getPosition());
+        }
+        userRepository.save(u);
+        return new ResponseEntity<User>(u ,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/employee/{id}")
+    public ResponseEntity<?> deleteEmployee(@PathVariable String id) {
+        User u = userRepository.findById(Long.parseLong(id));
+        if(u == null) {
+            return new ResponseEntity<HttpError>(new HttpError(404, "员工不存在"),HttpStatus.NOT_FOUND);
+        }
+        userRepository.deleteById(Long.parseLong(id));
+        JSONObject json = new JSONObject();
+        json.put("result", "ok");
+        return new ResponseEntity<JSONObject>(json ,HttpStatus.OK);
+    }
+
+    @PostMapping("/openAuth")
+    public ResponseEntity<?> openAuth(@RequestBody JSONObject request) throws IOException{
+        String employeeId = null;
+        String phone = null;
+        String email = null;
+        if(request.get("employeeId") != null){
+            employeeId = request.get("employeeId").toString();
+        }else{
+            return new ResponseEntity<HttpError>(new HttpError(400, "没有上送工号"),HttpStatus.BAD_REQUEST);
+        }
+        if(request.get("phone") != null){
+            phone = request.get("phone").toString();
+        }else{
+            return new ResponseEntity<HttpError>(new HttpError(400, "没有上送手机号"),HttpStatus.BAD_REQUEST);
+        }
+        if(request.get("email") != null){
+            email = request.get("email").toString();
+        }else{
+            return new ResponseEntity<HttpError>(new HttpError(400, "没有上送邮箱"),HttpStatus.BAD_REQUEST);
+        }
+        List<LDAPUser> us = lDAPUserRepository.findByCns(employeeId);
+        if(us == null || us.size() == 0 || us.get(0).getJcemployeeleavedate() != null){
+            return new ResponseEntity<HttpError>(new HttpError(401, "您不是在职员工"),HttpStatus.BAD_REQUEST);
+        }
+        User currentUser = userRepository.findByEmployeeId(employeeId);
+        if(currentUser == null){
+            currentUser = new User();
+            currentUser.setUsername(phone);
+            currentUser.setPassword(bCryptPasswordEncoder.encode("12345"));
+            currentUser.setAutoEmail(false);
+            currentUser.setEmail(email);
+            currentUser.setNickName(us.get(0).getName());
+            currentUser.setCreated(new Date());
+            currentUser.setEmployeeId(request.get("employeeId").toString());
+            currentUser.setPhone(request.get("phone").toString());
+            Employee ep = employeeRepository.findAllByEmployeeId(employeeId);
+            if(ep != null){
+                currentUser.setOrg(ep.getOrgName());
+                currentUser.setOrgCode(ep.getOrgCode());
+                currentUser.setOrgTree(ep.getOrgTree());
+            }
+            currentUser = userRepository.save(currentUser);
+        }
+
+        if(currentUser.getUdeskId() == null) {
+            HashMap<String, Object> udeskCustomer = new HashMap();
+            HashMap<String, String> customer = new HashMap();
+            customer.put("nick_name", us.get(0).getName());
+            customer.put("email", "ticket"+currentUser.getId()+"@jc.com");
+            udeskCustomer.put("customer", customer);
+            String url = generateUrl("open_api_v1/customers");
+            String r = HttpUtil.sendPost(url, JSON.toJSONString(udeskCustomer));
+            JSONObject c = JSON.parseObject(r);
+            if (c.get("customer") != null) {
+                JSONObject nc = JSON.parseObject(c.get("customer").toString());
+                String uId = nc.get("id").toString();
+                currentUser.setUdeskId(uId);
+                userRepository.save(currentUser);
+            }
+        }
+
+        String newTokenString = Jwts.builder()
+                .setSubject(currentUser.getUsername())
+                .setExpiration(new Date(System.currentTimeMillis() + 365 * 24 * 60 * 60 * 1000)) // 设置过期时间 365 * 24 * 60 * 60秒(这里为了方便测试，所以设置了1年的过期时间，实际项目需要根据自己的情况修改)
+                .signWith(SignatureAlgorithm.HS512, "MyJwtSecret") //采用什么算法是可以自己选择的，不一定非要采用HS512
+                .compact();
+        AccessToken newToken = new AccessToken();
+        newToken.setAccessToken(newTokenString);
+        newToken.setUserId(currentUser.getId());
+        newToken.setExpire(new Date(System.currentTimeMillis() + 365 * 24 * 60 * 60 * 1000));
+        accessTokenRepository.save(newToken);
+        JSONObject result = new JSONObject();
+        result.put("accessToken", newTokenString);
+        result.put("userId", currentUser.getId());
+        result.put("udeskId", currentUser.getUdeskId());
+        result.put("expire", newToken.getExpire());
+        return new ResponseEntity<JSONObject>(result,HttpStatus.OK);
+    }
+
+    @PostMapping("/checkToken")
+    public ResponseEntity<?> checkToken(@RequestBody JSONObject request) {
+        if(request.get("accessToken") == null){
+            return new ResponseEntity<HttpError>(new HttpError(400, "没有token"),HttpStatus.BAD_REQUEST);
+        }
+        AccessToken token = accessTokenRepository.findByAccessTokenEqualsAndExpireAfter(request.get("accessToken").toString(), new Date());
+        if(token == null){
+            return new ResponseEntity<HttpError>(new HttpError(401, "不是有效的令牌"),HttpStatus.BAD_REQUEST);
+        }else{
+            return new ResponseEntity<AccessToken>(token,HttpStatus.OK);
+        }
+    }
+
     @PostMapping("/wechatBind")
     public ResponseEntity<?> wechatBind(@RequestBody JSONObject request) throws IOException{
         String employeeId = null;
@@ -444,6 +666,13 @@ public class UserController {
                 currentUser.setOrg(ep.getOrgName());
                 currentUser.setOrgCode(ep.getOrgCode());
                 currentUser.setOrgTree(ep.getOrgTree());
+            }
+        }else{
+            if(currentUser.getOpenId() == null){
+                createFlag = true;
+                currentUser.setScore(200);
+            }else{
+                createFlag = false;
             }
         }
 
@@ -545,8 +774,9 @@ public class UserController {
         result.put("udeskId", currentUser.getUdeskId());
         result.put("expire", newToken.getExpire());
         return new ResponseEntity<JSONObject>(result,HttpStatus.OK);
-
     }
+
+
 
     @PostMapping("/wechatOpenId")
     public ResponseEntity<?> wechatOpenId(@RequestBody JSONObject request){
@@ -612,5 +842,143 @@ public class UserController {
         String sign = DigestUtils.sha1Hex(email+"&"+token+"&"+timeStamp);
         return env.getProperty("udesk.url").concat(url+"?email="+email+"&timestamp="+timeStamp+"&sign="+sign);
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(HttpServletRequest r1) {
+        if(r1.getAttribute("currentUserId") == null){
+            return new ResponseEntity<HttpError>(new HttpError(401, "员工不存在"),HttpStatus.UNAUTHORIZED);
+        }
+        long userId = Long.parseLong(r1.getAttribute("currentUserId").toString());
+        User usr = userRepository.findById(userId);
+        if(usr == null) {
+            return new ResponseEntity<HttpError>(new HttpError(401, "员工不存在"),HttpStatus.UNAUTHORIZED);
+        }
+        RegisterHistory registerHistory = new RegisterHistory();
+        registerHistory.setCreated(new Date());
+        registerHistory.setUserId(userId);
+        registerHistoryRepository.save(registerHistory);
+
+        Register register = registerRepository.findByUserId(userId);
+        Date today = new Date();
+        if(register == null){
+            register = new Register();
+            register.setContinuousRegister(1);
+            register.setCreated(today);
+            register.setLastRegister(today);
+            register.setUserId(userId);
+            register.setReward7(false);
+            register.setReward14(false);
+            register.setReward21(false);
+        }else{
+
+            Calendar aCalendar = Calendar.getInstance();
+            aCalendar.setTime(register.getLastRegister());
+            int day1 = aCalendar.get(Calendar.DAY_OF_YEAR);
+            aCalendar.setTime(today);
+            int day2 = aCalendar.get(Calendar.DAY_OF_YEAR);
+            if(day2 -day1 == 1){
+                register.setContinuousRegister(register.getContinuousRegister()+1);
+            }else{
+                register.setContinuousRegister(1);
+            }
+            System.out.println(day2 -day1);
+            register.setLastRegister(today);
+        }
+
+        ScoreHistory scoreHistory = new ScoreHistory();
+        scoreHistory.setType("add");
+        scoreHistory.setUserId(userId);
+        scoreHistory.setRemark("签到");
+        scoreHistory.setScore(5);
+        scoreHistory.setCreated(today);
+        scoreHistoryRepository.save(scoreHistory);
+
+        usr.setScore(usr.getScore() + 5);
+        userRepository.save(usr);
+        registerRepository.save(register);
+        return new ResponseEntity<Register>(register, HttpStatus.OK);
+    }
+
+    @GetMapping("/register")
+    public ResponseEntity<?> getRegister(HttpServletRequest r1) {
+        if(r1.getAttribute("currentUserId") == null){
+            return new ResponseEntity<HttpError>(new HttpError(401, "员工不存在"),HttpStatus.UNAUTHORIZED);
+        }
+        long userId = Long.parseLong(r1.getAttribute("currentUserId").toString());
+        User usr = userRepository.findById(userId);
+        if(usr == null) {
+            return new ResponseEntity<HttpError>(new HttpError(401, "员工不存在"),HttpStatus.UNAUTHORIZED);
+        }
+        Register register = registerRepository.findByUserId(userId);
+        return new ResponseEntity<Register>(register, HttpStatus.OK);
+    }
+
+    @GetMapping("/registerHistory")
+    public ResponseEntity<?> getRegisterHistory(@RequestParam(required=false, defaultValue = "") String start, @RequestParam(required=false, defaultValue = "") String end, HttpServletRequest r1) throws ParseException {
+        if(r1.getAttribute("currentUserId") == null){
+            return new ResponseEntity<HttpError>(new HttpError(401, "员工不存在"),HttpStatus.UNAUTHORIZED);
+        }
+        long userId = Long.parseLong(r1.getAttribute("currentUserId").toString());
+        User usr = userRepository.findById(userId);
+        if(usr == null) {
+            return new ResponseEntity<HttpError>(new HttpError(401, "员工不存在"),HttpStatus.UNAUTHORIZED);
+        }
+        SimpleDateFormat simFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date s = simFormat.parse(start);
+        Date e = simFormat.parse(end);
+        List<RegisterHistory> rhs = registerHistoryRepository.findAllByUserIdAndCreatedBetween(userId, s, e);
+        return new ResponseEntity<List<RegisterHistory>>(rhs, HttpStatus.OK);
+    }
+
+    @PostMapping("/reward")
+    public ResponseEntity<?> reward(@RequestBody JSONObject request, HttpServletRequest r1) {
+        String type = request.get("type").toString();
+        if(r1.getAttribute("currentUserId") == null){
+            return new ResponseEntity<HttpError>(new HttpError(401, "员工不存在"),HttpStatus.UNAUTHORIZED);
+        }
+        long userId = Long.parseLong(r1.getAttribute("currentUserId").toString());
+        User usr = userRepository.findById(userId);
+        if(usr == null) {
+            return new ResponseEntity<HttpError>(new HttpError(401, "员工不存在"),HttpStatus.UNAUTHORIZED);
+        }
+        Register register = registerRepository.findByUserId(userId);
+        if(register == null){
+            return new ResponseEntity<HttpError>(new HttpError(403, "不满足兑换条件"),HttpStatus.UNAUTHORIZED);
+        }
+        if(type.equals("reward7")){
+            if(register.getReward7() == true){
+                return new ResponseEntity<HttpError>(new HttpError(403, "已经兑换"),HttpStatus.UNAUTHORIZED);
+            }
+            register.setReward7(true);
+            usr.setScore(usr.getScore()+10);
+        }
+        if(type.equals("reward14")){
+            if(register.getReward14() == true){
+                return new ResponseEntity<HttpError>(new HttpError(403, "已经兑换"),HttpStatus.UNAUTHORIZED);
+            }
+            register.setReward14(true);
+            usr.setScore(usr.getScore()+10);
+        }
+        if(type.equals("reward21")){
+            if(register.getReward21() == true){
+                return new ResponseEntity<HttpError>(new HttpError(403, "已经兑换"),HttpStatus.UNAUTHORIZED);
+            }
+            register.setReward21(true);
+            usr.setScore(usr.getScore()+10);
+        }
+
+        registerRepository.save(register);
+        userRepository.save(usr);
+        ScoreHistory scoreHistory = new ScoreHistory();
+        scoreHistory.setType("add");
+        scoreHistory.setUserId(userId);
+        scoreHistory.setRemark("连续签到奖励");
+        scoreHistory.setScore(10);
+        scoreHistory.setCreated(new Date());
+        scoreHistoryRepository.save(scoreHistory);
+        return new ResponseEntity<Register>(register, HttpStatus.OK);
+    }
+
+
 
 }

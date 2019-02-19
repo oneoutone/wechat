@@ -1,3 +1,4 @@
+
 /*全局css*/
 html, body { height: 100% }
 *, ::before, ::after { margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; -webkit-box-sizing: border-box; box-sizing: border-box }
@@ -124,6 +125,8 @@ input[type=checkbox]:checked:before { content: '\e6ea'; color: #3fa6fe }
 .my-head .user-info { padding-left: 18px }
 .my-head .name { color: #ffffff; font-size: 16px; margin-bottom: 2px }
 .my-head .text { color: #ffffff; font-size: 12px; line-height: 18px }
+.my-head .sign-in-btn { width: 50px; color: #ffffff; font-size: 14px; text-align: center; line-height: 24px; border: 1px solid #ffffff; border-radius: 3px }
+
 
 .my-list { background-color: #ffffff; margin-top: 10px }
 .my-list li { padding: 0 12px }
@@ -285,3 +288,59 @@ input[type=checkbox]:checked:before { content: '\e6ea'; color: #3fa6fe }
 .pop-cont input:-moz-placeholder { color: #a3a3a3 }
 .pop-cont input:-ms-input-placeholder { color: #a3a3a3 }
 .pop-close { display: block; width: 28px; height: 28px; color: #ffffff; font-size: 28px; line-height: 28px; margin: 15px auto 0 auto }
+
+
+/*弹框*/
+.pop-mask { display: none; position: fixed; width: 100%; height: 100%; top: 0; left: 0; right: 0; bottom: 0; z-index: 10; background: rgba(0, 0, 0, .6) }
+.pop-mask.show { display: block; }
+.pop-mask.hide { display: none; }
+.pop-box { position: absolute; top: 50%; left: 50%; width: 270px; margin-left: -135px; margin-top: -135px }
+.pop-cont { width: 270px; height: 250px; padding: 16px 14px; background-color: #ffffff; border-radius: 5px }
+.pop-cont .text { color: #616161; font-size: 12px; line-height: 16px }
+.pop-cont .btn { display: block; width: 100%; color: #fff; font-size: 16px; text-align: center; line-height: 33px; background-color: #3fa6fe; border: 1px solid #3fa6fe; border-radius: 3px; margin-top: 12px }
+.pop-cont .input-group { margin-bottom: 15px }
+.pop-cont .input-row { line-height: 32px; padding: 6px 0; border-bottom: 1px solid #eeeeee }
+.pop-cont .input-row label { width: 80px; color: #333333; font-size: 12px }
+.pop-cont .input-row .input-box { padding-left: 12px }
+.pop-cont .input-row .input-box .input { width: 100%; color: #a3a3a3; font-size: 12px; line-height: 32px; text-align: right }
+.pop-cont input::-webkit-input-placeholder { color: #a3a3a3 }
+.pop-cont input::-moz-placeholder { color: #a3a3a3 }
+.pop-cont input:-moz-placeholder { color: #a3a3a3 }
+.pop-cont input:-ms-input-placeholder { color: #a3a3a3 }
+.pop-close { display: block; width: 28px; height: 28px; color: #ffffff; font-size: 28px; line-height: 28px; margin: 15px auto 0 auto }
+
+.alert-box { position: absolute; top: 50%; left: 50%; width: 270px; margin-left: -135px; margin-top: -100px; background-color: #ffffff; border-radius: 5px }
+.alert-cont { width: 270px; height: 115px; text-align: center; padding: 15px 14px 5px 14px; border-bottom: 1px solid #eeeeee }
+.alert-cont .iconfont { color: #007aff; font-size: 36px; line-height: 40px }
+.alert-cont .tit { color: #333333; font-size: 16px; margin-top: 3px }
+.alert-cont .text { color: #858585; font-size: 12px; margin-top: 5px }
+.alert-cont .text .num { color: #ffa311; font-size: 12px }
+.alert-btn .btn-item { color: #007aff; font-size: 16px; line-height: 45px; text-align: center; border-left: 1px solid #eeeeee }
+.alert-btn .btn-item:first-child { color: #333333; border-left: 0 }
+
+/*签到*/
+.sign-in-head { padding: 35px 15px 20px 15px; background: #007aff url(../images/bg-3.png) no-repeat center bottom; background-size: contain; -webkit-background-size: contain }
+.si-round { width: 106px; height: 106px; color: #007aff; text-align: center; padding: 8px; background-color: #ffffff; border-radius: 50%; -webkit-box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.4); box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.4); margin: 0 auto }
+.si-round .si-round-cont { width: 90px; height: 90px; padding: 7px; border: 1px solid #007aff; border-radius: 50% }
+.si-round .si-text { height: 38px; font-size: 16px; line-height: 38px; border-bottom: 1px solid #f1f1f1 }
+.si-round .si-num { height: 38px; font-size: 12px; line-height: 16px; padding: 4px 0 2px 0 }
+.si-round .si-num .num { color: #ffa311 }
+.sign-in-text { color: #ffffff; font-size: 14px; text-align: center; padding-top: 10px }
+.sign-in-text .num { color: #ffa311 }
+.sign-in-cont .si-box { background-color: #ffffff; margin-top: 10px }
+.sign-in-cont .si-box:first-child { margin-top: 0 }
+.si-box .title { color: #1c1c1c; font-size: 16px; line-height: 44px; border-bottom: 1px solid #f3f3f3; margin: 0 12px }
+.calendarWeek li { float: left; width: 14.25%; color: #1c1c1c; font-size: 14px; text-align: center; line-height: 30px; padding: 5px }
+.calendarDay { padding-bottom: 10px }
+.calendarDay li { float: left; width: 14.25%; height: 28px; padding: 3px 0 }
+.calendarDay li span { display: block; width: 22px; height: 22px; color: #3c3c3c; font-size: 12px; text-align: center; line-height: 22px; margin: 0 auto; border-radius: 50% }
+.calendarDay li:nth-child(7n+1) span,.calendarDay li:nth-child(7n+0) span { color: #858585 }
+.calendarDay li.active span { box-shadow: inset 0 0 0 1px #007aff }
+.calendarDay li.now-active span { color: #ffffff; background: #007aff }
+.si-list { padding: 5px 12px }
+.si-list .tit { color: #333333; font-size: 14px; line-height: 35px }
+.si-list .num { color: #ffa311 }
+.si-list .btn { width: 48px; font-size: 10px; text-align: center; line-height: 16px; border-radius: 5px }
+.si-list .btn1 { color: #007aff; border: 1px solid #007aff }
+.si-list .btn2 { color: #888888; border: 1px solid #888888 }
+.si-list .iconfont { color: #007aff; font-size: 18px; margin-right: 5px }

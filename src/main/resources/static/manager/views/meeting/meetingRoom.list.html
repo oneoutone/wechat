@@ -1,0 +1,96 @@
+<div class="padding">
+    <div class="box">
+
+        <div class="box-body b-t">
+            <button type="button" ng-click="editMeetingRoom()" data-toggle="modal" data-target="#m-edit" class="btn btn-sm {{app.setting.theme.primary}}">
+                <i class="material-icons">add</i> 新建
+            </button>
+        </div>
+
+        <table id="unitTable" class="table table-striped" data-sorting="true" data-filtering="true" data-empty="没有记录">
+            <thead>
+            <tr>
+                <th data-sortable="false">会议室编号</th>
+                <th data-sortable="false">名称</th>
+                <th data-sortable="false">座位数</th>
+                <th data-type="html" data-sortable="false">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="meetingRoom in meetingRooms">
+                <td class="v-m">{{meetingRoom.externalId}}</td>
+                <td class="v-m">{{meetingRoom.name}}</td>
+                <td class="v-m">{{meetingRoom.seatNum}}</td>
+                <td class="v-m">
+                    <button class="btn btn-outline btn-xs b-dark text-dark" ng-click="editMeetingRoom(meetingRoom)" data-toggle="modal" data-target="#m-edit">
+                        编辑
+                    </button>
+                    <button class="btn btn-outline btn-xs b-dark text-dark" data-toggle="modal" data-target="#m-delete" ng-click="deleteRoomBtn(meetingRoom, $index)">
+                       删除
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="m-delete" class="modal fade animate black-overlay" data-backdrop="false">
+    <div class="row-col h-v">
+        <div class="row-cell v-m">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content flip-y">
+                    <div class="modal-body text-center">
+                        <p class="p-y">
+                            <i class="fa fa-warning text-warn fa-3x"></i><br><br>
+                            确定删除会议室?
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm white p-x-md" data-dismiss="modal">取消</button>
+                        <button type="button" ng-click="deleteMeetingRoom()"  class="btn btn-sm {{app.setting.theme.primary}} p-x-md" data-dismiss="modal">删除</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- .modal -->
+<div id="m-edit" class="modal white-overlay" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content box-shadow-z3">
+            <div class="modal-header">
+                <h5 class="modal-title">会议室</h5>
+            </div>
+            <div class="modal-body p-a-0">
+                <form name="Form" role="form" noValidate>
+                    <div class="p-a-md" style="max-height: 72vh; overflow-y: auto;">
+                        <div class="form-group ">
+                            <label>会议室编号</label>
+                            <input type="text" id="idInput" class="form-control" ng-style="meetingRoomNoStyle" ng-model="meetingRoom.externalId" >
+                        </div>
+                        <div class="form-group">
+                            <label>名称</label>
+                            <input type="text" id="nameInput"  class="form-control" ng-model="meetingRoom.name" required>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>座位数</label>
+                                <input type="number" id="seatInput" class="form-control" ng-model="meetingRoom.seatNum">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-sm white" data-dismiss="modal">取消</button>
+                        <button ladda="completeLoading" data-style="expand-left" class="btn btn-sm {{app.setting.theme.primary}}" ng-click="saveMeetingRoom()" >完成</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- / .modal -->
+

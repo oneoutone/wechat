@@ -140,6 +140,56 @@
                 resolve: load(['toastr', 'moment', 'mgcrea.ngStrap', 'scripts/product/redeem.info.js'])
             })
 
+            .state('app.company',{
+                url: '/company',
+                template: '<div ui-view></div>',
+                data: {title: '企业列表'}
+            })
+
+            .state('app.company.list', {
+                url: '/list?status&index',
+                templateUrl: 'views/meeting/company.list.html',
+                controller: "CompanyListCtrl",
+                resolve: load(['toastr', 'moment','ui.bootstrap', 'scripts/meeting/company.list.js'])
+            })
+
+            .state('app.employee',{
+                url: '/employee',
+                template: '<div ui-view></div>',
+                data: {title: '员工列表'}
+            })
+            .state('app.employee.list', {
+                url: '/list?companyId&index',
+                templateUrl: 'views/meeting/employee.list.html',
+                controller: "EmployeeListCtrl",
+                resolve: load(['toastr', 'moment','ui.bootstrap', 'scripts/meeting/employee.list.js'])
+            })
+
+            .state('app.meetingRoom',{
+                url: '/meetingRoom',
+                template: '<div ui-view></div>',
+                data: {title: '会议室列表'}
+            })
+            .state('app.meetingRoom.list', {
+                url: '/list',
+                templateUrl: 'views/meeting/meetingRoom.list.html',
+                controller: "MeetingRoomListCtrl",
+                resolve: load(['toastr', 'moment','ui.bootstrap', 'scripts/meeting/meetingRoom.list.js'])
+            })
+            .state('app.meeting',{
+                url: '/meeting',
+                template: '<div ui-view></div>',
+                data: {title: '会议室列表'}
+            })
+            .state('app.meeting.grid', {
+                url: '/grid',
+                templateUrl: 'views/meeting/meeting.grid.html',
+                controller: "MeetingGirdCtrl",
+                resolve: load(['toastr', 'moment','mgcrea.ngStrap','ui.select', 'scripts/meeting/meeting.grid.js'])
+            })
+
+
+
         function load(srcs, callback) {
             return {
                 deps: ['$ocLazyLoad', '$q',

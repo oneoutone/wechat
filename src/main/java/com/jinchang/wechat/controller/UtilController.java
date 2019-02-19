@@ -17,6 +17,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import weixin.popular.api.TokenAPI;
 import weixin.popular.bean.ticket.Ticket;
 import weixin.popular.bean.token.Token;
@@ -31,7 +32,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 @RestController
-@RequestMapping("/api//util")
+@RequestMapping("/api/util")
 public class UtilController {
 
     @Autowired
@@ -111,5 +112,6 @@ public class UtilController {
         System.out.println(r);
         return r;
     }
+
 
 }

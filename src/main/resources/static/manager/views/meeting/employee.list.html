@@ -1,0 +1,124 @@
+
+<style type="text/css">
+    #editButton:active, #editButton:focus{
+        background-color: transparent;
+        color: #2e3e4e !important;
+    }
+</style>
+
+<div class="padding">
+    <div class="box">
+        <div class="box-body b-t">
+
+            <form class="form-inline  v-m" role="search">
+                <button type="button" data-toggle="modal" data-target="#m-edit" ng-click="setUser()" class="btn btn-sm {{app.setting.theme.primary}}">
+                    <i class="material-icons">add</i> 新建
+                </button>
+            </form>
+        </div>
+        <div>
+            <table id="cardTable" class="table table-striped" data-empty="没有记录">
+                <thead>
+                <tr>
+                    <th ng-hide="id" data-sortable="false">公司</th>
+                    <th data-sortable="false">姓名</th>
+                    <th data-sortable="false">职位</th>
+                    <th data-breakpoints="xs sm md" data-sortable="false" data-type="html">手机号</th>
+                    <th data-sortable="false">邮箱</th>
+                    <th data-type="html" data-sortable="false">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="user in userList" on-finish-render-filters>
+                    <td class="v-m" ng-hide="id">{{company.name}}</td>
+                    <td class="v-m">{{user.nickName}}</td>
+                    <td class="v-m">{{user.position}}</td>
+                    <td class="v-m">{{user.phone}}</td>
+                    <td class="v-m">{{user.email}}</td>
+                    <td><button id="editButton" class="btn btn-outline btn-xs b-dark text-dark" data-toggle="modal" data-target="#m-edit" ng-click="setUser(user)">编辑</button>
+                        <button id="deleteButton" class="btn btn-outline btn-xs b-dark text-dark" ng-click="showDeleteModal(user)" data-toggle="modal" data-target="#m-delete">删除</button>
+                    </td>
+                </tr>
+                <tr class="white b-white" ng-show="bigTotalItems > 10">
+                    <td colspan="8" class="white b-white text-center">
+                        <ul class="pagination"  uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage"  max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" next-text="下一页" previous-text="上一页" rotate="true" ng-change="pageChanged()"></ul>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- .modal -->
+<div id="m-edit" class="modal white-overlay" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content box-shadow-z3">
+            <div class="modal-header">
+                <h5 class="modal-title">用户信息</h5>
+            </div>
+            <div class="modal-body p-a-0">
+                <form name="Form" class="p-t form-validation" role="form" noValidate>
+                    <div class="col-md-12 p-l-md p-r-md" ng-show="!id">
+                        <div class="form-group">
+                            <label>* 公司</label>
+                            <input type="text" class="form-control"  ng-model="company.name" disabled>
+                        </div>
+                    </div>
+                    <div class="row p-a-md">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>* 姓名</label>
+                                <input id="nameInput" type="text" class="form-control"  ng-model="user.nickName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>职务</label>
+                                <input type="text" class="form-control" ng-model="user.position">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <label>手机号</label>
+                                <input type="text" id="phoneInput" data-parsley-type="alphanum" ng-model="user.phone" ng-pattern="/^[0-9]{11}$/" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>邮箱</label>
+                                <input type="email" id="emailInput" name="email" ng-style="emailStyle" class="form-control" ng-model="user.email"  ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn white p-x-md"  data-dismiss="modal">取消</button>
+                        <button ladda="userLoading" data-style="expand-left" class="btn {{app.setting.theme.primary}}" ng-click="saveUser()" >完成</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- / .modal -->
+<div id="m-delete" class="modal fade animate black-overlay" data-backdrop="false">
+    <div class="row-col h-v">
+        <div class="row-cell v-m">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content flip-y">
+                    <div class="modal-body text-center">
+                        <p class="p-y">
+                            <i class="fa fa-warning text-warn fa-3x"></i><br><br>
+                            确定删除该用户?
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm white p-x-md" data-dismiss="modal">取消</button>
+                        <button type="button" ng-click="deleteUser()"  class="btn btn-sm {{app.setting.theme.primary}} p-x-md" data-dismiss="modal">删除</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div>
+        </div>
+    </div>
+</div>

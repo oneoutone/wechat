@@ -6,21 +6,23 @@ import com.alibaba.fastjson.JSONObject;
 import com.jinchang.wechat.entity.ScoreHistory;
 import com.jinchang.wechat.entity.Ticket;
 import com.jinchang.wechat.entity.User;
-import com.jinchang.wechat.repository.ScoreHistoryRepository;
-import com.jinchang.wechat.repository.TicketRepository;
-import com.jinchang.wechat.repository.UserRepository;
+import com.jinchang.wechat.repository.*;
 import com.jinchang.wechat.util.HttpUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import com.jinchang.wechat.entity.LDAPOrganization;
+import com.jinchang.wechat.entity.Organization;
+import com.jinchang.wechat.entity.Employee;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Iterator;
 
 @Component
 public class QuartzService {
@@ -36,6 +38,16 @@ public class QuartzService {
 
     @Autowired
     protected ScoreHistoryRepository scoreHistoryRepository;
+
+    @Autowired
+    protected LDAPUserRepository lDAPUserRepository;
+
+    @Autowired
+    protected OrganizationRepository organizationRepository;
+
+    @Autowired
+    protected EmployeeRepository employeeRepository;
+
 
     @Scheduled(cron = "0 0 */1 * * ?")
     public void generateScore() throws IOException {
@@ -138,4 +150,72 @@ public class QuartzService {
         String sign = DigestUtils.sha1Hex(email+"&"+token+"&"+timeStamp);
         return env.getProperty("udesk.url").concat(url+"?email="+email+"&timestamp="+timeStamp+"&sign="+sign);
     }
+
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void updateOrg() throws IOException {
+        List<LDAPOrganization> u = lDAPUserRepository.findOrgnaizations();
+        System.out.println("start");
+        System.out.println(u.size());
+        if(u == null || u.size() == 0){
+            return;
+        }
+        LDAPOrganization root = u.get(0);
+        if(root.getJcparentdeptcode() != null){
+            return;
+        }
+        organizationRepository.deleteAll();
+        employeeRepository.deleteAll();
+        Organization rootOrg = new Organization();
+        rootOrg.setLevel(1);
+        rootOrg.setCode(root.getCn());
+        rootOrg.setName(root.getJcchnname());
+        rootOrg.setOrgCode(root.getJcorgcode());
+        rootOrg.setOrgTree(root.getJcchnname());
+        rootOrg.setShowAsChoice(false);
+        organizationRepository.save(rootOrg);
+        u.remove(0);
+        int index = 1;
+        List<String> preCn = new ArrayList<>();
+        preCn.add(rootOrg.getCode());
+        List<Organization> preOrgs = new ArrayList<>();
+        preOrgs.add(rootOrg);
+        do {
+            index ++;
+            List<Organization> orgs = new ArrayList<>();
+
+            Iterator<LDAPOrganization> iterator = u.iterator();
+            while (iterator.hasNext()) {
+                LDAPOrganization item = iterator.next();
+                int indexOfOrg = preCn.indexOf(item.getJcparentdeptcode());
+                if(indexOfOrg != -1){
+                    Organization obj = new Organization();
+                    obj.setLevel(index);
+                    obj.setCode(item.getCn());
+                    obj.setName(item.getJcchnname());
+                    obj.setOrgCode(item.getJcorgcode());
+                    obj.setParent(preOrgs.get(indexOfOrg).getCode());
+                    obj.setOrgTree(preOrgs.get(indexOfOrg).getOrgTree() + "," +item.getJcchnname());
+                    orgs.add(obj);
+                    iterator.remove();
+                    if(item.getUniquemember() != null && item.getUniquemember().size() > 0){
+                        for(int a=0; a<item.getUniquemember().size(); a++){
+                            Employee ep = new Employee();
+                            ep.setEmployeeId(item.getUniquemember().get(a).split(",")[0].substring(3));
+                            ep.setOrgCode(item.getCn());
+                            ep.setOrgName(item.getJcchnname());
+                            ep.setOrgTree(obj.getOrgTree());
+                            employeeRepository.save(ep);
+                        }
+                    }
+                }
+            }
+            List<Organization> organs = organizationRepository.saveAll(orgs);
+            preOrgs = organs;
+            preCn = new ArrayList<>();
+            for(int j=0; j<preOrgs.size(); j++){
+                preCn.add(preOrgs.get(j).getCode());
+            }
+        } while(u.size() > 0);
+    }
+
 }

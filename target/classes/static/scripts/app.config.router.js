@@ -92,6 +92,12 @@
             controller: 'ProfileCtrl',
             resolve: load(['toastr', 'se.util', 'moment', 'scripts/controllers/profile.js'])
          })
+        .state('register', {
+            url: '/register',
+            templateUrl: 'views/register.html',
+            controller: 'RegisterCtrl',
+            resolve: load(['toastr', 'se.util', 'moment', 'scripts/controllers/register.js'])
+        })
         .state('score', {
             url: '/score',
             templateUrl: 'views/product/score.info.html'
@@ -124,7 +130,6 @@
             controller: 'ProductInfoCtrl',
             resolve: load(['moment', 'se.util', 'toastr', 'scripts/controllers/product/product.info.js'])
         })
-
     function load(srcs, callback) {
       return {
         deps: ['$ocLazyLoad', '$q',

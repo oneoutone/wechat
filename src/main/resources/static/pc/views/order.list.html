@@ -1,0 +1,145 @@
+
+<div class="head">
+    <div class="wrap clearfix">
+        <div class="logo">
+            <img src="../../assets/images/img-logo1.png" />
+        </div>
+        <div class="head-right">
+            <span class="icon icon-user">您好：{{app.setting.user.nickName}} ({{app.setting.user.org}})</span>
+        </div>
+    </div>
+</div>
+<div class="wrap">
+    <div class="head-menu">
+        <div class="title clearfix">
+            <h2 class="tit">我的工单</h2>
+            <button id="addBtn" type="button" class="add-btn btn" ng-click="showAdd()">新建工单</button>
+        </div>
+        <div class="menu-screen">
+            <div class="screen-box clearfix">
+                <span class="screen-tit">状态</span>
+                <div class="screen-nav">
+                    <a class="{{status == 'all' ? 'active' : ''}}" ng-click="setStatus('all')">全部</a>
+                    <a class="{{status == 'open' ? 'active' : ''}}" ng-click="setStatus('open')">已提交</a>
+                    <a class="{{status == 'solving' ? 'active' : ''}}" ng-click="setStatus('solving')">解决中</a>
+                    <a class="{{status == 'resolved' ? 'active' : ''}}" ng-click="setStatus('resolved')">已解决</a>
+                    <a class="{{status == 'closed' ? 'active' : ''}}" ng-click="setStatus('closed')">已关闭</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wo-list">
+        <ul>
+            <li ng-repeat="item in list">
+                <a class="wo-item" ng-click="openTicket(item)">
+                    <h3 class="wo-tit">{{item.subject}}<span class="state {{item.status == 'resolved' ? 'state2' : (item.status == 'closed' ? 'state3' :  (item.status == 'solving' ? 'state4' : 'state1'))}}">{{item.status == 'resolved' ? '已解决' : (item.status == 'closed' ? '已关闭' : (item.status == 'solving' ? '解决中' : '已提交'))}}</span></h3>
+                    <div class="cont ellipsis-2">{{item.content}}</div>
+                    <div class="clearfix">
+                        <div class="fl text">当前责任人:{{item.assignee}}</div>
+                        <div class="fr time">{{item.created}}</div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+
+    </div>
+    <!--<div class="page">-->
+    <!--<a class="prev" href="javascript:void(0);">&nbsp;</a>-->
+    <!--<a class="active" href="javascript:void(0);">1</a>-->
+    <!--<a href="javascript:void(0);">2</a>-->
+    <!--<a href="javascript:void(0);">3</a>-->
+    <!--<a href="javascript:void(0);">4</a>-->
+    <!--<a href="javascript:void(0);">5</a>-->
+    <!--<a href="javascript:void(0);">6</a>-->
+    <!--<a href="javascript:void(0);">7</a>-->
+    <!--<a href="javascript:void(0);">8</a>-->
+    <!--<a href="javascript:void(0);">9</a>-->
+    <!--<a href="javascript:void(0);">···</a>-->
+    <!--<a href="javascript:void(0);">16</a>-->
+    <!--<a class="next" href="javascript:void(0);">&nbsp;</a>-->
+    <!--</div>-->
+</div>
+
+<!--新建工单-->
+<div class="mask-box"></div>
+<div id="alertResult" class="alert-box">
+    <div class="title"><span class="tit">新建工单</span><span class="close-pop" ng-click="hide()"></span></div>
+    <div class="alert-cont">
+        <form class="form-box">
+            <ul class="form-list">
+                <li class="input-box clearfix">
+                    <label class="tit"><span class="must c-red">*</span>工单标题</label>
+                    <div class="cont">
+                        <input class="input" type="text" ng-model="order.subject" placeholder="请填写工单标题">
+                    </div>
+                </li>
+                <li class="textarea-box clearfix">
+                    <label class="tit"><span class="must c-red">*</span>工单描述</label>
+                    <div class="cont">
+                        <textarea class="textarea" ng-model="order.content"  rows="5" placeholder="请填写工单描述"></textarea>
+                    </div>
+                </li>
+                <li class="select-box clearfix">
+                    <label class="tit"><span class="must c-red">*</span>工单类型</label>
+                    <div class="cont">
+                        <div class="styled-select">
+                            <label>{{types[order.type].label}}</label>
+                            <select ng-model="order.type">
+                                <option ng-repeat="item in types" ng-selected="{{item.value == order.type}}" value="{{item.value}}">{{item.label}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </li>
+                <li class="imgs-box clearfix">
+                    <label class="tit">图片上传</label>
+                    <div class="cont">
+                        <div class="upload-img-list clearfix">
+                            <div class="img-item" ng-repeat="img in images">
+                                <img class="img" ng-src="{{img.data}}">
+                                <span class="del" ng-click="remove($index)"></span>
+                            </div>
+                            <div class="add-img img-item">
+                                <img class="add" src="../assets/images/icon-add.png">
+                                <p class="text2">点击添加图片</p>
+                                <input type="file" accept="image/*" id="image-2"  onchange="angular.element(this).scope().fileChanged(this.files)">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </form>
+    </div>
+    <div class="btn-box">
+        <button id="closeAlert" type="button" class="btn-outlined" ng-click="hide()">取消</button>
+        <button id="submitBtn" ladda="loading" data-style="expand-left" type="button" class="btn" ng-click="createOrder()">提交</button>
+    </div>
+</div>
+
+<!--<script type="text/javascript">-->
+    <!--$("#addBtn").click(function() {-->
+        <!--openPop()-->
+    <!--});-->
+
+    <!--$(".close-pop").click(function() {-->
+        <!--closePop();-->
+    <!--});-->
+
+    <!--$("#closeAlert").click(function() {-->
+        <!--closePop();-->
+    <!--});-->
+
+    <!--$("#submitBtn").click(function() {-->
+        <!--closePop();-->
+    <!--});-->
+
+    <!--function openPop() {-->
+        <!--$("#alertResult").show();-->
+        <!--$(".mask-box").show();-->
+    <!--}-->
+
+    <!--function closePop() {-->
+        <!--$("#alertResult").hide();-->
+        <!--$(".mask-box").hide();-->
+    <!--}-->
+<!--</script>-->

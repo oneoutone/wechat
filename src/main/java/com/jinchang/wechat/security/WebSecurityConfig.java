@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
             "/api/users/wechatAuth",
             "/api/users/wechatBind",
             "/api/users/wechatOpenId",
+            "/api/users/openAuth",
             "/api/users/accessToken",
             "/webjars/**",
             "/**.html",
@@ -49,11 +50,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
             "/manager",
             "/manager/**",
             "/manager/access/**",
+            "/pc",
+            "/pc/**",
             "/scripts/**",
             "/views/**",
             "/api/users/hello",
+            "/api/users/hello1",
             "/api/users/initAdmin",
-            "/api/jobs/notification"
+            "/api/jobs/notification",
+            "/api/users/checkToken",
+            "/api/jobs/**/uploadByPc",
+            "/api/jobs/**/uploadReplyFileByPc"
             // other public endpoints of your API may be appended to this array
     };
 

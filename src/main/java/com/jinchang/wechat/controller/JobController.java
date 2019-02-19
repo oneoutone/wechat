@@ -11,12 +11,7 @@ import com.jinchang.wechat.repository.WechatAccessTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.jinchang.wechat.util.HttpUtil;
 import org.springframework.core.env.Environment;
 import com.alibaba.fastjson.JSON;
@@ -28,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
 import weixin.popular.api.MessageAPI;
 import weixin.popular.api.TokenAPI;
 import weixin.popular.bean.media.MediaGetResult;
@@ -274,6 +270,39 @@ public class JobController {
         String result = HttpUtil.sendFile(url, id, r.getBytes());
         System.out.println(result);
         return result;
+    }
+
+    @PutMapping("/{id}/uploadByPc")
+    public ResponseEntity<?> uploadByPc(@PathVariable String id, @RequestParam ("file") MultipartFile multipartFile) throws IOException {
+        if (multipartFile.isEmpty() || multipartFile.getOriginalFilename() == null) {
+            return new ResponseEntity<HttpError>(new HttpError(400, "没有文件"),HttpStatus.BAD_REQUEST);
+        }
+        String contentType = multipartFile.getContentType();
+        if (!contentType.contains("")) {
+            return new ResponseEntity<HttpError>(new HttpError(400, "文件格式不正确"),HttpStatus.BAD_REQUEST);
+        }
+        String root_fileName = multipartFile.getOriginalFilename();
+        System.out.print(multipartFile.getBytes().toString());
+        System.out.print(root_fileName);
+        String url = generateUrl("open_api_v1/tickets/upload_file")+"&ticket_id="+id+"&file_name="+id+"_"+URLEncoder.encode(multipartFile.getOriginalFilename());
+        String result = HttpUtil.sendFile(url, id, multipartFile.getBytes());
+        System.out.println(result);
+        return new ResponseEntity<String>(result,HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/uploadReplyFileByPc")
+    public ResponseEntity<?> uploadReplyFileByPc(@PathVariable String id, @RequestParam ("file") MultipartFile multipartFile) throws IOException {
+        if (multipartFile.isEmpty() || multipartFile.getOriginalFilename() == null) {
+            return new ResponseEntity<HttpError>(new HttpError(400, "没有文件"),HttpStatus.BAD_REQUEST);
+        }
+        String contentType = multipartFile.getContentType();
+        if (!contentType.contains("")) {
+            return new ResponseEntity<HttpError>(new HttpError(400, "文件格式不正确"),HttpStatus.BAD_REQUEST);
+        }
+        String root_fileName = multipartFile.getOriginalFilename();
+        String url = generateUrl("open_api_v1/tickets/upload_file_for_reply")+"&ticket_id="+id+"&file_name="+id+"_"+URLEncoder.encode(multipartFile.getOriginalFilename());
+        String result = HttpUtil.sendFile(url, id, multipartFile.getBytes());
+        return new ResponseEntity<String>(result,HttpStatus.OK);
     }
 
 

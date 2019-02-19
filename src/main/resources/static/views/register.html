@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>签到</title>
+</head>
+
+<body>
+<div class="sign-in-head">
+    <div class="si-round">
+        <div class="si-round-cont">
+            <div class="si-text">已签到</div>
+            <div class="si-num">连续签到<span class="num">{{register.continuousRegister}}</span>天</div>
+        </div>
+    </div>
+    <div class="sign-in-text">今日已签到，获得<span class="num">5</span>积分</div>
+</div>
+
+<div class="sign-in-cont">
+    <div class="si-box">
+        <div class="title">{{month}}月签到表</div>
+        <ul class="calendarWeek layout-cell">
+            <li>日</li>
+            <li>一</li>
+            <li>二</li>
+            <li>三</li>
+            <li>四</li>
+            <li>五</li>
+            <li>六</li>
+        </ul>
+        <ul class="calendarDay layout-cell">
+            <li ng-repeat="item in dateList" class="{{item.isToday ? 'now-active' : ''}} {{item.isSign ? 'active' : ''}} "><span>{{item.dayString}}</span></li>
+        </ul>
+    </div>
+
+    <md-calendar></md-calendar>
+
+    <div class="si-box">
+        <div class="title">连续签到礼包</div>
+        <ul class="si-list">
+            <li class="si-item layout-center">
+                <i class="iconfont icon-sign-in"></i>
+                <div class="tit flex-item1">连续签到<span class="num">7</span>天即可领取</div>
+                <span class="btn btn2">已领取</span>
+            </li>
+            <li class="si-item layout-center">
+                <i class="iconfont icon-sign-in"></i>
+                <div class="tit flex-item1">连续签到<span class="num">15</span>天即可领取</div>
+                <span class="btn btn1">领取</span>
+            </li>
+            <li class="si-item layout-center">
+                <i class="iconfont icon-sign-in"></i>
+                <div class="tit flex-item1">连续签到<span class="num">30</span>天即可领取</div>
+                <span class="btn btn1">领取</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!--弹框-->
+<div id="signInPop" class="pop-mask hide">
+    <div class="alert-box">
+        <div class="alert-cont">
+            <i class="iconfont icon-success"></i>
+            <div class="tit">签到成功！</div>
+            <div class="text">获得<span class="num">5</span>个积分，已连续签到<span class="num">{{register.continuousRegister}}</span>天</div>
+        </div>
+        <div class="alert-btn layout-box">
+            <span id="signInClose" class="flex-item1 btn-item" ng-click="hideModel()">确定</span>
+            <span class="flex-item1 btn-item" ui-sref="product.list">去积分商城</span>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

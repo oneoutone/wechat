@@ -273,7 +273,6 @@
          * @param callback
          */
 
-
         vm.app.init();
 
     }

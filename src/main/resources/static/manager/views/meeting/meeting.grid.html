@@ -1,0 +1,400 @@
+
+<style type="text/css">
+    .w-20 {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        text-align: center; }
+
+
+    .btn.whitel,
+
+    .btn-default {
+        background-color: #fff;
+        color: rgba(0, 0, 0, 0.87); }
+
+    .btn.whitel,
+    .btn.btn-default {
+        box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.3); }
+    .btn.whitel:not([disabled]):hover,
+    .btn.whitel:not([disabled]).active,
+    .btn.btn-default:not([disabled]):hover,
+    .btn.btn-default:not([disabled]):focus,
+    .btn.btn-default:not([disabled]).active {
+        box-shadow: none!important; }
+
+    .input-group-btn > .whitel:active, .input-group-btn > .whitel:focus, .input-group-btn > .whitel:hover {
+        box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.3); }
+</style>
+<!-- tooltip -->
+<!-- <span class="glyphicon glyphicon-refresh spinning"></span> -->
+<div id="booking-tooltip" class="box-color img-rounded dark pos-rlt booking-tooltip" style="z-index: 999;">
+    <div class="box-body">
+        <table class="tooltip-content" cellpadding="0" cellspacing="0" border="0" style="display:table;width:300px;">
+            <tr>
+                <!--<td style="width:50px;">-->
+                    <!--&lt;!&ndash;-->
+                    <!--<img class="logo" src="../../assets/images/logo.png" style="width:50px; height:50px; line-height:50px; vertical-align:middle" />-->
+                    <!--&ndash;&gt;-->
+                    <!--<img class="logo" style="width:50px; height:50px; line-height:50px; vertical-align:middle" />-->
+                <!--</td>-->
+                <td>
+                    <div style="margin-left:10px;">
+                        <span class="booking-team">公司名称</span>
+                        <div></div>
+                        <span class="booking-people">预定人</span>
+                        <div></div>
+                        <span class="booking-description">开始时间-结束时间（时长）</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<!-- content area -->
+<div class="padding">
+
+    <!-- criteria row -->
+    <div class="row" style="padding-right: 16px;">
+
+        <div class="col-sm-4">
+            <div class="input-group">
+                <span class="input-group-btn">
+          <button class="btn whitel"  type="button" ng-click="prevMeetingDate()"> <i class="fa fa-caret-left gray-icon"></i>
+          </button>
+        </span>
+
+                <input id="selectedDateInput"  type="text" size="8" class="form-control w-auto inline"
+                       data-date-format="yyyy-MM-dd EEE"
+                       ng-model="selectedDate"
+                       data-autoclose="1"
+                       data-icon-left="fa fa-chevron-left"
+                       data-icon-right="fa fa-chevron-right"
+                       placeholder="会议日期"
+                       bs-datepicker />
+
+                <span class="input-group-btn">
+          <button class="btn whitel" type="button" ng-click="nextMeetingDate()"> <i class="fa fa-caret-right gray-icon"></i>
+          </button>
+        </span>
+            </div>
+        </div>
+
+
+        <div class="col-sm-4 pull-right">
+            <div class="input-group">
+
+        <span class="input-group-btn">
+          <button class="btn whitel" type="button"  ng-click="prevMeetingRoom()" ng-disabled="!hasPrevious">
+            <i class="fa fa-caret-left gray-icon"></i>
+          </button>
+        </span>
+                <select class="form-control c-select" placeholder="会议室" ng-model="selectedMeetingRoom" ng-change="meetingRoomChanged()">
+                    <option ng-repeat="room in meetingRoomNames" value="{{room}}">{{room}}</option>
+                </select>
+
+                <span class="input-group-btn">
+          <button class="btn whitel" type="button" ng-click="nextMeetingRoom()" ng-disabled="!hasNext">
+            <i class="fa fa-caret-right gray-icon"></i>
+          </button>
+        </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- meeting grid area -->
+    <div style="position:relative;margin-top:20px;">
+        <table>
+            <tr>
+                <td>
+                    <div style="margin-right:17px;">
+                        <table id="meetingHeaderTable" class="table m-b-none table-v-m">
+                            <tr>
+                                <th></th>
+                                <th class="{{room == selectedMeetingRoom ? 'text-blue' : 'white'}}" ng-repeat="room in meetingRoomsInPage">{{room.name}}</th>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div id="meetingBodyTableWrapper">
+                        <table cellpadding="0" cellspacing="0" id="meetingBodyTable"  class="table m-b-none table-v-m">
+                            <tbody>
+                            <tr ng-repeat-start="item in earlyDayHours">
+                                <td rowspan="2">{{item}}</td>
+                                <td class="bookable early-cell" ng-repeat="room in meetingRoomsInPage" style="overflow: visible">
+                                    <div style="position: relative; z-index: 333; height: 1.5rem; padding: 0.5rem;">
+                                        <div class="addBtnContainer">
+                                            <span class="fa fa-plus bookable-cell-span" style="margin-left:5px;"></span>
+                                            <span class="bookable-cell-span" style="margin-left:10px;">添加</span>
+                                        </div>
+                                    </div>
+                                    <div style="width:100%; position: absolute; top: 0; z-index: 500;">
+                                        <div class="cell" style="width: 100%; height: 1.25rem; " ng-click="bookTableCellClicked($event, item, room, false)" ng-mouseenter="mouseenterBookable($event)" ng-mouseleave="mouseleaveBookable($event)">
+                                            <div class="infoContainer" style="display:none;margin:auto;">
+                                                <span class="teamText">团队编号</span>
+                                            </div>
+                                        </div>
+                                        <div class="cell" style="width: 100%; height: 1.25rem;" ng-click="bookTableCellClicked($event, item, room, false)" ng-mouseenter="mouseenterBookable($event)" ng-mouseleave="mouseleaveBookable($event)">
+                                            <div class="infoContainer" style="display:none;margin:auto;">
+                                                <span class="teamText">团队编号</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr ng-repeat-end>
+                                <td class="bookable early-cell" ng-repeat="room in meetingRoomsInPage" style="overflow: visible">
+                                    <div style="position: relative; z-index: 333; height: 1.5rem; padding: 0.5rem;">
+                                        <div class="addBtnContainer">
+                                            <span class="fa fa-plus bookable-cell-span" style="margin-left:5px;"></span>
+                                            <span class="bookable-cell-span" style="margin-left:10px;">添加</span>
+                                        </div>
+                                    </div>
+                                    <div style="width:100%; position: absolute; top: 0; z-index: 500;">
+                                        <div class="cell" style="width: 100%; height: 1.25rem;" ng-click="bookTableCellClicked($event, item, room, true)" ng-mouseenter="mouseenterBookable($event)" ng-mouseleave="mouseleaveBookable($event)">
+                                            <div class="infoContainer" style="display:none;margin:auto;">
+                                                <span class="teamText">团队编号</span>
+                                            </div>
+                                        </div>
+                                        <div class="cell" style="width: 100%; height: 1.25rem;" ng-click="bookTableCellClicked($event, item, room, true)" ng-mouseenter="mouseenterBookable($event)" ng-mouseleave="mouseleaveBookable($event)">
+                                            <div class="infoContainer" style="display:none;margin:auto;">
+                                                <span class="teamText">团队编号</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr ng-repeat-start="item in normalDayHours">
+                                <td rowspan="2">{{item}}</td>
+                                <td class="bookable " ng-repeat="room in meetingRoomsInPage" style="overflow: visible;">
+                                    <div style="position: relative; z-index: 333; height: 1.5rem; padding: 0.5rem;">
+                                        <div class="addBtnContainer">
+                                            <span class="fa fa-plus" style="color:white;margin-left:5px;"></span>
+                                            <span style="color:white;margin-left:10px;">添加</span>
+                                        </div>
+                                    </div>
+                                    <div style="width:100%; position: absolute; top: 0; z-index: 500;">
+                                        <div class="cell" style="width: 100%; height: 1.25rem;" ng-click="bookTableCellClicked($event, item, room, false)" ng-mouseenter="mouseenterBookable($event)" ng-mouseleave="mouseleaveBookable($event)">
+                                            <div class="infoContainer" style="display:none;margin:auto;" >
+                                                <span class="teamText">团队编号</span>
+                                            </div>
+                                        </div>
+                                        <div class="cell" style="width: 100%; height: 1.25rem;" ng-click="bookTableCellClicked($event, item, room, false)" ng-mouseenter="mouseenterBookable($event)" ng-mouseleave="mouseleaveBookable($event)">
+                                            <div class="infoContainer" style="display:none;margin:auto;">
+                                                <span class="teamText">团队编号</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            <tr ng-repeat-end>
+                                <td class="bookable" ng-repeat="room in meetingRoomsInPage" style="overflow: visible;">
+                                    <div style="position: relative; z-index: 333; height: 1.5rem; padding: 0.5rem;">
+                                        <div class="addBtnContainer">
+                                            <span class="fa fa-plus" style="color:white;margin-left:5px;"></span>
+                                            <span style="color:white;margin-left:10px;">添加</span>
+                                        </div>
+                                    </div>
+                                    <div style="width:100%; position: absolute; top: 0; z-index: 500;">
+                                        <div class="cell" style="width: 100%; height: 1.25rem;"  ng-click="bookTableCellClicked($event, item, room, true)" ng-mouseenter="mouseenterBookable($event)" ng-mouseleave="mouseleaveBookable($event)">
+                                            <div class="infoContainer" style="display:none;margin:auto;">
+                                                <span class="teamText">团队编号</span>
+                                            </div>
+                                        </div>
+                                        <div class="cell" style="width: 100%; height: 1.25rem;" ng-click="bookTableCellClicked($event, item, room, true)" ng-mouseenter="mouseenterBookable($event)" ng-mouseleave="mouseleaveBookable($event)">
+                                            <div class="infoContainer" style="display:none;margin:auto;">
+                                                <span class="teamText">团队编号</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr ng-repeat-start="item in lateDayHours">
+                                <td rowspan="2">{{item}}</td>
+                                <td class="bookable early-cell"  ng-repeat="room in meetingRoomsInPage" style="overflow: visible">
+                                    <div style="position: relative; z-index: 333; height: 1.5rem; padding: 0.5rem;">
+                                        <div class="addBtnContainer">
+                                            <span class="fa fa-plus bookable-cell-span" style="margin-left:5px;"></span>
+                                            <span class="bookable-cell-span" style="margin-left:10px;">添加</span>
+                                        </div>
+                                    </div>
+                                    <div style="width:100%; position: absolute; top: 0; z-index: 500;">
+                                        <div class="cell" style="width: 100%; height: 1.25rem;" ng-click="bookTableCellClicked($event, item, room, false)" ng-mouseenter="mouseenterBookable($event)" ng-mouseleave="mouseleaveBookable($event)">
+                                            <div class="infoContainer" style="display:none;margin:auto;" >
+                                                <span class="teamText">团队编号</span>
+                                            </div>
+                                        </div>
+                                        <div class="cell" style="width: 100%; height: 1.25rem;" ng-click="bookTableCellClicked($event, item, room, false)" ng-mouseenter="mouseenterBookable($event)" ng-mouseleave="mouseleaveBookable($event)">
+                                            <div class="infoContainer" style="display:none;margin:auto;">
+                                                <span class="teamText">团队编号</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr ng-repeat-end>
+                                <td class="bookable early-cell" ng-repeat="room in meetingRoomsInPage" style="overflow: visible">
+                                    <div style="position: relative; z-index: 333; height: 1.5rem; padding: 0.5rem;">
+                                        <div class="addBtnContainer">
+                                            <span class="fa fa-plus bookable-cell-span" style="margin-left:5px;"></span>
+                                            <span class="bookable-cell-span" style="margin-left:10px;">添加</span>
+                                        </div>
+
+                                    </div>
+                                    <div style="width:100%; position: absolute; top: 0; z-index: 500;">
+                                        <div class="cell" style="width: 100%; height: 1.25rem;" ng-click="bookTableCellClicked($event, item, room, true)" ng-mouseenter="mouseenterBookable($event)" ng-mouseleave="mouseleaveBookable($event)">
+                                            <div class="infoContainer" style="display:none;margin:auto;">
+                                                <span class="teamText">团队编号</span>
+                                            </div>
+                                        </div>
+                                        <div class="cell" style="width: 100%; height: 1.25rem;" ng-click="bookTableCellClicked($event, item, room, true)" ng-mouseenter="mouseenterBookable($event)" ng-mouseleave="mouseleaveBookable($event)">
+                                            <div class="infoContainer" style="display:none;margin:auto;">
+                                                <span class="teamText">团队编号</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+<!-- right input panel -->
+<div class="modal fade inactive" id="bookingFormModal" data-backdrop="true">
+    <div class="right w-xl white b-l">
+        <div class="row-col">
+            <a data-dismiss="modal" class="pull-right text-muted text-lg p-a-sm m-r-sm">&times;</a>
+            <div class="p-a b-b">
+                <span class="h5">预约会议</span>
+            </div>
+            <div class="row-row">
+                <div class="row-body">
+                    <div class="row-inner">
+                        <div class="p-a">
+                            <form id="bookingForm" class="form-validation" >
+                                <div class="form-group">
+                                    <label for="name"><span class="requiredStar">* </span>公司</label>
+                                    <ui-select required="true" id="name" ng-model="bookingFormData.company" theme="bootstrap">
+                                        <ui-select-match class="ui-select-match" placeholder="输入或选择公司名称">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices class="ui-select-choices" repeat="company in companyList | filter: $select.search">
+                                            <div ng-bind-html="company.name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="form-group">
+                                    <label>预定人</label>
+                                    <input ng-model="bookingFormData.bookingPeople" type="text" class="form-control" placeholder="">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="room"><span class="requiredStar">* </span>会议室</label>
+                                    <ui-select required="true" id="room" ng-model="bookingFormData.meetingRoom" theme="bootstrap">
+                                        <ui-select-match class="ui-select-match" placeholder="选择会议室">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices class="ui-select-choices" repeat="room in meetingRoomList | filter: $select.search">
+                                            <div ng-bind-html="room.name| highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="form-group">
+                                    <label><span class="requiredStar">* </span>日期</label>
+                                    <input type="text" class="form-control"
+                                           required
+                                           ng-model="bookingFormData.meetingDate "
+                                           placeholder="日期"
+                                           data-placement="bottom-right"
+                                           data-icon-left="fa fa-chevron-left"
+                                           data-icon-right="fa fa-chevron-right"
+                                           data-date-format="yyyy-MM-dd"
+                                           data-round-display="true"
+                                           autocomplete="on"
+                                           data-autoclose="1"
+                                           bs-datepicker>
+                                </div>
+                                <div class="form-group">
+                                    <label><span class="requiredStar">* </span>起始时间</label>
+                                    <div class="row row-sm">
+                                        <div class="col-xs-6">
+                                            <input type="text" class="form-control" ng-change="resetEndDate()"
+                                                   ng-model="bookingFormData.meetingTime"
+                                                   required
+                                                   data-placement="bottom-right"
+                                                   data-icon-up="fa fa-chevron-up"
+                                                   data-icon-down="fa fa-chevron-down"
+                                                   data-minute-step="15"
+                                                   data-time-format="HH:mm"
+                                                   autocomplete="on"
+                                                   data-autoclose="1"
+                                                   placeholder="时间"
+                                                   bs-timepicker></div>
+                                        <div class="col-xs-6">
+                                            <input type="text" class="form-control" ng-change="resetEndDate()"
+                                                   required
+                                                   ng-model="bookingFormData.meetingEndTime"
+                                                   placeholder="时间"
+                                                   data-placement="bottom-right"
+                                                   data-icon-up="fa fa-chevron-up"
+                                                   data-icon-down="fa fa-chevron-down"
+                                                   data-time-format="HH:mm"
+                                                   data-minute-step="15"
+                                                   autocomplete="on"
+                                                   data-autoclose="1"
+                                                   bs-timepicker></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>主题</label>
+                                    <input ng-model="bookingFormData.topic" type="text" class="form-control" id="subject" placeholder=""></div>
+                                <div class="form-group">
+                                    <label for="discription">描述</label>
+                                    <textarea ng-model="bookingFormData.remark" class="form-control" id="discription" rows="2"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <button ng-click="confirmBookingClicked()" type="submit" class="btn {{app.setting.theme.primary}}">确定</button>
+                                    <span> <a class="btn btn-outline b-danger text-danger pull-right m-b"  ng-show="bookingFormData.id" ng-click="deleteBookingCb()">删除</a></span>
+
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- / .modal -->
+<div id="m-blank" class="modal fade animate black-overlay" data-backdrop="false">
+    <div class="row-col h-v">
+        <div class="row-cell v-m">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content flip-y">
+                    <div class="modal-body text-center">
+                        <p class="p-y m-t"><i class="material-icons text-grey text-3x">mood_bad </i></p>
+                        <p>目前没有会议室，请先配置会议室！</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn white p-x-md" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn {{app.setting.theme.primary}} p-x-md"  ng-click="app.goSpace()" ui-sref="app.space.meetingRoom.list">去添加</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div>
+        </div>
+    </div>
+</div>

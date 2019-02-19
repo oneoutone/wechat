@@ -21,7 +21,7 @@
       name: '锦创科技微服务',
       version: '0.6.0',
         //host: 'http://localhost:8080/api',
-        host: 'http://jcservice.nat300.top/api',
+        host: 'http://localhost:8080/api',
       color: {
         'primary':      '#0cc2aa',
         'accent':       '#a88add',

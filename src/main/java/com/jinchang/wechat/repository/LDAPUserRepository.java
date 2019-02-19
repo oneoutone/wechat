@@ -28,10 +28,10 @@ public class LDAPUserRepository {
         return ldapTemplate.find(query().where("cn").is(cn), LDAPUser.class);
     }
 
-
     public List<LDAPOrganization> findOrgnaizations() {
         return ldapTemplate.findAll(LDAPOrganization.class);
     }
 
+    public List<LDAPUser> findByName(String name) { return ldapTemplate.find(query().where("jcfullname").is(name), LDAPUser.class);}
 
 }
