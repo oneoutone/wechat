@@ -231,7 +231,7 @@
             vm.meetingRoomList = []
             vm.companyList = []
 
-            httpService.getMeetingRoomList(function(rooms){
+            httpService.getMeetingRoomByBuildingId({buildingId: vm.app.setting.buildingId},function(rooms){
                 vm.meetingRoomList = rooms
                 vm.meetingRoomNames = rooms.map(function(item){
                     return item.name
@@ -242,7 +242,7 @@
                 console.log(err)
             })
 
-            httpService.getAllCompany(function(companies){
+            httpService.companyByBuildingId({buildingId: vm.app.setting.buildingId}, function(companies){
                 vm.companyList = companies
             }, function(err){
                 console.log(err)
@@ -508,10 +508,20 @@
                 var isfifteen = (fifteenIndex % 2 == 1) ? 1 : 0;
                 var currentTd = meetingBodyTable.find("tr:eq(" + startTimeIndex + ") > td:eq(" + currentRoomIndex + ")");
                 var currentDiv = meetingBodyTable.find("tr:eq(" + startTimeIndex + ") > td:eq(" + currentRoomIndex + ") > div:eq(1) > div:eq("+isfifteen+")");
-                currentDiv.removeClass('not-confirm');
-                currentDiv.addClass('booked');
-                currentTd.removeClass('not-confirm');
-                currentTd.addClass('booked');
+                if (bookingFormData.confirmed) {
+                    console.log('bookingFormData.confirmed')
+                    currentDiv.removeClass('not-confirm');
+                    currentDiv.addClass('booked');
+                    currentTd.removeClass('not-confirm');
+                    currentTd.addClass('booked');
+                } else {
+                    console.log('bookingFormData.confirmed not')
+                    currentDiv.removeClass('booked');
+                    currentDiv.addClass('not-confirm');
+                    currentTd.removeClass('booked');
+                    currentTd.addClass('not-confirm');
+                    currentTd.removeClass('bookborder');
+                }
 
                 //currentTd.addClass('booked');
                 currentDiv.attr('data-booking-id', bookingFormData.id);
@@ -733,6 +743,11 @@
                 toastr.error("请选择公司");
                 return;
             }
+
+            if(!vm.bookingFormData.bookingPeople){
+                toastr.error("请输入预约人");
+                return;
+            }
             if(!vm.bookingFormData.meetingRoom){
                 toastr.error("请选择会议室");
                 return;
@@ -754,13 +769,16 @@
                 remark: vm.bookingFormData.remark,
                 meetingRoomId: vm.bookingFormData.meetingRoom.id,
                 meetingRoomName: vm.bookingFormData.meetingRoom.name,
-                channel: "manager"
+                channel: "manager",
+                phone:  vm.bookingFormData.phone
             }
 
             if(vm.bookingFormData.id){
                 newMeeting.id = vm.bookingFormData.id
             }
-
+            if(confirm){
+                newMeeting.confirmed = confirm
+            }
             httpService.upsertMeeting(newMeeting, function(meeting){
                 if(!newMeeting.id){
                     pushBookingData([meeting]);
@@ -867,6 +885,7 @@
                     meetingDateTime: moment(meetings[i].start).toDate(),
                     meetingEndTime: moment(meetings[i].end).toDate(),
                     duration: 1,
+                    confirmed: meetings[i].confirmed,
                     topic: meetings[i].topic,
                     remark: meetings[i].remark
                 }
@@ -888,7 +907,8 @@
         }
 
         function pullMeetingOrders(start, end) {
-            httpService.getMeeting({
+            httpService.getMeetingByBuildingId({
+                buildingId: vm.app.setting.buildingId,
                 start: moment(start).format('YYYY-MM-DD HH:ss:mm'),
                 end: moment(end).format('YYYY-MM-DD HH:ss:mm')
             }, function(meetings){
@@ -933,7 +953,13 @@
             });
         };
 
-        vm.initMeetingGrid(vm.initPage);
+        vm.app.ready(function(){
+            vm.initMeetingGrid(vm.initPage);
+            vm.$watch("app.setting.buildingId", function(newVal, oldVal) {
+                vm.initMeetingGrid(vm.initPage);
+            });
+        })
+
 
     }
 })();

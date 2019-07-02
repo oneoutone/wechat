@@ -1,0 +1,174 @@
+<div class="padding">
+
+    <div class="nav-active-{{app.setting.theme.primary}} p-b">
+        <ul class="nav nav-pills" ui-nav>
+            <li class="nav-item {{status == 'all' ? 'active' : ''}}">
+                <a class="nav-link" ng-click="setState('all')" href>全部</a>
+            </li>
+            <li class="nav-item {{status == 'living' ? 'active' : ''}}" >
+                <a class="nav-link" ng-click="setState('living')" href>当前入驻</a>
+            </li>
+            <li class="nav-item {{status == 'past' ? 'active' : ''}}" >
+                <a class="nav-link" ng-click="setState('past')" href>历史入驻</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="box">
+
+        <div class="box-body b-t">
+            <button type="button" data-toggle="modal" ng-click="setCompany()" data-target="#m-edit" class="btn btn-sm {{app.setting.theme.primary}}">
+                <i class="material-icons">add</i> 新建
+            </button>
+        </div>
+
+        <table id="teamTable" class="table table-striped" data-empty="没有记录">
+            <thead>
+            <tr>
+                <th>
+                    <a ng-click="sortBy('name')">公司名称</a><span ng-show="order == 'name'" class="fooicon {{direct == 'ASC' ? 'fooicon-sort-asc' : 'fooicon-sort-desc'}} m-l-1"></span>
+                </th>
+                <th data-breakpoints="xs sm md" data-sortable="false">联系人</th>
+                <th>
+                    <a ng-click="sortBy('enterDate')">联系电话</a><span ng-show="order == 'enterDate'" class="fooicon {{direct == 'ASC' ? 'fooicon-sort-asc' : 'fooicon-sort-desc'}} m-l-1"></span>
+                </th>
+                <th data-breakpoints="xs sm md">
+                    <a ng-click="sortBy('leaveDate')">邮箱</a><span ng-show="order == 'leaveDate'" class="fooicon {{direct == 'ASC' ? 'fooicon-sort-asc' : 'fooicon-sort-desc'}} m-l-1"></span>
+                </th>
+                <th data-type="html" data-sortable="false">操作</th>
+            </tr>
+            </thead>
+            <tr ng-repeat="row in companies">
+                <td class="v-m">{{row.name}}</td>
+                <td class="v-m">{{row.contactPeople}}</td>
+                <td class="v-m">{{row.phone}}</td>
+                <td class="v-m">{{row.email}}</td>
+                <td class="v-m" data-type="html">
+                    <button class="btn btn-xs btn-outline b-dark text-dark" ng-click="showEdit(row)" >编辑</button>
+                    <!-- Single button -->
+                    <div class="btn-group" uib-dropdown>
+                        <button type="button" class="btn btn-xs btn-outline b-dark text-dark b-a" uib-dropdown-toggle ng-disabled="disabled">
+                            更多 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                            <li role="menuitem"><a href ui-sref="app.employee.list({companyId: row.id})">人员管理</a></li>
+                            <li role="menuitem"><a href ng-click="changeLeft(row)">{{row.left == true ? '移入当前入驻' : '移入历史入驻'}}</a></li>
+                            <li role="menuitem"><a href ng-click="showDeleteModal(row)" data-toggle="modal" data-target="#delete">删除</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr class="white b-white" ng-show="bigTotalItems > 10">
+                <td colspan="6" class="white b-white text-center">
+                    <ul class="pagination" uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" total-items="true" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" next-text="下一页" previous-text="上一页" rotate="false" ng-change="pageChanged()"></ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- small modal -->
+<div id="m-remove" class="modal fade animate black-overlay" data-backdrop="false">
+    <div class="row-col h-v">
+        <div class="row-cell v-m">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content flip-y">
+                    <div class="modal-body text-center">
+                        <p class="p-y m-t"><i class="fa fa-check text-success fa-3x"></i></p>
+                        <p>该团队已被移入历史入驻！</p>
+                    </div>
+                    <div class="modal-footer text-center">
+                        <!--<button type="button" class="btn white p-x-md" data-dismiss="modal">取消</button>-->
+                        <button type="button" class="btn {{app.setting.theme.primary}} p-x-md" data-dismiss="modal">知道了</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="m-return" class="modal fade animate black-overlay" data-backdrop="false">
+    <div class="row-col h-v">
+        <div class="row-cell v-m">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content flip-y">
+                    <div class="modal-body text-center">
+                        <p class="p-y m-t"><i class="fa fa-check text-success fa-3x"></i></p>
+                        <p>该团队已被移入当前入驻！</p>
+                    </div>
+                    <div class="modal-footer text-center">
+                        <!--<button type="button" class="btn white p-x-md" data-dismiss="modal">取消</button>-->
+                        <button type="button" class="btn {{app.setting.theme.primary}} p-x-md" data-dismiss="modal">知道了</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / .modal -->
+
+<!-- / .modal -->
+<div id="delete" class="modal fade animate black-overlay" data-backdrop="false">
+    <div class="row-col h-v">
+        <div class="row-cell v-m">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content flip-y">
+                    <div class="modal-body text-center">
+                        <p class="p-y">
+                            <i class="fa fa-warning text-warn fa-3x"></i><br><br>
+                            确定删除团队?
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm white p-x-md" data-dismiss="modal">取消</button>
+                        <button type="button" ng-click="deleteCompany()"  class="btn btn-sm {{app.setting.theme.primary}} p-x-md" data-dismiss="modal">删除</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- .modal -->
+<div id="m-edit" class="modal white-overlay" data-backdrop="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content box-shadow-z3">
+            <div class="modal-header">
+                <h5 class="modal-title">新建公司</h5>
+            </div>
+            <div class="modal-body p-a-0">
+                <form name="dbForm" role="form" id="teamForm" class="form-validation" ng-submit="createCompany()" novalidate>
+                    <div class="p-a-md">
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label for="nameInput">公司名称<span class="text-danger"> *</span></label>
+                                <input id="nameInput" type="text"  class="form-control checkPost"  ng-model="company.name" required >
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="ceoInput">联系人</label>
+                                <input id="ceoInput" type="text"  class="form-control" ng-model="company.contactPeople" >
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="phoneInput">联系人手机号</label>
+                                <input id="phoneInput" type="tel" ng-pattern="/^[0-9]{11}$/" placeholder="11位手机号码"  class="form-control" ng-model="company.phone">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="emailInput">联系邮箱</label>
+                                <input id="emailInput" type="tel" ng-pattern="/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}/" placeholder="邮箱"  class="form-control" ng-model="company.email">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-sm white" data-dismiss="modal">取消</button>
+                        <button type="submit" ladda="loading" data-style="expand-left" class="btn btn-sm {{app.setting.theme.primary}}" >完成</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- / .modal -->
+

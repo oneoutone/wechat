@@ -1,0 +1,184 @@
+<!-- <span class="glyphicon glyphicon-refresh spinning"></span> -->
+<!-- content area -->
+
+<div class="">
+
+    <style type="text/css">
+        .ellipsis{
+            width: 100%;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .weui-select{
+            padding-left: 0;
+        }
+        .weui-cell:after {
+            content: " ";
+            display: inline-block;
+            height: 6px;
+            width: 6px;
+            border-width: 2px 2px 0 0;
+            border-color: #c8c8cd;
+            border-style: solid;
+            -webkit-transform: matrix(.71,.71,-.71,.71,0,0);
+            transform: matrix(.71,.71,-.71,.71,0,0);
+            position: relative;
+            top: -2px;
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            margin-top: -3px;
+        }
+    </style>
+
+    <div class="page__bd">
+            <div class="weui-flex__item" style="width: 20%;">
+                <div class="" style="background: none; margin: 0;">
+                    <div class="weui-cell " style="padding: 0; padding-left: 0.75rem;">
+                        <div class=" text-xs">
+                            <input id="selectedDateInput" class="weui_input weui-date ellipsis" style="background: none; border: none; height: 40px; line-height: 40px;" type="text" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-flex__item" style="width: 40%;">
+                <div class="" style="background: none; margin: 0; ">
+                    <div class="weui-cell weui-cell_select" style="padding: 0; padding-left: 0.75rem; height: 40px; line-height: 40px;">
+                        <div class="weui-cell__bd text-xs">
+                            <select class="weui-select ellipsis" style="height: 40px; line-height: 40px;"  id="selectRooms" placeholder="会议室编号" ng-model="selectedMeetingRoom" ng-change="meetingRoomChanged()">
+                                <option ng-repeat="room in meetingRooms"  value="{{room.id}}">{{room.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <style type="text/css">
+        td{
+            border:1px solid #e3e3e3;
+            text-align: center;
+            overflow:hidden;
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            padding: 0 8px 0 8px;
+        }
+        #tDiv{
+            border-bottom:1px solid #e3e3e3;
+            border-right:1px solid #e3e3e3;
+        }
+        #tb1 td, #tb4 td{
+            height: 34px;
+        }
+        #tb2 td{
+            height: 33px;
+        }
+        #tb3 td{
+            height: 68px;
+        }
+    </style>
+
+    <div style="position:absolute; top:40px; bottom: 0; left: 0; right: 0; background: white" >
+        <!--左上-->
+        <div id="tDiv" style=" width:80px; height:34px;overflow:hidden;position:absolute;" ></div>
+        <!--会议室：X轴-->
+        <div id="xDiv" style="height:34px;overflow:hidden;position:absolute; left: 80px; top:0; right:0;z-index: 2;" >
+            <table id="tb2" width="80px" style="position:absolute; table-layout:fixed" >
+                <tr>
+                    <!--<td ng-repeat="room in meetingRooms">{{room}}</td>-->
+                    <td  ng-repeat="room in meetingRooms"><span>{{room.name}}</span></td>
+                </tr>
+            </table>
+        </div>
+        <!--时间：Y轴-->
+        <div id="yDiv" style="width:80px; overflow:hidden; position:absolute; top: 33px; bottom: 0; left: 0;" >
+            <table id="tb3" width="80px" style="position:absolute;" class="text-xs" >
+                <tr ng-repeat="item in earlyDayHours"><td>{{item}}</td></tr>
+                <tr ng-repeat="item in normalDayHours"><td>{{item}}</td></tr>
+                <tr ng-repeat="item in lateDayHours"><td>{{item}}</td></tr>
+            </table>
+        </div>
+        <!--会议内容-->
+        <div id="cDiv" style="overflow:auto; position:absolute; top: 33px; bottom: 0; left: 80px; right:0;" inertia-scroll>
+            <table id="tb4" width="1000px">
+                <tr ng-repeat-start="item in earlyDayHours">
+                    <!--<td width="100" rowspan="2">{{item}}</td>-->
+                    <td class="bookable early-cell" ng-click="bookTableCellClicked($event, item, room, false)"  ng-repeat="room in meetingRooms">
+                        <div class="addBtnContainer">
+                            <span class="fa fa-plus bookable-cell-span" style="margin-left:5px;"></span>
+                            <span class="bookable-cell-span" style="margin-left:10px;">添加</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr ng-repeat-end>
+                    <td class="bookable early-cell" ng-click="bookTableCellClicked($event, item, room, true)"  ng-repeat="room in meetingRooms">
+                        <div class="addBtnContainer">
+                            <span class="fa fa-plus bookable-cell-span" style="margin-left:5px;"></span>
+                            <span class="bookable-cell-span" style="margin-left:10px;">添加</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr ng-repeat-start="item in normalDayHours">
+                    <!--<td rowspan="2">{{item}}</td>-->
+                    <td class="bookable" ng-click="bookTableCellClicked($event, item, room, false)" ng-repeat="room in meetingRooms">
+                        <div class="addBtnContainer">
+                            <span class="fa fa-plus" style="color:white;margin-left:5px;"></span>
+                            <span style="color:white;margin-left:10px;">添加</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr ng-repeat-end>
+                    <td class="bookable" ng-click="bookTableCellClicked($event, item, room, true)" ng-repeat="room in meetingRooms">
+                        <div class="addBtnContainer">
+                            <span class="fa fa-plus" style="color:white;margin-left:5px;"></span>
+                            <span style="color:white;margin-left:10px;">添加</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr ng-repeat-start="item in lateDayHours">
+                    <!--<td rowspan="2">{{item}}</td>-->
+                    <td class="bookable early-cell" ng-click="bookTableCellClicked($event, item, room, false)"  ng-repeat="room in meetingRooms">
+                        <div class="addBtnContainer">
+                            <span class="fa fa-plus bookable-cell-span" style="margin-left:5px;"></span>
+                            <span class="bookable-cell-span" style="margin-left:10px;">添加</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr ng-repeat-end>
+                    <td class="bookable early-cell" ng-click="bookTableCellClicked($event, item, room, true)" ng-repeat="room in meetingRooms">
+                        <div class="addBtnContainer">
+                            <span class="fa fa-plus bookable-cell-span" style="margin-left:5px;"></span>
+                            <span class="bookable-cell-span" style="margin-left:10px;">添加</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div ng-repeat="meeting in meetings"  ng-style="meeting.style" ng-click="bookedCellClicked(meeting)" style="color: white;">
+                <div class="teamInfoContainer" style=" padding-left: 10px; width:100%;display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" ng-style="meeting.textStyle">
+                    <span class="teamText">{{meeting.companyName}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+</div>
+
+
+
+<!--BEGIN dialog2-->
+<div class="js_dialog" id="dateOutRangeTip" style="display: none;">
+    <div class="weui-mask"></div>
+    <div class="weui-dialog">
+        <div class="weui-dialog__bd">亲，你貌似在预约一个过去的时间。</div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="hideMe()">知道了</a>
+        </div>
+    </div>
+</div>
+<!--END dialog2-->

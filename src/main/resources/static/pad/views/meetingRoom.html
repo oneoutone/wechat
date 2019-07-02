@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>会议室信息</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	</head>
+
+	<body>
+		<div id="site-landing"></div>
+		<div class="boardroom" >
+			<div class="head clearfix">
+				<div class="title">{{name}}</div>
+				<div class="time">{{dateString}}</div>
+			</div>
+			<div class="cont">
+				<table>
+					<tr>
+						<th>会议主题</th>
+						<th>会议时间</th>
+						<th>参与人</th>
+						<th>预约人</th>
+					</tr>
+					<tr ng-repeat="item in meetings">
+						<td class="tc">{{item.topic}}</td>
+						<td class="tc">{{item.start | date: 'HH:mm'}}-{{item.end | date: 'HH:mm'}}</td>
+						<td>{{item.remark}}</td>
+						<td>{{item.companyName}}<br />{{item.userName}}</td>
+					</tr>
+				</table>
+			</div>
+
+		</div>
+	</body>
+
+</html>

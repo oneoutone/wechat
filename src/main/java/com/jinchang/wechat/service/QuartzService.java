@@ -115,11 +115,6 @@ public class QuartzService {
         }
     }
 
-    @Scheduled(cron = "0 0 1 * * ?")
-    public void updateOrganization() throws IOException {
-
-    }
-
     public void fetchOrders(List list, int page, int pageNum) throws IOException {
         String url = generateUrl("open_api_v1/tickets/tickets_in_filter")+"&filter_id="+env.getProperty("udesk.scoreFilterId")+"&page="+page+"&per_page=100";;
         String r = HttpUtil.sendGet(url);
@@ -153,18 +148,27 @@ public class QuartzService {
 
     @Scheduled(cron = "0 0 1 * * ?")
     public void updateOrg() throws IOException {
-        List<LDAPOrganization> u = lDAPUserRepository.findOrgnaizations();
+        List<LDAPOrganization> p = lDAPUserRepository.findOrgnaizations();
+        List<LDAPOrganization> u = new ArrayList<>();
+        for(int i = 0; i<p.size(); i++ ){
+            if(p.get(i).getJcparentdeptcode() != null || p.get(i).getJcchnname().equals("锦创集团")){
+                u.add(p.get(i));
+            }
+        }
         System.out.println("start");
         System.out.println(u.size());
-        if(u == null || u.size() == 0){
-            return;
+        int base = 0;
+        for(int i = 0; i<u.size(); i++ ){
+            if(u.get(i).getJcchnname().equals("锦创集团")){
+                base = i;
+                break;
+            }
         }
-        LDAPOrganization root = u.get(0);
-        if(root.getJcparentdeptcode() != null){
-            return;
-        }
+        LDAPOrganization root = u.get(base);
+        System.out.println("base"+base);
         organizationRepository.deleteAll();
         employeeRepository.deleteAll();
+        System.out.println("1");
         Organization rootOrg = new Organization();
         rootOrg.setLevel(1);
         rootOrg.setCode(root.getCn());
@@ -173,16 +177,17 @@ public class QuartzService {
         rootOrg.setOrgTree(root.getJcchnname());
         rootOrg.setShowAsChoice(false);
         organizationRepository.save(rootOrg);
-        u.remove(0);
+        u.remove(base);
         int index = 1;
+        System.out.println("2");
         List<String> preCn = new ArrayList<>();
         preCn.add(rootOrg.getCode());
         List<Organization> preOrgs = new ArrayList<>();
         preOrgs.add(rootOrg);
+        System.out.println("3");
         do {
             index ++;
             List<Organization> orgs = new ArrayList<>();
-
             Iterator<LDAPOrganization> iterator = u.iterator();
             while (iterator.hasNext()) {
                 LDAPOrganization item = iterator.next();

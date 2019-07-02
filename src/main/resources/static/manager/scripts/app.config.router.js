@@ -153,6 +153,18 @@
                 resolve: load(['toastr', 'moment','ui.bootstrap', 'scripts/meeting/company.list.js'])
             })
 
+            .state('app.building',{
+                url: '/building',
+                template: '<div ui-view></div>',
+                data: {title: '楼宇列表'}
+            })
+            .state('app.building.list', {
+                url: '/list',
+                templateUrl: 'views/meeting/building.list.html',
+                controller: "BuildingListCtrl",
+                resolve: load(['toastr', 'moment','ui.bootstrap', 'scripts/meeting/building.list.js'])
+            })
+
             .state('app.employee',{
                 url: '/employee',
                 template: '<div ui-view></div>',
@@ -188,7 +200,59 @@
                 resolve: load(['toastr', 'moment','mgcrea.ngStrap','ui.select', 'scripts/meeting/meeting.grid.js'])
             })
 
-
+            // 会议预约
+            .state('wechatMeeting', {
+                url: '/wechatMeeting',
+                template: '<div ui-view></div>',
+                data: { title: '会议室管理' }
+            })
+            .state('wechatMeeting.grid', {
+                url: '/grid?buildingId',
+                params: {"param": null, "time": null, "offsetx": null, "offsety": null},
+                templateUrl: 'views/meeting/meeting.wechat.grid.html',
+                controller: "MeetingWechatGirdCtrl",
+                resolve: load(['moment', 'mobiscroll', 'scripts/meeting/meeting.wechat.grid.js'])
+            })
+            .state('wechatMeeting.info', {
+                url: '/:id?buildingId',
+                params: {"param": null, "offsetx": null, "offsety": null},
+                templateUrl: 'views/meeting/meeting.wechat.info.html',
+                //templateUrl: '../m.views/meetings/meetings.detail.m.html',
+                controller: 'BookingWechatFormCtrl',
+                resolve: load(['moment', 'toastr', 'mobiscroll', 'scripts/meeting/meeting.wechat.info.js'])
+            })
+            .state('wechatBuilding', {
+                url: '/wechatBuilding',
+                template: '<div ui-view></div>',
+                data: { title: '楼宇列表' }
+            })
+            .state('wechatBuilding.list', {
+                url: '/list',
+                templateUrl: 'views/meeting/building.wechat.list.html',
+                controller: "WechatBuildingCtrl",
+                resolve: load(['toastr', 'moment', 'mgcrea.ngStrap', 'scripts/meeting/building.wechat.list.js'])
+            })
+            .state('app.feedbackList', {
+                url: '/feedbackList?filter&category&page',
+                templateUrl: 'views/feedback/feedback.html',
+                data: { title: '反馈列表' },
+                controller: "FeedbackCtrl",
+                resolve: load(['toastr', 'moment', 'mgcrea.ngStrap', 'scripts/feedback/feedback.js'])
+            })
+            .state('app.complainList', {
+                url: '/complainList?filter&category&reply&page',
+                templateUrl: 'views/feedback/complain.html',
+                data: { title: '投诉列表' },
+                controller: "ComplainCtrl",
+                resolve: load(['toastr', 'moment', 'mgcrea.ngStrap', 'scripts/feedback/complain.js'])
+            })
+            .state('app.letterList', {
+                url: '/letterList?filter&reply&page',
+                templateUrl: 'views/feedback/letter.html',
+                data: { title: '总裁信件列表' },
+                controller: "LetterCtrl",
+                resolve: load(['toastr', 'moment', 'mgcrea.ngStrap', 'scripts/feedback/letter.js'])
+            })
 
         function load(srcs, callback) {
             return {

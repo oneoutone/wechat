@@ -12,6 +12,7 @@
             <tr>
                 <th data-sortable="false">会议室编号</th>
                 <th data-sortable="false">名称</th>
+                <th data-sortable="false">楼宇名称</th>
                 <th data-sortable="false">座位数</th>
                 <th data-type="html" data-sortable="false">操作</th>
             </tr>
@@ -20,6 +21,7 @@
             <tr ng-repeat="meetingRoom in meetingRooms">
                 <td class="v-m">{{meetingRoom.externalId}}</td>
                 <td class="v-m">{{meetingRoom.name}}</td>
+                <td class="v-m">{{meetingRoom.buildingName}}</td>
                 <td class="v-m">{{meetingRoom.seatNum}}</td>
                 <td class="v-m">
                     <button class="btn btn-outline btn-xs b-dark text-dark" ng-click="editMeetingRoom(meetingRoom)" data-toggle="modal" data-target="#m-edit">
@@ -73,6 +75,12 @@
                         <div class="form-group">
                             <label>名称</label>
                             <input type="text" id="nameInput"  class="form-control" ng-model="meetingRoom.name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nameInput">楼宇名称<span class="text-danger"> *</span></label>
+                            <select class="form-control c-select" placeholder="楼宇" ng-model="meetingRoom.buildingName">
+                                <option ng-repeat="item in buildings" value="{{item.name}}">{{item.name}}</option>
+                            </select>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">

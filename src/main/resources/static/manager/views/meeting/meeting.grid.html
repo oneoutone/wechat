@@ -296,8 +296,13 @@
                                     </ui-select>
                                 </div>
                                 <div class="form-group">
-                                    <label>预定人</label>
+                                    <label><span class="requiredStar">* </span>预定人</label>
                                     <input ng-model="bookingFormData.bookingPeople" type="text" class="form-control" placeholder="">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>预定人手机</label>
+                                    <input ng-model="bookingFormData.phone" type="text" class="form-control" placeholder="">
                                 </div>
 
                                 <div class="form-group">
@@ -359,11 +364,13 @@
                                     <label>主题</label>
                                     <input ng-model="bookingFormData.topic" type="text" class="form-control" id="subject" placeholder=""></div>
                                 <div class="form-group">
-                                    <label for="discription">描述</label>
+                                    <label for="discription">参会人</label>
                                     <textarea ng-model="bookingFormData.remark" class="form-control" id="discription" rows="2"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <button ng-click="confirmBookingClicked()" type="submit" class="btn {{app.setting.theme.primary}}">确定</button>
+                                    <button ng-click="confirmBookingClicked(true)" type="submit" class="btn {{app.setting.theme.primary}}">确定</button>
+                                    <button ng-if="!bookingFormData.confirmed" ng-click="confirmBookingClicked(true)" type="submit" class="btn {{app.setting.theme.primary}}">审核</button>
+
                                     <span> <a class="btn btn-outline b-danger text-danger pull-right m-b"  ng-show="bookingFormData.id" ng-click="deleteBookingCb()">删除</a></span>
 
 

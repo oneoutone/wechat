@@ -17,7 +17,9 @@
     function AppCtrl( $scope, $localStorage, $location, $rootScope, $anchorScroll, $timeout, $window, $state, httpService) {
 
         var vm = $scope
-        var url = 'http://192.168.1.97/'
+        var setting = 'local-setting';
+        //var url = 'http://192.168.1.97/'
+        var url = 'http://localhost:3000/'
         vm.app = {
             name: '锦创微服务',
             url: url,
@@ -30,17 +32,24 @@
 
         vm.app.isAuthenticated = function(){
             var now = new Date()
-            if(vm.app.setting && vm.app.setting.accessToken && vm.app.setting.expire && now < new Date(vm.app.setting.expire)){
+            console.log(vm.app.setting.expire)
+            console.log(vm.app.setting.accessToken)
+            console.log('expire')
+            console.log($localStorage[setting])
+            if($localStorage[setting] && $localStorage[setting].accessToken && now < moment($localStorage[setting].expire).toDate()){
                 return true
             }
             return false
         }
 
-
         vm.app.setUser = function(user){
+            console.log('set user')
             vm.app.setting.accessToken = user.accessToken
             vm.app.setting.userId = user.userId
             vm.app.setting.expire = user.expire
+            $localStorage[setting].accessToken = user.accessToken
+            $localStorage[setting].expire = user.expire
+            $localStorage[setting].user = user.userId
         }
         /**
          * 程序初始化使用。使用方法
@@ -64,8 +73,9 @@
 
 
         $rootScope.$on('$stateChangeStart', function (event, toState) {
-            console.log('gogogo')
-            if(!vm.app.isAuthenticated() && (!search || !search.accessToken)){
+            // console.log('gogogo')
+            console.log(toState)
+            if(toState != 'error' && !vm.app.isAuthenticated() && (!search || !search.accessToken)){
                 $state.go('error');
             }
         });
@@ -102,22 +112,15 @@
             window.close()
         }
 
-        var setting = 'local-setting';
         console.log(setting)
         // save settings to local storage
         if (angular.isDefined($localStorage[setting])) {
             vm.app.setting = $localStorage[setting];
-        } else {
-            $localStorage[setting] = vm.app.setting;
         }
         // watch changes
         $scope.$watch('app.setting', function () {
             $localStorage[setting] = vm.app.setting;
         }, true);
-
-        console.log('check')
-        console.log(vm.app.isAuthenticated())
-        console.log(search.accessToken)
 
         // if((search && search.accessToken)) {
         //     httpService.checkToken(search.accessToken, function (accessToken) {
@@ -133,8 +136,10 @@
         // }
 
         if(!vm.app.isAuthenticated() && (!search || !search.accessToken)){
+            console.log("auth 1")
             $state.go('error');
-        }else if(!vm.app.isAuthenticated() && (search && search.accessToken)){
+        }else if(search && search.accessToken){
+            console.log("auth 2")
             httpService.checkToken(search.accessToken, function(accessToken){
                 if(!accessToken){
                     $state.go('error');
@@ -146,6 +151,7 @@
                 $state.go('error');
             })
         }else if(vm.app.isAuthenticated()){
+            console.log("auth 3")
             console.log(vm.app.setting.accessToken)
             vm.app.init()
         }

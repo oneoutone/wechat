@@ -37,6 +37,27 @@
                         vm.user.roles.productConfirm = true
                         vm.user.roles.manage = true
                     }
+                    httpService.getBuildingList(function(result){
+                        $scope.buildings = result;
+                        if(vm.user.buildings && vm.user.buildings.length > 0){
+                            var bs = vm.user.buildings.split(',')
+                            for(var i=0; i<bs.length; i++){
+                                var et = $scope.buildings.filter(function(t){
+                                    return t.name == bs[i]
+                                })
+                                if(et && et.length > 0){
+                                    et[0].checked = true
+                                }
+                            }
+                        }
+                        if(vm.user.roles.admin == true){
+                            for(var i=0; i<$scope.buildings.length; i++){
+                                $scope.buildings[i].checked = true
+                            }
+                        }
+                    }, function(err){
+                        console.log(err)
+                    })
                 }, function (err) {
                     console.log(err)
                     toastr.error("获取管理员信息失败")
@@ -149,6 +170,30 @@
 
             }
         };
+
+        vm.upsertBuilding = function(){
+            vm.buildingLoading = true
+            if($stateParams.id){
+                var buildings = ''
+                for(var i=0; i<vm.buildings.length; i++){
+                    if(vm.buildings[i].checked){
+                        buildings += vm.buildings[i].name+','
+                    }
+                }
+                if(buildings.length > 0){
+                    buildings = buildings.substr(0, buildings.length-1)
+                }
+                httpService.upsertManager({buildings: buildings, id: vm.user.id}, function(data){
+                    vm.buildingLoading = false;
+                    toastr.success("更新成功");
+                }, function(err){
+                    console.info(err);
+                    toastr.error("更新失败");
+                    vm.buildingLoading = false;
+                })
+
+            }
+        }
 
         vm.updatePassword = function(){
             if(!$('#newPasswordInput').hasClass('ng-valid') || !$('#newConfirmInput').hasClass('ng-valid')){

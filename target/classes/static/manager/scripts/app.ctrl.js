@@ -26,7 +26,7 @@
 
         vm.app = {
             name: '锦创科技微服务后台',
-            version: '0.6.0',
+            version: '1.6.0',
             // for chart colors
             color: {
                 'primary': '#0cc2aa',
@@ -94,12 +94,30 @@
 
         $rootScope.$on('$stateChangeStart', function (event, toState) {
             //console.info( LoopBackAuth.currentUserData)
-            if (!vm.app.isAuthenticated() && toState.name.indexOf('access.') == -1) {
+            if (!vm.app.isAuthenticated() && toState.name.indexOf('access.') == -1 && toState.name.indexOf('wechatMeeting')) {
                 event.preventDefault();
                 $state.go('access.signin');
                 return
             }
+            if(toState.name == 'app.meeting.grid'){
+                vm.app.showBuilding = true
+            }else{
+                vm.app.showBuilding = false
+            }
         });
+
+        vm.app.buildingChange = function(){
+            console.log('build did change')
+            var currentBuilding = vm.app.setting.buildings.filter(function(item){
+                return item.name == vm.app.setting.buildingName
+            })
+            if(currentBuilding && currentBuilding.length > 0){
+                vm.app.setting.buildingId = currentBuilding[0].id
+            }
+            console.log(vm.app.setting.buildingId)
+            console.log(vm.app.setting.buildingName)
+            //$state.go('app.meeting.grid', {reload: true})
+        }
 
 
         /**
@@ -117,11 +135,36 @@
                         vm.app.setting.user.roles[roles[i]] = true
                     }
                 }
-                vm.app.isReady = true
-                vm.app.runTodos()
-                if(callback){
-                    callback()
-                }
+                httpService.getBuildingList(function(result){
+                    vm.app.setting.buildings = result
+                    if(vm.app.setting.user.roles.admin){
+                        vm.app.setting.user.buildings = vm.app.setting.buildings.map(function(item){
+                            return item.name
+                        })
+                        if(vm.app.setting.buildings.length > 0){
+                            vm.app.setting.buildingId = vm.app.setting.buildings[0].id
+                            vm.app.setting.buildingName = vm.app.setting.buildings[0].name
+                        }
+                    }else{
+                        vm.app.setting.user.buildings = (vm.app.setting.user.buildings ? vm.app.setting.user.buildings.split(",") : [])
+                        if(vm.app.setting.user.buildings.length > 0){
+                            vm.app.setting.buildingName = vm.app.setting.user.buildings[0]
+                        }
+                        var currentBuilding = vm.app.setting.buildings.filter(function(item){
+                            return item.name == vm.app.setting.buildingName
+                        })
+                        if(currentBuilding && currentBuilding.length > 0){
+                            vm.app.setting.buildingId = currentBuilding[0].id
+                        }
+                    }
+                    vm.app.isReady = true
+                    vm.app.runTodos()
+                    if(callback){
+                        callback()
+                    }
+                }, function(err){
+                    console.log(err)
+                })
             }, function(err){
                 console.log(err)
             })
@@ -273,7 +316,9 @@
          * @param callback
          */
 
-        vm.app.init();
+        if(vm.app.isAuthenticated ){
+            vm.app.init();
+        }
 
     }
 })();

@@ -1,0 +1,86 @@
+
+<div class="head">
+    <div class="wrap clearfix">
+        <div class="logo">
+            <img src="/assets/img/img-logo.png" />
+        </div>
+        <ul class="top-menu">
+            <li class="menu-item">
+                <a ui-sref="bill">即时工单</a>
+            </li>
+            <li class="menu-item">
+                <a ui-sref="feedback">问题反馈</a>
+            </li>
+            <li class="menu-item">
+                <a ui-sref="complain">匿名投诉</a>
+            </li>
+            <li class="menu-item active">
+                <a ui-sref="letter">总裁信箱</a>
+            </li>
+        </ul>
+        <div class="head-right">
+            <span class="icon icon-notice" ui-sref="rule"></span>
+        </div>
+    </div>
+</div>
+<div class="main clearfix">
+    <div class="main-box main-l">
+        <div class="jc-title clearfix">
+            <h2 class="tit">我提交的信件</h2>
+        </div>
+        <ul class="complain-list">
+            <li class="complain-item" ng-repeat="item in list">
+                <a href="javascript:void(0);">
+                    <div class="tit-box">
+                        <h3 class="tit">{{item.title}}</h3>
+                    </div>
+                    <div class="cont">{{item.content}}</div>
+                    <div class="info clearfix">
+                        <div class="info-item">
+                            <span class="type">{{item.category}}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="time">{{item.created | date: 'yyyy-mm-dd'}}提交</span>
+                        </div>
+                    </div>
+                    <div class="cont" ng-show="item.result">{{item.result}}</div>
+                </a>
+            </li>
+        </ul>
+        <div class="page">
+            <div class="page-list">
+                <a class="{{currentPage == item ? 'active' : ''}}" ng-click="pageChanged(item)" ng-repeat="item in pages">{{item}}</a>
+            </div>
+        </div>
+    </div>
+    <div class="main-box main-r">
+        <div class="jc-title clearfix">
+            <h2 class="tit">我给总裁写封信</h2>
+        </div>
+        <form class="form-box">
+            <ul class="form-list">
+                <li class="form-item input-box">
+                    <span class="must c-red">*</span>
+                    <label class="tit">标题</label>
+                    <div class="cont">
+                        <input class="input" type="text" ng-model="title" placeholder="请输入投诉标题，不少于5个字" />
+                    </div>
+                </li>
+                <li class="form-item textarea-box">
+                    <span class="must c-red">*</span>
+                    <label class="tit">内容</label>
+                    <div class="cont">
+                        <textarea class="textarea" ng-model="content" rows="10" placeholder="请输入投诉详情，不少于12个字"></textarea>
+                    </div>
+                </li>
+            </ul>
+            <div class="btn-box">
+                <button type="button" class="btn-outlined" ng-click="clear()">清除</button>
+                <button type="button" class="btn" ng-click="addLetter()">提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--返回顶部-->
+<a href="javascript:void(0);" class="return_top"></a>

@@ -25,6 +25,8 @@ public class Meeting {
     private long meetingRoomId;
     private String meetingRoomName;
     private String channel; // wechat, manager
+    private String phone;
+    private Boolean confirmed;
 
     public long getId() { return id; }
 
@@ -44,6 +46,15 @@ public class Meeting {
     public void setCreated(Date created) { this.created = created; }
 
     public long getUserId() { return userId; }
+
+    public Boolean getConfirmed() {
+        return confirmed;
+    }
+
+    public void seConfirmed(Boolean confirmed) {
+        this.confirmed = confirmed;
+    }
+
     public void setUserId(long userId) { this.userId = userId; }
 
     public String getUserName() { return userName; }
@@ -63,4 +74,14 @@ public class Meeting {
 
     public String getChannel() { return channel; }
     public void setChannel( String channel) { this.channel = channel; }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+
 }

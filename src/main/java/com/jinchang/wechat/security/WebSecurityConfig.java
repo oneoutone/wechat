@@ -45,6 +45,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
             "/**.css",
             "/index.html",
             "/assets/**",
+            "/assets/pad/**",
+            "/assets/images/**",
+            "/assets/images/pc/**",
             "/libs/**",
             "/",
             "/manager",
@@ -52,6 +55,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
             "/manager/access/**",
             "/pc",
             "/pc/**",
+            "/pad",
+            "/pad/**",
             "/scripts/**",
             "/views/**",
             "/api/users/hello",
@@ -60,7 +65,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
             "/api/jobs/notification",
             "/api/users/checkToken",
             "/api/jobs/**/uploadByPc",
-            "/api/jobs/**/uploadReplyFileByPc"
+            "/api/jobs/**/uploadReplyFileByPc",
+            "/api/meetings/meetingRoom/**",
+            "/api/meetingRooms/**",
+            "/api/meetings",
+            "/api/meetings/**",
+            "/api/companies/**",
+            "/api/building/**",
             // other public endpoints of your API may be appended to this array
     };
 

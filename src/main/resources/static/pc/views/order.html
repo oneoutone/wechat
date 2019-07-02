@@ -1,0 +1,397 @@
+<div class="head">
+	<div class="wrap clearfix">
+		<div class="logo">
+			<img src="../assets/img/img-logo.png" />
+		</div>
+		<ul class="top-menu">
+			<li class="menu-item active" >
+				<a ui-sref="bill">即时工单</a>
+			</li>
+			<li class="menu-item">
+				<a ui-sref="feedback">问题反馈</a>
+			</li>
+			<li class="menu-item ">
+				<a ui-sref="complain">匿名投诉</a>
+			</li>
+			<li class="menu-item">
+				<a ui-sref="letter">总裁信箱</a>
+			</li>
+		</ul>
+		<div class="head-right">
+			<span class="icon icon-notice" ui-sref="rule"></span>
+		</div>
+	</div>
+</div>
+<div class="main clearfix">
+	<div class="main-box main-l">
+		<div class="jc-title clearfix">
+			<h2 class="tit">我的工单</h2>
+			<button id="addBtn" type="button" class="add-btn btn" ng-click="showAdd()">新建工单</button>
+		</div>
+		<ul class="wo-list">
+			<li class="wo-item" ng-repeat="item in orderList">
+				<a class="clearfix" ui-sref="order.detail({id: item.id})">
+					<h3 class="wo-tit">{{item.subject}}<span class="state {{item.status == 'resolved' ? 'state2' : (item.status == 'closed' ? 'state3' :  (item.status == 'solving' ? 'state4' : 'state1'))}}">{{item.status == 'resolved' ? '已解决' : (item.status == 'closed' ? '已关闭' : (item.status == 'solving' ? '解决中' : '等待接单'))}}</span></h3>
+					<span class="time">{{item.created}}</span>
+				</a>
+				<div class="cont">{{item.content}}</div>
+				<div class="wo-foot">
+					<span class="text">当前责任人：{{item.assignee}}</span>
+				</div>
+				<div class="imgbox clearfix"><img  class="img viewimg" ng-repeat="image in item.attachments" src="{{image.url}}" /></div>
+			</li>
+		</ul>
+		<div class="page">
+			<div class="page-list">
+				<a class="{{currentPage == item ? 'active' : ''}}" ng-click="pageChanged(item)" ng-repeat="item in pages">{{item}}</a>
+			</div>
+		</div>
+	</div>
+	<div class="main-box main-r">
+		<div class="jc-title clearfix">
+			<h2 class="tit">常见故障与自救方案</h2>
+			<!--<a class="more" href="help.html">更多</a>-->
+		</div>
+		<div class="save-box collapse">
+			<div class="panel active">
+				<div class="panel-head clearfix">
+					<h4>电话故障</h4><span class="icon-btn">[收起]</span>
+				</div>
+				<div class="panel-body">
+					<ul class="save-list">
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel">
+				<div class="panel-head clearfix">
+					<h4>网络故障</h4><span class="icon-btn">[展开]</span>
+				</div>
+				<div class="panel-body">
+					<ul class="save-list">
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel">
+				<div class="panel-head clearfix">
+					<h4>考勤机故障</h4><span class="icon-btn">[展开]</span>
+				</div>
+				<div class="panel-body">
+					<ul class="save-list">
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel">
+				<div class="panel-head clearfix">
+					<h4>云桌面故障</h4><span class="icon-btn">[展开]</span>
+				</div>
+				<div class="panel-body">
+					<ul class="save-list">
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel">
+				<div class="panel-head clearfix">
+					<h4>视频监控故障</h4><span class="icon-btn">[展开]</span>
+				</div>
+				<div class="panel-body">
+					<ul class="save-list">
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel">
+				<div class="panel-head clearfix">
+					<h4>软件系统故障</h4><span class="icon-btn">[展开]</span>
+				</div>
+				<div class="panel-body">
+					<ul class="save-list">
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel">
+				<div class="panel-head clearfix">
+					<h4>软件系统故障</h4><span class="icon-btn">[展开]</span>
+				</div>
+				<div class="panel-body">
+					<ul class="save-list">
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel">
+				<div class="panel-head clearfix">
+					<h4>软件系统故障</h4><span class="icon-btn">[展开]</span>
+				</div>
+				<div class="panel-body">
+					<ul class="save-list">
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel">
+				<div class="panel-head clearfix">
+					<h4>其他</h4><span class="icon-btn">[展开]</span>
+				</div>
+				<div class="panel-body">
+					<ul class="save-list">
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+						<li class="save-item">
+							<a target="_blank" href="help.html">电话呼出后出现滴滴声音-&gt;&gt;&gt;</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--新建工单-->
+<div class="mask-box"></div>
+<div id="alertResult" class="alert-box">
+	<div class="title"><span class="tit">新建工单</span><span class="close-pop"></span></div>
+	<div class="alert-cont">
+		<form class="form-box">
+			<ul class="form-list">
+				<li class="form-item select-box">
+					<span class="must c-red">*</span>
+					<label class="tit">问题类型</label>
+					<div class="cont">
+						<div class="select-list select-list1 clearfix">
+							<div class="select-item {{item.value == order.type ? 'active' : ''}}" ng-repeat="item in types">
+								<a ng-click="setType(item.value)">{{item.label}}</a>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li class="form-item input-box">
+					<span class="must c-red">*</span>
+					<label class="tit">工单标题</label>
+					<div class="cont">
+						<input class="input" type="text" ng-model="order.subject"  placeholder="请输入工单标题，不少于5个字" />
+					</div>
+				</li>
+				<li class="form-item textarea-box">
+					<span class="must c-red">*</span>
+					<label class="tit">工单描述</label>
+					<div class="cont">
+						<textarea class="textarea" ng-model="order.content" rows="5" placeholder="请输入工单描述，不少于12个字"></textarea>
+					</div>
+				</li>
+				<li class="form-item imgs-box">
+					<label class="tit">图片上传</label>
+					<div class="cont">
+						<div class="upload-img-list clearfix">
+							<div class="img-item" ng-repeat="img in images">
+								<img class="img viewimg" ng-src="{{img.data}}" />
+								<span class="del" ng-click="remove($index)"></span>
+							</div>
+							<div class="add-img img-item">
+								<input type="file" accept="image/*" id="image-2"  onchange="angular.element(this).scope().fileChanged(this.files)">
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</form>
+	</div>
+	<div class="btn-box">
+		<button id="closeAlert" type="button" class="btn-outlined">取消</button>
+		<button id="submitBtn" type="button" class="btn" ng-click="createOrder()">提交</button>
+	</div>
+</div>
+
+<!--图片预览-->
+<div id="outerdiv" class="img-view">
+	<div id="innerdiv" class="bigimg">
+		<img id="bigimg" src="" />
+	</div>
+</div>
+
+<!--返回顶部-->
+<a href="javascript:void(0);" class="return_top"></a>
+
+
+	<script type="text/javascript">
+		$("#addBtn").click(function() {
+			openPop()
+		});
+
+		$(".close-pop").click(function() {
+			closePop();
+		});
+
+		$("#closeAlert").click(function() {
+			closePop();
+		});
+
+		function openPop() {
+			$("#alertResult").show();
+			$(".mask-box").show();
+		}
+
+		function closePop() {
+			$("#alertResult").hide();
+			$(".mask-box").hide();
+		}
+
+		 $("body").on('click','.viewimg',function(){  
+	        var _this = $(this);
+	        imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
+		});
+		
+		function imgShow(outerdiv, innerdiv, bigimg, _this) {
+			var src = _this.attr("src");
+			$(bigimg).attr("src", src);
+			$("<img/>").attr("src", src).load(function() {
+				var windowW = $(window).width();
+				var windowH = $(window).height();
+				var realWidth = this.width;
+				var realHeight = this.height;
+				var imgWidth, imgHeight;
+				var scale = 0.8;
+				if(realHeight > windowH * scale) {
+					imgHeight = windowH * scale;
+					imgWidth = imgHeight / realHeight * realWidth;
+					if(imgWidth > windowW * scale) {
+						imgWidth = windowW * scale;
+					}
+				} else if(realWidth > windowW * scale) {
+					imgWidth = windowW * scale;
+					imgHeight = imgWidth / realWidth * realHeight;
+				} else {
+					imgWidth = realWidth;
+					imgHeight = realHeight;
+				}
+				$(bigimg).css("width", imgWidth);
+				var w = (windowW - imgWidth) / 2;
+				var h = (windowH - imgHeight) / 2;
+				$(innerdiv).css({
+					"top": h,
+					"left": w
+				});
+				$(outerdiv).fadeIn("fast");
+			});
+			$(outerdiv).click(function() {
+				$(this).fadeOut("fast");
+			});
+		}
+		
+		
+		$(function() {
+			$(".collapse .icon-btn").each(function() {
+				var e = $(this);
+				e.click(function() {
+					var panel = e.closest(".panel");
+					panel.toggleClass("active");
+					if(panel.hasClass("active")) {
+						e.text("[收起]");
+					} else {
+						e.text("[展开]");
+					}
+				})
+			});
+
+		});
+		
+	</script>

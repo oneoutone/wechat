@@ -63,7 +63,12 @@
                 $('#nameInput').addClass('ng-invalid');
                 return;
             }
-
+            var current = $scope.buildings.filter(function(item){
+                return $scope.meetingRoom.buildingName == item.name
+            })
+            if(current && current.length > 0){
+                $scope.meetingRoom.buildingId = current[0].id
+            }
             $scope.completeLoading = true
             httpService.upsertMeetingRoom($scope.meetingRoom, function(){
                 $scope.completeLoading = false
@@ -74,5 +79,11 @@
                 toastr.error('保存失败')
             })
         };
+
+        httpService.getBuildingList(function(result){
+            $scope.buildings = result;
+        }, function(err){
+            console.log(err)
+        })
     }
 })();

@@ -47,6 +47,12 @@ public class CompanyController {
         return new ResponseEntity<List<Company>>(companyList ,HttpStatus.OK);
     }
 
+    @GetMapping("/allByBuildingId")
+    public ResponseEntity<?> getCompanyList(@RequestParam(required=false) long buildingId){
+        List<Company> companyList = companyRepository.findAllByBuildingId(buildingId);
+        return new ResponseEntity<List<Company>>(companyList ,HttpStatus.OK);
+    }
+
     @PostMapping("")
     public ResponseEntity<?> create(@RequestBody JSONObject request){
         if(request.get("name") == null){
@@ -67,6 +73,12 @@ public class CompanyController {
         }
         if(request.get("contactPeople") != null){
             company.setContactPeople(request.get("contactPeople").toString());
+        }
+        if(request.get("buildingId") != null){
+            company.setBuildingId(Long.parseLong(request.get("buildingId").toString()));
+        }
+        if(request.get("buildingName") != null){
+            company.setBuildingName(request.get("buildingName").toString());
         }
         if(request.get("phone") != null){
             company.setPhone(request.get("phone").toString());
@@ -102,6 +114,12 @@ public class CompanyController {
         }
         if(request.get("contactPeople") != null){
             company.setContactPeople(request.get("contactPeople").toString());
+        }
+        if(request.get("buildingId") != null){
+            company.setBuildingId(Long.parseLong(request.get("buildingId").toString()));
+        }
+        if(request.get("buildingName") != null){
+            company.setBuildingName(request.get("buildingName").toString());
         }
         if(request.get("phone") != null){
             company.setPhone(request.get("phone").toString());

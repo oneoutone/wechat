@@ -14,6 +14,8 @@ public class MeetingRoom {
     private String externalId;
     private String name;
     private int seatNum;
+    private long buildingId;
+    private String buildingName;
 
     public long getId() {
         return id;
@@ -34,4 +36,20 @@ public class MeetingRoom {
     public int getSeatNum() { return seatNum; }
 
     public void setSeatNum(int seatNum) { this.seatNum = seatNum; }
+
+    public long getBuildingId() {
+        return buildingId;
+    }
+
+    public void setBuildingId(long buildingId) {
+        this.buildingId = buildingId;
+    }
+
+    public String getBuildingName() {
+        return buildingName;
+    }
+
+    public void setBuildingName(String buildingName) {
+        this.buildingName = buildingName;
+    }
 }

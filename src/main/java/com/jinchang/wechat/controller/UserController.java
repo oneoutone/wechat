@@ -164,80 +164,81 @@ public class UserController {
     }
 
     @RequestMapping("/hello")
-    public List<LDAPUser> hello(HttpServletRequest request) throws IOException {
-//        List<LDAPOrganization> u = lDAPUserRepository.findOrgnaizations();
-//        System.out.println("start");
-//        System.out.println(u.size());
-//        if(u == null || u.size() == 0){
-//            return "123";
-//        }
-//        LDAPOrganization root = u.get(0);
-//        if(root.getJcparentdeptcode() != null){
-//            return "123";
-//        }
-//        Organization rootOrg = new Organization();
-//        rootOrg.setLevel(1);
-//        rootOrg.setCode(root.getCn());
-//        rootOrg.setName(root.getJcchnname());
-//        rootOrg.setOrgCode(root.getJcorgcode());
-//        rootOrg.setOrgTree(root.getJcchnname());
-//        rootOrg.setShowAsChoice(false);
-//        organizationRepository.save(rootOrg);
-//        u.remove(0);
-//        int index = 1;
-//        List<String> preCn = new ArrayList<>();
-//        preCn.add(rootOrg.getCode());
-//        List<Organization> preOrgs = new ArrayList<>();
-//        preOrgs.add(rootOrg);
-//        do {
-//            index ++;
-//            List<Organization> orgs = new ArrayList<>();
-//
-//            Iterator<LDAPOrganization> iterator = u.iterator();
-//            while (iterator.hasNext()) {
-//                LDAPOrganization item = iterator.next();
-//                int indexOfOrg = preCn.indexOf(item.getJcparentdeptcode());
-//                if(indexOfOrg != -1){
-//                    Organization obj = new Organization();
-//                    obj.setLevel(index);
-//                    obj.setCode(item.getCn());
-//                    obj.setName(item.getJcchnname());
-//                    obj.setOrgCode(item.getJcorgcode());
-//                    obj.setParent(preOrgs.get(indexOfOrg).getCode());
-//                    obj.setOrgTree(preOrgs.get(indexOfOrg).getOrgTree() + "," +item.getJcchnname());
-//                    orgs.add(obj);
-//                    iterator.remove();
-//                    if(item.getUniquemember() != null && item.getUniquemember().size() > 0){
-//                        for(int a=0; a<item.getUniquemember().size(); a++){
-//                            Employee ep = new Employee();
-//                            ep.setEmployeeId(item.getUniquemember().get(a).split(",")[0].substring(3));
-//                            ep.setOrgCode(item.getCn());
-//                            ep.setOrgName(item.getJcchnname());
-//                            ep.setOrgTree(obj.getOrgTree());
-//                            employeeRepository.save(ep);
-//                        }
-//                    }
-//                }
-//            }
-//            List<Organization> organs = organizationRepository.saveAll(orgs);
-//            preOrgs = organs;
-//            preCn = new ArrayList<>();
-//            for(int j=0; j<preOrgs.size(); j++){
-//                preCn.add(preOrgs.get(j).getCode());
-//            }
-//
-//        }while(u.size() > 0);
-//
-//
-//        return "123";
-       // return getAccessToken() ;
-//        String url = generateUrl("open_api_v1/customers");
-//        String agents = HttpUtil.sendGet(url);
-//        System.out.println(agents);
-//        return agents;
-        List<LDAPUser> u =lDAPUserRepository.findByCns("3201131080258");
-        System.out.println(u);
-        return u;
+    public String hello(HttpServletRequest request) throws IOException {
+        List<LDAPOrganization> p = lDAPUserRepository.findOrgnaizations();
+        List<LDAPOrganization> u = new ArrayList<>();
+        for(int i = 0; i<p.size(); i++ ){
+            if(p.get(i).getJcparentdeptcode() != null || p.get(i).getJcchnname().equals("锦创集团")){
+                u.add(p.get(i));
+            }
+        }
+        System.out.println("start");
+        System.out.println(u.size());
+        int base = 0;
+        for(int i = 0; i<u.size(); i++ ){
+            if(u.get(i).getJcchnname().equals("锦创集团")){
+                base = i;
+                break;
+            }
+        }
+        LDAPOrganization root = u.get(base);
+        System.out.println("base"+base);
+        organizationRepository.deleteAll();
+        employeeRepository.deleteAll();
+        System.out.println("1");
+        Organization rootOrg = new Organization();
+        rootOrg.setLevel(1);
+        rootOrg.setCode(root.getCn());
+        rootOrg.setName(root.getJcchnname());
+        rootOrg.setOrgCode(root.getJcorgcode());
+        rootOrg.setOrgTree(root.getJcchnname());
+        rootOrg.setShowAsChoice(false);
+        organizationRepository.save(rootOrg);
+        u.remove(base);
+        int index = 1;
+        System.out.println("2");
+        List<String> preCn = new ArrayList<>();
+        preCn.add(rootOrg.getCode());
+        List<Organization> preOrgs = new ArrayList<>();
+        preOrgs.add(rootOrg);
+        System.out.println("3");
+        do {
+            index ++;
+            List<Organization> orgs = new ArrayList<>();
+            Iterator<LDAPOrganization> iterator = u.iterator();
+            while (iterator.hasNext()) {
+                LDAPOrganization item = iterator.next();
+                int indexOfOrg = preCn.indexOf(item.getJcparentdeptcode());
+                if(indexOfOrg != -1){
+                    Organization obj = new Organization();
+                    obj.setLevel(index);
+                    obj.setCode(item.getCn());
+                    obj.setName(item.getJcchnname());
+                    obj.setOrgCode(item.getJcorgcode());
+                    obj.setParent(preOrgs.get(indexOfOrg).getCode());
+                    obj.setOrgTree(preOrgs.get(indexOfOrg).getOrgTree() + "," +item.getJcchnname());
+                    orgs.add(obj);
+                    iterator.remove();
+                    if(item.getUniquemember() != null && item.getUniquemember().size() > 0){
+                        for(int a=0; a<item.getUniquemember().size(); a++){
+                            Employee ep = new Employee();
+                            ep.setEmployeeId(item.getUniquemember().get(a).split(",")[0].substring(3));
+                            ep.setOrgCode(item.getCn());
+                            ep.setOrgName(item.getJcchnname());
+                            ep.setOrgTree(obj.getOrgTree());
+                            employeeRepository.save(ep);
+                        }
+                    }
+                }
+            }
+            List<Organization> organs = organizationRepository.saveAll(orgs);
+            preOrgs = organs;
+            preCn = new ArrayList<>();
+            for(int j=0; j<preOrgs.size(); j++){
+                preCn.add(preOrgs.get(j).getCode());
+            }
+        } while(u.size() > 0);
+        return "123";
     }
 
     @PostMapping("/profile")
@@ -295,6 +296,7 @@ public class UserController {
         json.put("clientRoles", user.getClientRoles());
         json.put("emplyeeId", user.getEmployeeId());
         json.put("managerRoles", user.getManagerRoles());
+        json.put("buildings", user.getBuildings());
         Employee employee = employeeRepository.findAllByEmployeeId(user.getEmployeeId());
         if(employee != null){
             json.put("org", employee.getOrgName());
@@ -321,6 +323,7 @@ public class UserController {
         json.put("email", user.getEmail());
         json.put("phone", user.getPhone());
         json.put("managerRoles", user.getManagerRoles());
+        json.put("buildings", user.getBuildings());
         return json;
     }
 
@@ -367,6 +370,9 @@ public class UserController {
         }
         if(request.get("managerRoles") != null){
             newUser.setManagerRoles(request.get("managerRoles").toString());
+        }
+        if(request.get("buildings") != null){
+            newUser.setBuildings(request.get("buildings").toString());
         }
 //        if(request.get("employeeId") != null){
 //            newUser.setEmployeeId(request.get("employeeId").toString());

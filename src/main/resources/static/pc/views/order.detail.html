@@ -1,10 +1,24 @@
 <div class="head">
     <div class="wrap clearfix">
         <div class="logo">
-            <img src="../../assets/images/img-logo1.png" />
+            <img src="../assets/img/img-logo.png" />
         </div>
+        <ul class="top-menu">
+            <li class="menu-item active" >
+                <a ui-sref="bill">即时工单</a>
+            </li>
+            <li class="menu-item">
+                <a ui-sref="feedback">问题反馈</a>
+            </li>
+            <li class="menu-item ">
+                <a ui-sref="complain">匿名投诉</a>
+            </li>
+            <li class="menu-item">
+                <a ui-sref="letter">总裁信箱</a>
+            </li>
+        </ul>
         <div class="head-right">
-            <span class="icon icon-user">您好：{{app.setting.user.nickName}} ({{app.setting.user.org}})</span>
+            <span class="icon icon-notice" ui-sref="rule"></span>
         </div>
     </div>
 </div>
@@ -41,23 +55,22 @@
     <div class="alert-cont">
         <form class="form-box">
             <ul class="form-list">
-                <li class="textarea-box clearfix">
-                    <label class="tit"><span class="must c-red">*</span>回复内容</label>
+                <li class="form-item textarea-box">
+                    <span class="must c-red">*</span>
+                    <label class="tit">回复内容</label>
                     <div class="cont">
                         <textarea class="textarea" name="" rows="5" ng-model="content" placeholder="请填写回复内容"></textarea>
                     </div>
                 </li>
-                <li class="imgs-box clearfix">
+                <li class="form-item imgs-box">
                     <label class="tit">图片上传</label>
                     <div class="cont">
                         <div class="upload-img-list clearfix">
                             <div class="img-item" ng-repeat="image in images">
-                                <img class="img" src="{{image.data}}">
+                                <img class="img viewimg" src="{{image.data}}">
                                 <span class="del" ng-click="remove($index)"></span>
                             </div>
                             <div class="add-img img-item">
-                                <img class="add " src="../../assets/images/icon-add.png" >
-                                <p class="text2">点击添加图片</p>
                                 <input type="file" accept="image/*" id="image-2"  onchange="angular.element(this).scope().fileChanged(this.files)">
                             </div>
                         </div>
@@ -71,5 +84,16 @@
         <button id="submitBtn" ng-click="reply()" type="button" class="btn">提交</button>
     </div>
 </div>
+
+
+<!--图片预览-->
+<div id="outerdiv" class="img-view">
+    <div id="innerdiv" class="bigimg">
+        <img id="bigimg" src="" />
+    </div>
+</div>
+
+<!--返回顶部-->
+<a href="javascript:void(0);" class="return_top"></a>
 
 

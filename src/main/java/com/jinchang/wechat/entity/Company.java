@@ -19,6 +19,8 @@ public class Company {
     private String email;
     private String image;
     private String remark;
+    private long buildingId;
+    private String buildingName;
     private Date created;
 
     public long getId() { return id; }
@@ -47,4 +49,19 @@ public class Company {
     public Date getCreated() { return created; }
     public void setCreated(Date created) { this.created = created; }
 
+    public long getBuildingId() {
+        return buildingId;
+    }
+
+    public void setBuildingId(long buildingId) {
+        this.buildingId = buildingId;
+    }
+
+    public String getBuildingName() {
+        return buildingName;
+    }
+
+    public void setBuildingName(String buildingName) {
+        this.buildingName = buildingName;
+    }
 }

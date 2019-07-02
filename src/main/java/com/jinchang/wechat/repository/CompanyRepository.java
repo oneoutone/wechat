@@ -16,6 +16,8 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     Company findById(long id);
 
+    List<Company> findAllByBuildingId(long buildingId);
+
     @Query(value = "select count(*) from sys_company  where if(?1 !='',status = ?1,1=1)", nativeQuery = true)
     int countCompany(String status);
 

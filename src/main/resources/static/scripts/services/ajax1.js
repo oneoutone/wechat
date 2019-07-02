@@ -4,7 +4,8 @@
         .module('myAjax', [])
         .service('httpService', ['$http', '$localStorage', function ($http, $localStorage) {
             var self = this;
-            var host = 'http://localhost:8080/api'
+            //var host = 'http://10.100.30.240:3000/api'
+            var host = 'http://localhost:3000/api'
 
             self.print1 = function () {
                 console.log('print')
@@ -675,6 +676,228 @@
                     fail(r)
                 })
             }
+
+            self.addFeedback = function(data, success, fail) {
+                $http({
+                    method: 'post',
+                    url: host + '/feedback',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    data: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getFeedback = function(data, success, fail) {
+                $http({
+                    method: 'get',
+                    url: host + '/feedback/list',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params:data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getFeedbackCount = function(success, fail) {
+                $http({
+                    method: 'get',
+                    url: host + '/feedback/count',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getMyFeedbackCount = function(success, fail) {
+                $http({
+                    method: 'get',
+                    url: host + '/feedback/countMyList',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getMyFeedbackList = function(data, success, fail) {
+                $http({
+                    method: 'get',
+                    url: host + '/feedback/myList',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params:data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.support = function(data, success, fail) {
+                $http({
+                    method: 'post',
+                    url: host + '/feedback/support',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    data: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.unSupport = function(data, success, fail) {
+                $http({
+                    method: 'post',
+                    url: host + '/feedback/unSupport',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    data: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.addComplain = function(data, success, fail) {
+                $http({
+                    method: 'post',
+                    url: host + '/complain',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    data: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getMyComplainCount = function(success, fail) {
+                $http({
+                    method: 'get',
+                    url: host + '/complain/countMyList',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getMyComplainList = function(data, success, fail) {
+                $http({
+                    method: 'get',
+                    url: host + '/complain/myList',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params:data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.addLetter = function(data, success, fail) {
+                $http({
+                    method: 'post',
+                    url: host + '/letter',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    data: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getMyLetterCount = function(success, fail) {
+                $http({
+                    method: 'get',
+                    url: host + '/letter/countMyList',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getMyLetterList = function(data, success, fail) {
+                $http({
+                    method: 'get',
+                    url: host + '/letter/myList',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params:data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getAllComplainList = function(data, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/complain/allList',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getAllComplainCount = function(data, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/complain/allCount',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
 
             function getAccessToken() {
                 console.log('getAccessToken')

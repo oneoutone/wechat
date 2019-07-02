@@ -26,6 +26,7 @@ public class User {
     private String status;  //客户状态living，left
     private String clientRoles;
     private String managerRoles;
+    private String buildings;
     private Date created;
     private String org;
     private String orgTree;
@@ -144,4 +145,12 @@ public class User {
     public String getPosition() { return position; }
 
     public void setPosition(String position) { this.position = position; }
+
+    public String getBuildings() {
+        return buildings;
+    }
+
+    public void setBuildings(String buildings) {
+        this.buildings = buildings;
+    }
 }

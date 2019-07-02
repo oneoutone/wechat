@@ -1,0 +1,101 @@
+<div class="content" xmlns="http://www.w3.org/1999/html">
+    <div class="page__bd">
+        <div id="booking-form-container" class="weui-cells weui-cells_form" style="margin-top: 0;">
+
+            <div class="weui-cell weui-cell_select weui-cell_select-after">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">会议室</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" ng-model="bookingFormData.meetingRoom">
+                        <option ng-repeat="room in meetingRooms" value="{{room.id}}">{{room.name}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="weui-cell weui-cell_select weui-cell_select-after">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">公司</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" ng-model="bookingFormData.company">
+                        <option ng-repeat="company in companies" value="{{company.id}}">{{company.name}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">开始时间</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" ng-disabled="confirmManager"  id="startInput" type="text"/>
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">结束时间</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" ng-disabled="confirmManager" id="endInput" type="text"/>
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">预定人</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" ng-disabled="confirmManager"  ng-model="bookingFormData.userName" type="text" />
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">预定人手机</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" ng-disabled="confirmManager"  ng-model="bookingFormData.phone" type="text" />
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">主题</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" ng-disabled="confirmManager"  ng-model="bookingFormData.topic" type="text" />
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" ng-disabled="confirmManager"  ng-model="bookingFormData.remark" placeholder="参会人" rows="3"></textarea>
+                    <div class="weui-textarea-counter"><span>0</span>/200</div>
+                </div>
+            </div>
+
+        </div>
+        <p style="color: #f44355; margin:0; padding: 0.25rem 15px 0 15px;" ng-show="needConfirm"><small><i class="material-icons md-5">&#xe88f;</i>{{info}}</small></p>
+        <div class="weui-btn-area">
+            <a ng-show="!meetingId || (meeting.organizerId == user.id && showDetele)" class="weui-btn {{meetingId ? 'weui-btn_warn' : 'weui-btn_primary'}}" href="javascript:" ng-click="bookingConfirmOrCancelClicked()" id="bookingBtn">{{meetingId ? '取消预约' : '预约'}}</a>
+            <a ng-show="confirmManager" class="weui-btn weui-btn_primary" href="javascript:" ng-click="confirm()">审核</a>
+            <a ng-show="meetingId && meeting.organizerId == user.id && showTerminate" class="weui-btn weui-btn_default" ng-click="terminate()">结束使用</a>
+        </div>
+    </div>
+</div>
+
+<!--BEGIN dialog2-->
+<div class="js_dialog" id="noMeetingTips" style="display: none;">
+    <div class="weui-mask"></div>
+    <div class="weui-dialog">
+        <div class="weui-dialog__bd">
+            没有这个会议记录
+        </div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="hideMe()">知道了</a>
+        </div>
+    </div>
+</div>
+<!--END dialog2-->
+
+<div id="loadingToast" style="display:none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-loading weui-icon_toast"></i>
+        <p class="weui-toast__content">处理中</p>
+    </div>
+</div>
+
+

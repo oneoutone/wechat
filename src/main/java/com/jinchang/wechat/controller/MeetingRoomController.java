@@ -28,6 +28,13 @@ public class MeetingRoomController {
       return new ResponseEntity<List<MeetingRoom>>(rooms ,HttpStatus.OK);
     }
 
+    @GetMapping("/roomsByBuilding")
+    public ResponseEntity<?> meetingRoomList(@RequestParam(required=false) long buildingId) {
+        List<MeetingRoom> rooms = meetingRoomRepository.findAllByBuildingId(buildingId);
+        return new ResponseEntity<List<MeetingRoom>>(rooms ,HttpStatus.OK);
+    }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<?> meetingRoomList(@PathVariable String id) {
         Optional<MeetingRoom> room = meetingRoomRepository.findById(Long.parseLong(id));
@@ -57,6 +64,12 @@ public class MeetingRoomController {
         }
         if(room.getSeatNum() > 0){
             r.setSeatNum(room.getSeatNum());
+        }
+        if(room.getBuildingName() != null){
+            r.setBuildingName(room.getBuildingName());
+        }
+        if(room.getBuildingId() > 0){
+            r.setBuildingId(room.getBuildingId());
         }
         meetingRoomRepository.save(r);
         return new ResponseEntity<MeetingRoom>(r ,HttpStatus.OK);

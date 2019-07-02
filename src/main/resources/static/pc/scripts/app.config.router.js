@@ -42,17 +42,45 @@
                 url: '/order',
                 template: '<div ui-view></div>'
             })
+            .state('bill', {
+                url: '/bill',
+                templateUrl: 'views/order.html',
+                controller: 'OrderCtrl',
+                resolve: load(['toastr','ui.bootstrap', 'mgcrea.ngStrap', 'scripts/pc/order.js'])
+            })
+            .state('feedback', {
+                url: '/feedback',
+                templateUrl: 'views/feedback.html',
+                controller: 'FeedbackCtrl',
+                resolve: load(['toastr','ui.bootstrap', 'mgcrea.ngStrap', 'scripts/pc/feedback.js'])
+            })
+            .state('rule', {
+                url: '/rule',
+                templateUrl: 'views/rule_regulation.html'
+            })
+            .state('complain', {
+                url: '/complain',
+                templateUrl: 'views/complain.html',
+                controller: 'ComplainCtrl',
+                resolve: load(['toastr','ui.bootstrap', 'mgcrea.ngStrap', 'scripts/pc/complain.js'])
+            })
+            .state('letter', {
+                url: '/letter',
+                templateUrl: 'views/letter.html',
+                controller: 'LetterCtrl',
+                resolve: load(['toastr','ui.bootstrap', 'mgcrea.ngStrap', 'scripts/pc/letter.js'])
+            })
             .state('order.list', {
                 url: '/list?status',
                 templateUrl: 'views/order.list.html',
                 controller: 'PcOrderListCtrl',
-                resolve: load(['moment' , 'toastr', 'scripts/pc/order.list.js'])
+                resolve: load(['toastr', 'scripts/pc/order.list.js'])
             })
             .state('order.detail', {
                 url: '/:id',
                 templateUrl: 'views/order.detail.html',
                 controller: 'PcOrderInfoCtrl',
-                resolve: load(['moment', 'toastr', 'scripts/pc/order.detail.js'])
+                resolve: load(['toastr', 'scripts/pc/order.detail.js'])
             })
             .state('error', {
                 url: '/error',

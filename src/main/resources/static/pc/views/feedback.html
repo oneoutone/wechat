@@ -1,0 +1,156 @@
+
+		<div class="head">
+			<div class="wrap clearfix">
+				<div class="logo">
+					<img src="../assets/img/img-logo.png" />
+				</div>
+				<ul class="top-menu">
+					<li class="menu-item">
+						<a ui-sref="bill">即时工单</a>
+					</li>
+					<li class="menu-item active" >
+						<a ui-sref="feedback">问题反馈</a>
+					</li>
+					<li class="menu-item ">
+						<a ui-sref="complain">匿名投诉</a>
+					</li>
+					<li class="menu-item">
+						<a ui-sref="letter">总裁信箱</a>
+					</li>
+				</ul>
+				<div class="head-right">
+					<span class="icon icon-notice" ui-sref="rule"></span>
+				</div>
+			</div>
+		</div>
+		<div class="main clearfix">
+			<div class="main-box main-l">
+				<div class="jc-title clearfix">
+					<h2 class="tit">问题反馈</h2>
+					<div class="select">
+						<div class="styled-select">
+							<label>{{type}}</label>
+							<select ng-model="type"  ng-change="typeChanged()">
+								<option value="按认同率">按认同率</option>
+								<option value="按时间">按时间</option>
+								<option value="只看我提交的">只看我提交的</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<ul class="feedback-list">
+					<li class="feedback-item" ng-repeat="item in list">
+						<div class="head-box">
+							<img class="img" src="{{item.hide ? '../assets/images/img-head.png' : (item.userImage ? item.userImage : '../assets/images/img-head.png')}}" />
+							<p class="name">{{item.hide ? '匿名' : item.userName}}</p>
+						</div>
+						<a class="collect {{item.agree ? 'active' : '' }}" ng-click="changeSupport(item)"></a>
+						<a class="feedback-con" href="javascript:void(0);">
+							<div class="tit-box">
+								<h3 class="tit">{{item.title}}</h3>
+							</div>
+							<div class="cont">{{item.content}}</div>
+							<div class="info clearfix">
+								<div class="info-item">
+									<span class="type">{{item.category}}</span>
+								</div>
+								<div class="info-item">
+									<span class="time">{{item.hide ? '匿名' : item.userName}}发布于{{item.created | date: 'yyyy-mm-dd'}}</span>
+								</div>
+								<div class="info-item tr">
+									<span class="view">共<i class="num">{{item.support}}</i>人认同</span>
+								</div>
+							</div>
+						</a>
+					</li>
+				</ul>
+				<div class="page">
+					<div class="page-list">
+						<a class="{{currentPage == item ? 'active' : ''}}" ng-click="pageChanged(item)" ng-repeat="item in pages">{{item}}</a>
+					</div>
+				</div>
+			</div>
+			<div class="main-box main-r">
+				<form class="form-box">
+					<ul class="form-list">
+						<li class="form-item select-box">
+							<span class="must c-red">*</span>
+							<label class="tit">反馈领域</label>
+							<div class="cont">
+								<div class="select-list select-list1 clearfix">
+									<div class="select-item {{state == '人事招聘' ? 'active' : ''}}">
+										<a ng-click="setState('人事招聘')">人事招聘</a>
+									</div>
+									<div class="select-item {{state == '薪酬绩效' ? 'active' : ''}}">
+										<a ng-click="setState('薪酬绩效')">薪酬绩效</a>
+									</div>
+									<div class="select-item {{state == '考勤制度' ? 'active' : ''}}">
+										<a ng-click="setState('考勤制度')">考勤制度</a>
+									</div>
+									<div class="select-item {{state == '系统软件' ? 'active' : ''}}">
+										<a ng-click="setState('系统软件')">系统软件</a>
+									</div>
+									<div class="select-item {{state == '稽核品管制度' ? 'active' : ''}}">
+										<a ng-click="setState('稽核品管制度')">稽核品管制度</a>
+									</div>
+									<div class="select-item {{state == '福利待遇' ? 'active' : ''}}">
+										<a ng-click="setState('福利待遇')">福利待遇</a>
+									</div>
+									<div class="select-item {{state == '职场环境' ? 'active' : ''}}">
+										<a ng-click="setState('职场环境')">职场环境</a>
+									</div>
+									<div class="select-item {{state == '其他' ? 'active' : ''}}">
+										<a ng-click="setState('其他')">其他</a>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="form-item input-box">
+							<span class="must c-red">*</span>
+							<label class="tit">反馈标题</label>
+							<div class="cont">
+								<input class="input" ng-model="title" type="text" placeholder="请输入反馈标题，不少于5个字" />
+							</div>
+						</li>
+						<li class="form-item textarea-box">
+							<span class="must c-red">*</span>
+							<label class="tit">反馈详情</label>
+							<div class="cont">
+								<textarea class="textarea" ng-model="content" rows="5" placeholder="请输入反馈详情，不少于12个字"></textarea>
+							</div>
+						</li>
+						<li class="form-item radio-box">
+							<span class="must c-red">*</span>
+							<label class="tit">匿名反馈</label>
+							<div class="cont clearfix">
+								<div class="radio">
+									<label><input type="radio" name="radios1" value="true" ng-model="hide" ng-checked="hide == true" /><span class="radio-text">匿名反馈</span></label>
+								</div>
+								<div class="radio">
+									<label><input type="radio" name="radios1" value="false" ng-model="hide"  ng-checked="hide == false" /><span class="radio-text">实名反馈</span></label>
+								</div>
+							</div>
+						</li>
+						<li class="form-item radio-box">
+							<span class="must c-red">*</span>
+							<label class="tit">是否公开</label>
+							<div class="cont clearfix">
+								<div class="radio">
+									<label><input type="radio" name="radios2" value="false" ng-model="open" ng-checked="open == false" /><span class="radio-text">不公开</span></label>
+								</div>
+								<div class="radio">
+									<label><input type="radio" value="true"  name="radios2" ng-model="open" ng-checked="open == true" /><span class="radio-text">公开</span></label>
+								</div>
+							</div>
+						</li>
+					</ul>
+					<div class="btn-box">
+						<button type="button" class="btn-outlined" ng-click="clear()">清除</button>
+						<button type="button" class="btn" ng-click="addFeedback()">提交</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<!--返回顶部-->
+		<a href="javascript:void(0);" class="return_top"></a>

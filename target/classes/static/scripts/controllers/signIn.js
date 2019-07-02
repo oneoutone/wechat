@@ -35,8 +35,8 @@
 
       if((!$localStorage["local-setting"] || !$localStorage["local-setting"].accessToken ||  !$localStorage["local-setting"].expire || moment($localStorage["local-setting"].expire).toDate() < new Date()) && !code && SeUtil.isWechatBrowser()){
           var state = $location.search().state
-          //$window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3cb154669646f311&redirect_uri=http://jcservice.nat300.top/%23/signin&response_type=code&scope=snsapi_base&state='+state+'#wechat_redirect';
-          $window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe046330b69c05b15&redirect_uri=http://alextest.nat300.top/%23/signin&response_type=code&scope=snsapi_base&state='+state+'#wechat_redirect';
+          $window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3cb154669646f311&redirect_uri=http://jcservice.nat300.top/%23/signin&response_type=code&scope=snsapi_base&state='+state+'#wechat_redirect';
+          //$window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe046330b69c05b15&redirect_uri=http://alextest.nat300.top/%23/signin&response_type=code&scope=snsapi_base&state='+state+'#wechat_redirect';
           return
       }
       console.log('code')

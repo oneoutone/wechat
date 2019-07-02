@@ -126,6 +126,12 @@
             })
         };
 
+        httpService.getBuildingList(function(result){
+            $scope.buildings = result;
+        }, function(err){
+            console.log(err)
+        })
+
 
 
     }

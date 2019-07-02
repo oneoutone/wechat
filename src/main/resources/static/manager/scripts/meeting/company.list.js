@@ -119,6 +119,10 @@
                 $('#nameInput').addClass('ng-invalid');
                 return;
             }
+            if (!$scope.company.buildingName) {
+                toastr.error('请选择楼宇');
+                return;
+            }
             if (!$('#phoneInput').hasClass('ng-valid')) {
                 toastr.error('联系人手机号码格式不正确');
                 $('#phoneInput').addClass('ng-dirty');
@@ -132,6 +136,15 @@
                 return
             }
 
+            var buildingId = 0
+            var selectedBuilding = $scope.buildings.filter(function(item){
+                return $scope.company.buildingName == item.name
+            })
+
+            if(selectedBuilding && selectedBuilding.length > 0){
+                buildingId = selectedBuilding[0].id
+            }
+            $scope.company.buildingId = buildingId
             if( $scope.company.id){
                 $scope.loading = true;
                 httpService.updateCompany($scope.company, function(company){
@@ -140,7 +153,8 @@
                     $state.go('app.company.list', {
                         index: $scope.bigCurrentPage,
                         status: $scope.status
-                    }, {reload: true})
+                    })
+                    $('#m-edit').modal('hide')
                 }, function(err){
                     console.log(err)
                     $scope.loading = false
@@ -148,13 +162,15 @@
             }else{
                 $scope.company.status = 'living'
                 $scope.loading = true;
+
                 httpService.createCompany($scope.company, function(company){
                     console.log(company)
                     $scope.loading = false
                     $state.go('app.company.list', {
                         index: $scope.bigCurrentPage,
                         status: $scope.status
-                    }, {reload: true})
+                    })
+                    $('#m-edit').modal('hide')
                 }, function(err){
                     console.log(err)
                     $scope.loading = false
@@ -167,6 +183,12 @@
             $scope.company = company
             $('#m-edit').modal('show')
         }
+
+        httpService.getBuildingList(function(result){
+            $scope.buildings = result;
+        }, function(err){
+            console.log(err)
+        })
 
     }
 

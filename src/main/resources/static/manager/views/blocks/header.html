@@ -11,6 +11,11 @@
 
     <!-- navbar right -->
     <ul class="nav navbar-nav pull-right">
+        <li class="nav-item">
+            <select class="form-control c-select m-t-sm"  ng-model="app.setting.buildingName" ng-change="app.buildingChange()" ng-show="app.showBuilding">
+                <option ng-repeat="building in app.setting.user.buildings" value="{{building}}">{{building}}</option>
+            </select>
+        </li>
       <li class="nav-item dropdown">
         <a class="nav-link clear" href data-toggle="dropdown">
           <span class="avatar w-32">

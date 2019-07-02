@@ -136,7 +136,15 @@
                 files: [
                     '../scripts/services/ajax.js'
                 ]
-            }
+            },
+            {
+                name: 'mobiscroll',
+                module: true,
+                files: [
+                    '../libs/js/mobiscroll/mobiscroll.custom-3.0.0-beta2.min.js',
+                    '../libs/js/mobiscroll/mobiscroll.custom-3.0.0-beta2.min.css'
+                ]
+            },
         ])
         .config(['$ocLazyLoadProvider', 'MODULE_CONFIG', function($ocLazyLoadProvider, MODULE_CONFIG) {
             $ocLazyLoadProvider.config({

@@ -4,7 +4,9 @@
         .module('myAjax', [])
         .service('httpService', ['$http', '$localStorage', function ($http, $localStorage) {
             var self = this;
-            var host = 'http://localhost:8080/api'
+            //var host = 'http://jcservice.nat300.top/api'
+            var host = 'http://localhost:3000/api'
+
 
             self.print1 = function () {
                 console.log('print')
@@ -436,8 +438,22 @@
                 $http({
                     method: 'get',
                     url: host + '/companies',
-                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    headers: {'Content-Type': 'application/json'},
                     params:data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getBuildingList = function(success, fail) {
+                $http({
+                    method: 'get',
+                    url: host + '/building/all',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
                 }).success(function (r, header, config, status) {
                     console.log("success")
                     success(r)
@@ -451,7 +467,22 @@
                 $http({
                     method: 'get',
                     url: host + '/companies/all',
-                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
+                    headers: {'Content-Type': 'application/json'}
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.companyByBuildingId = function(data, success, fail) {
+                $http({
+                    method: 'get',
+                    url: host + '/companies/allByBuildingId',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params: data
                 }).success(function (r, header, config, status) {
                     console.log("success")
                     success(r)
@@ -495,6 +526,50 @@
                 $http({
                     method: 'delete',
                     url: host + '/companies/'+id,
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
+                }).success(function (r, header, config, status) {
+                    console.log(r)
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log(r)
+                    fail(r)
+                })
+            }
+
+            self.createBuilding = function(data, success, fail) {
+                $http({
+                    method: 'post',
+                    url: host + '/building',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    data: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.updateBuilding = function(data, success, fail) {
+                $http({
+                    method: 'post',
+                    url: host + '/building/update',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    data: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.deleteBuilding = function(id, success, fail){
+                $http({
+                    method: 'delete',
+                    url: host + '/building/'+id,
                     headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
                 }).success(function (r, header, config, status) {
                     console.log(r)
@@ -577,6 +652,125 @@
                 })
             }
 
+            self.getAllFeedbackList = function(data, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/feedback/allList',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getAllFeedbackCount = function(data, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/feedback/allCount',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getAllComplainList = function(data, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/complain/allList',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getAllComplainCount = function(data, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/complain/allCount',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.processResult = function(data, success, fail){
+                $http({
+                    method: 'post',
+                    url: host + '/complain/process',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    data: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getAllLetterList = function(data, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/letter/allList',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getAllLetterCount = function(data, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/letter/allCount',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    params: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.replyLetter = function(data, success, fail){
+                $http({
+                    method: 'post',
+                    url: host + '/letter/process',
+                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    data: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
 
             /*
             meetingRoom CURE
@@ -586,7 +780,37 @@
                 $http({
                     method: 'get',
                     url: host + '/meetingRooms',
-                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
+                    headers: {'Content-Type': 'application/json'}
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getMeetingRoomListByBuildingId = function(data, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/meetingRooms/meetingsByBuildingId',
+                    headers: {'Content-Type': 'application/json'},
+                    params: data
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getMeetingRoomByBuildingId = function(data, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/meetingRooms/roomsByBuilding',
+                    headers: {'Content-Type': 'application/json'},
+                    params: data
                 }).success(function (r, header, config, status) {
                     console.log("success")
                     success(r)
@@ -627,6 +851,20 @@
                 })
             }
 
+            self.getMeetingById = function(id, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/meetings/'+id,
+                    headers: {'Content-Type': 'application/json'}
+                }).success(function (r, header, config, status) {
+                    console.log(r)
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log(r)
+                    fail(r)
+                })
+            }
+
             /**
              * meeting CURE
              */
@@ -650,7 +888,22 @@
                 $http({
                     method: 'get',
                     url: host + '/meetings',
-                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    headers: {'Content-Type': 'application/json'},
+                    params: param
+                }).success(function (r, header, config, status) {
+                    console.log("success")
+                    success(r)
+                }).error(function (r, header, config, status) {
+                    console.log("fail")
+                    fail(r)
+                })
+            }
+
+            self.getMeetingByBuildingId = function(param, success, fail){
+                $http({
+                    method: 'get',
+                    url: host + '/meetings/meetingsByBuildingId',
+                    headers: {'Content-Type': 'application/json'},
                     params: param
                 }).success(function (r, header, config, status) {
                     console.log("success")

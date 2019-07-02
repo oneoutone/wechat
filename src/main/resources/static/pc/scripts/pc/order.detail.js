@@ -10,11 +10,10 @@
         })
         .controller('PcOrderInfoCtrl', PcOrderInfoCtrl);
 
-    PcOrderInfoCtrl.$inject = ['$scope', '$stateParams','$state', '$location', '$window', '$http', 'toastr', '$q'];
+    PcOrderInfoCtrl.$inject = ['$scope', '$stateParams','$state', '$location', '$window', '$http', 'toastr'];
 
-    function PcOrderInfoCtrl ($scope, $stateParams, $state, $location, $window, $http, toastr, $q) {
+    function PcOrderInfoCtrl ($scope, $stateParams, $state, $location, $window, $http, toastr) {
         var vm = $scope
-
 
         vm.id = $stateParams.id
         vm.list = []

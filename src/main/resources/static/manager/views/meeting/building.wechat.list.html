@@ -1,0 +1,12 @@
+<div class="page-bd">
+    <div class="weui-cells" ng-repeat="building in buildings">
+        <a class="weui-cell weui-cell_access" ui-sref="wechatMeeting.grid({buildingId: building.id})">
+            <div class="weui-cell__bd">
+                <p>{{building.name}}</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+</div>
+
