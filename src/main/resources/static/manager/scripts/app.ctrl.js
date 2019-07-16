@@ -94,7 +94,7 @@
 
         $rootScope.$on('$stateChangeStart', function (event, toState) {
             //console.info( LoopBackAuth.currentUserData)
-            if (!vm.app.isAuthenticated() && toState.name.indexOf('access.') == -1 && toState.name.indexOf('wechatMeeting')) {
+            if (!vm.app.isAuthenticated() && toState.name.indexOf('access.') == -1 && toState.name.indexOf('wechatMeeting') == -1 && toState.name.indexOf('wechatBuilding') == -1) {
                 event.preventDefault();
                 $state.go('access.signin');
                 return
@@ -146,7 +146,7 @@
                             vm.app.setting.buildingName = vm.app.setting.buildings[0].name
                         }
                     }else{
-                        vm.app.setting.user.buildings = (vm.app.setting.user.buildings ? vm.app.setting.user.buildings.split(",") : [])
+                        vm.app.setting.user.buildings = (vm.app.setting.user.buildings ? vm.app.setting.user.buildings.split() : [])
                         if(vm.app.setting.user.buildings.length > 0){
                             vm.app.setting.buildingName = vm.app.setting.user.buildings[0]
                         }

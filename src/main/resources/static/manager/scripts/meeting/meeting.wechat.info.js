@@ -22,7 +22,11 @@
         console.log("get bookingId: ", $stateParams.id);
 
         var vm = $scope;
-        vm.buildingId = $stateParams.buildingId
+        if($stateParams.buildingId){
+            vm.buildingId = $stateParams.buildingId
+        }else{
+            vm.buildingId = 198284
+        }
 
         vm.bookingFormData ={};
 

@@ -1,0 +1,7 @@
+生产服务器地址： 10.100.30.240
+username: root
+password: root123,
+应用目录: /root/wechat
+80口使用natapp映射，地址:http://jcservice.nat300.top
+前端部署地址:/usr/share/nginx/html
+源代码地址: https://github.com/oneoutone/wechat.git

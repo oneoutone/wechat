@@ -4,8 +4,8 @@
         .module('myAjax', [])
         .service('httpService', ['$http', '$localStorage', function ($http, $localStorage) {
             var self = this;
-            //var host = 'http://10.100.30.240:3000/api'
-            var host = 'http://localhost:3000/api'
+            var host = 'http://10.100.30.240:3000/api'
+            //var host = 'http://localhost:3000/api'
 
             self.print1 = function () {
                 console.log('print')

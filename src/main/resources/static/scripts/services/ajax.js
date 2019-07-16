@@ -4,8 +4,8 @@
         .module('myAjax', [])
         .service('httpService', ['$http', '$localStorage', function ($http, $localStorage) {
             var self = this;
-            //var host = 'http://jcservice.nat300.top/api'
-            var host = 'http://localhost:3000/api'
+            var host = 'http://jcservice.nat300.top/api'
+            //var host = 'http://localhost:3000/api'
 
 
             self.print1 = function () {
@@ -453,7 +453,7 @@
                 $http({
                     method: 'get',
                     url: host + '/building/all',
-                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()}
+                    headers: {'Content-Type': 'application/json'}
                 }).success(function (r, header, config, status) {
                     console.log("success")
                     success(r)
@@ -481,7 +481,7 @@
                 $http({
                     method: 'get',
                     url: host + '/companies/allByBuildingId',
-                    headers: {'Content-Type': 'application/json', 'Authorization': getAccessToken()},
+                    headers: {'Content-Type': 'application/json'},
                     params: data
                 }).success(function (r, header, config, status) {
                     console.log("success")

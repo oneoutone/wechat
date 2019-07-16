@@ -22,7 +22,12 @@
         });
 
         var vm = $scope;
-        vm.buildingId = $stateParams.buildingId
+        if($stateParams.buildingId){
+            vm.buildingId = $stateParams.buildingId
+        }else{
+            vm.buildingId = 198284
+        }
+
         vm.clickable = true;
         //table scroll：控制X轴和Y轴滚动条
         cDiv.onscroll=function(){

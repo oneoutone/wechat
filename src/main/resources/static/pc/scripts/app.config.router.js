@@ -71,10 +71,10 @@
                 resolve: load(['toastr','ui.bootstrap', 'mgcrea.ngStrap', 'scripts/pc/letter.js'])
             })
             .state('order.list', {
-                url: '/list?status',
-                templateUrl: 'views/order.list.html',
-                controller: 'PcOrderListCtrl',
-                resolve: load(['toastr', 'scripts/pc/order.list.js'])
+                url: '/list',
+                templateUrl: 'views/order.html',
+                controller: 'OrderCtrl',
+                resolve: load(['toastr','ui.bootstrap', 'mgcrea.ngStrap', 'scripts/pc/order.js'])
             })
             .state('order.detail', {
                 url: '/:id',

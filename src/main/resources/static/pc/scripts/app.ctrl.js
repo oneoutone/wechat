@@ -19,7 +19,7 @@
         var vm = $scope
         var setting = 'local-setting';
         //var url = 'http://192.168.1.97/'
-        var url = 'http://localhost:3000/'
+        var url = 'http://10.100.30.240:3000/'
         vm.app = {
             name: '锦创微服务',
             url: url,
